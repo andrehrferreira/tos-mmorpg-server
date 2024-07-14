@@ -1,0 +1,6 @@
+{
+    "watch": ["src"],
+    "ext": "ts,vue",
+    "ignore": ["src/**/*.spec.ts", "src/**/*.spec.ts", "admin/dist/*", "admin/node_modules/*"],
+    "exec": "nest start --debug"
+}

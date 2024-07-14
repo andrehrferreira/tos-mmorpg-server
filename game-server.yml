@@ -1,0 +1,16 @@
+---
+serverGame: "Eurone: Latin America (BR)"
+serverMaxPlayer: 10000
+serverOverbook: "queue"
+serverSaveInterval: 900
+serverAutomaticRestart: "04:00:00"
+initSkillPoints: 5
+initStatsPoints: 50
+skillCapperSkill: 10
+skillMaxPowerScroll: 13
+skillCap: 0
+skillUpFactor: 1
+initialMap: "1_Tutorial"
+initialPosX: 5981
+initialPosY: 7700
+initialPosZ: 357

@@ -1,0 +1,198 @@
+[
+	{
+		"Name": "Bear",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Animalia/BP_Bear.BP_Bear_C'"
+	},
+	{
+		"Name": "OakTreeEnt",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_OakTreeEnt.BP_OakTreeEnt_C'"
+	},
+	{
+		"Name": "AncientUnreadFlamen",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/AncientUndead/BP_AncientUndeadFlamen.BP_AncientUndeadFlamen_C'"
+	},
+	{
+		"Name": "BearSummon",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/BP_BearSummon.BP_BearSummon_C'"
+	},
+	{
+		"Name": "Pig",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Animalia/BP_Pig.BP_Pig_C'"
+	},
+	{
+		"Name": "Deer",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Animalia/BP_Deer.BP_Deer_C'"
+	},
+	{
+		"Name": "DarknessSpider",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_DarknessSpider.BP_DarknessSpider_C'"
+	},
+	{
+		"Name": "DemonLord",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_DemonLord.BP_DemonLord_C'"
+	},
+	{
+		"Name": "Dragonide",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_Dragonide.BP_Dragonide_C'"
+	},
+	{
+		"Name": "EvilWatcher",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_EvilWatcher.BP_EvilWatcher_C'"
+	},
+	{
+		"Name": "EvilWatcher2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_EvilWatcher2.BP_EvilWatcher2_C'"
+	},
+	{
+		"Name": "Ghoul",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_Ghoul.BP_Ghoul_C'"
+	},
+	{
+		"Name": "GiantViper",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_GiantViper.BP_GiantViper_C'"
+	},
+	{
+		"Name": "GiantViper2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_GiantViper1.BP_GiantViper1_C'"
+	},
+	{
+		"Name": "GiantViper3",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_GiantViper2.BP_GiantViper2_C'"
+	},
+	{
+		"Name": "GiantViper4",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_GiantViper3.BP_GiantViper3_C'"
+	},
+	{
+		"Name": "GiatRat",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_GiatRat.BP_GiatRat_C'"
+	},
+	{
+		"Name": "Hydra",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_Hydra.BP_Hydra_C'"
+	},
+	{
+		"Name": "IceGolem",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_IceGolem.BP_IceGolem_C'"
+	},
+	{
+		"Name": "LavaGolem",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_LavaGolem.BP_LavaGolem_C'"
+	},
+	{
+		"Name": "RockGolem",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_RockGolem.BP_RockGolem_C'"
+	},
+	{
+		"Name": "LizardWarrior",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_LizardWarrior.BP_LizardWarrior_C'"
+	},
+	{
+		"Name": "Werewolf",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_Werewolf.BP_Werewolf_C'"
+	},
+	{
+		"Name": "Butcher",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_Butcher.BP_Butcher_C'"
+	},
+	{
+		"Name": "Executioner",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_Executioner.BP_Executioner_C'"
+	},
+	{
+		"Name": "FatOrc",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_FatOrc.BP_FatOrc_C'"
+	},
+	{
+		"Name": "Wyvern",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_Wyvern.BP_Wyvern_C'"
+	},
+	{
+		"Name": "MountainDragon",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/Protofactor/BP_MountainDragon.BP_MountainDragon_C'"
+	},
+	{
+		"Name": "FatOrc2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_FatOrc2.BP_FatOrc2_C'"
+	},
+	{
+		"Name": "Butcher2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_Butcher2.BP_Butcher2_C'"
+	},
+	{
+		"Name": "Butcher3",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/OrcPack/BP_Butcher3.BP_Butcher3_C'"
+	},
+	{
+		"Name": "AncientUndeadGuard",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/AncientUndead/BP_AncientUndeadGuard.BP_AncientUndeadGuard_C'"
+	},
+	{
+		"Name": "AncientUndeadPrice",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/AncientUndead/BP_AncientUndeadPrice.BP_AncientUndeadPrice_C'"
+	},
+	{
+		"Name": "Fishman",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Fishman/BP_Fishman.BP_Fishman_C'"
+	},
+	{
+		"Name": "Slime",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Green.BP_Slime_Green_C'"
+	},
+	{
+		"Name": "Slime2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Black.BP_Slime_Black_C'"
+	},
+	{
+		"Name": "Slime3",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Blue.BP_Slime_Blue_C'"
+	},
+	{
+		"Name": "Slime4",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Grey.BP_Slime_Grey_C'"
+	},
+	{
+		"Name": "Slime5",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Pink.BP_Slime_Pink_C'"
+	},
+	{
+		"Name": "Slime6",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Purple.BP_Slime_Purple_C'"
+	},
+	{
+		"Name": "Slime7",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Red.BP_Slime_Red_C'"
+	},
+	{
+		"Name": "Slime8",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_White.BP_Slime_White_C'"
+	},
+	{
+		"Name": "Slime9",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Monsters/InfinityPBR/Slime/BP_Slime_Yellow.BP_Slime_Yellow_C'"
+	},
+	{
+		"Name": "Chicken",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Chicken.BP_Chicken_C'"
+	},
+	{
+		"Name": "Chicken2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Chicken2.BP_Chicken2_C'"
+	},
+	{
+		"Name": "Chicken3",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Chicken3.BP_Chicken3_C'"
+	},
+	{
+		"Name": "Cow",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Cow.BP_Cow_C'"
+	},
+	{
+		"Name": "Cow2",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Cow2.BP_Cow2_C'"
+	},
+	{
+		"Name": "Cow3",
+		"Reference": "/Script/Engine.BlueprintGeneratedClass'/Game/_ToS/Mobiles/Animals/Protofactor/Farm/BP_Cow3.BP_Cow3_C'"
+	}
+]

@@ -1,0 +1,57 @@
+export enum Dices {
+    None,
+    D1D4 = "1D4",
+    D2D4 = "2D4",
+    D3D4 = "3D4",
+    D4D4 = "4D4",
+    D5D4 = "5D4",
+    D6D4 = "6D4",
+    D1D6 = "1D6",
+    D2D6 = "2D6",
+    D3D6 = "3D6",
+    D4D6 = "4D6",
+    D5D6 = "5D6",
+    D6D6 = "6D6",
+    D1D8 = "1D8",
+    D2D8 = "2D8",
+    D3D8 = "3D8",
+    D4D8 = "4D8",
+    D5D8 = "5D8",
+    D6D8 = "6D8",
+    D1D10 = "1D10",
+    D2D10 = "2D10",
+    D3D10 = "3D10",
+    D4D10 = "4D10",
+    D5D10 = "5D10",
+    D6D10 = "6D10",
+    D1D12 = "1D12",
+    D2D12 = "2D12",
+    D3D12 = "3D12",
+    D4D12 = "4D12",
+    D5D12 = "5D12",
+    D6D12 = "6D12",
+    D1D20 = "1D20",
+    D2D20 = "2D20",
+    D3D20 = "3D20",
+    D4D20 = "4D20",
+    D5D20 = "5D20",
+    D6D20 = "6D20",
+}
+
+export enum DamageType {
+    None,
+    Physic,
+    Fire,
+    Cold,
+    Poison,
+    Energy,
+    Light,
+    Dark,
+    Bleed
+}
+
+export enum HealType {
+    Life,
+    Mana,
+    Stamina
+}

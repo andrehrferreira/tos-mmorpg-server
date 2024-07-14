@@ -1,0 +1,1474 @@
+[
+	{
+		"Name": "1",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_villager_01_b",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_pants_02",
+		"Boots": "SK_ma_medieval_shoe_02_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_sword_01",
+		"Offhand": "SM_wp_shield_square_01_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "1",
+			"1": "Custom02",
+			"2": "Custom03",
+			"3": "Custom04",
+			"4": "Custom05",
+			"5": "Custom06"
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "2",
+		"Str": 9,
+		"Dex": 13,
+		"Int": 4,
+		"Vig": 8,
+		"Agi": 8,
+		"Luc": 8,
+		"Chest": "SK_ma_meta_tal_nrw_rogue_01_a",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_pants_03_a",
+		"Boots": "SK_ma_meta_tal_nrw_shoes_01_c",
+		"Cloak": "",
+		"Mainhand": "Bow-Composite_1",
+		"Offhand": "",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/Bow/Bow_TripleShot_Montage.Bow_TripleShot_Montage'",
+		"PreviewArmors":
+		{
+			"0": "2",
+			"1": "Archer02",
+			"2": "Archer03",
+			"3": "Archer04",
+			"4": "Archer05",
+			"5": "Archer06"
+		},
+		"Skills":
+		{
+			"Long Range Weapons": 3,
+			"Combat With Weapons": 1,
+			"Skinning": 1
+		}
+	},
+	{
+		"Name": "3",
+		"Str": 15,
+		"Dex": 8,
+		"Int": 3,
+		"Vig": 10,
+		"Agi": 7,
+		"Luc": 7,
+		"Chest": "SK_chest_soldier_01_e",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_armour_pants_01_a",
+		"Boots": "SK_ma_medieval_armour_boot_03_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_1h_sword_03",
+		"Offhand": "Shield2",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/SwordAndShield/51_Frank_ActionRPG_Sword_Combo_A6_Montage.51_Frank_ActionRPG_Sword_Combo_A6_Montage'",
+		"PreviewArmors":
+		{
+			"0": "3",
+			"1": "Warrior02",
+			"2": "Warrior03",
+			"3": "Warrior04",
+			"4": "Warrior05",
+			"5": "Warrior06"
+		},
+		"Skills":
+		{
+			"Combat With Weapons": 3,
+			"Two Handed Weapons": 2
+		}
+	},
+	{
+		"Name": "4",
+		"Str": 5,
+		"Dex": 7,
+		"Int": 20,
+		"Vig": 6,
+		"Agi": 5,
+		"Luc": 7,
+		"Chest": "sk_ma_meta_tal_nrw_mage_dress_01_c",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_meta_tal_nrw_caster_pants_01_001",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_wpn_mage_staff_03",
+		"Offhand": "",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/Mage/Mage_Combo02_Montage.Mage_Combo02_Montage'",
+		"PreviewArmors":
+		{
+			"0": "4",
+			"1": "Mage02",
+			"2": "Mage03",
+			"3": "Mage04",
+			"4": "Mage05",
+			"5": "Mage06"
+		},
+		"Skills":
+		{
+			"Elementarism": 3,
+			"Magic Resistence": 2
+		}
+	},
+	{
+		"Name": "5",
+		"Str": 6,
+		"Dex": 15,
+		"Int": 4,
+		"Vig": 5,
+		"Agi": 13,
+		"Luc": 7,
+		"Chest": "SK_chest_north_02_c",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_armour_pants_01_a",
+		"Boots": "SK_ma_medieval_armour_boot_03_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_1h_sword_01",
+		"Offhand": "",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/Dagger/Dagger_BladeDance_Montage.Dagger_BladeDance_Montage'",
+		"PreviewArmors":
+		{
+			"0": "5",
+			"1": "Assassin02",
+			"2": "Assassin03",
+			"3": "Assassin04",
+			"4": "Assassin05",
+			"5": "Assassin06"
+		},
+		"Skills":
+		{
+			"Combat With Weapons": 2,
+			"ShadowMaster": 3
+		}
+	},
+	{
+		"Name": "6",
+		"Str": 12,
+		"Dex": 7,
+		"Int": 9,
+		"Vig": 8,
+		"Agi": 7,
+		"Luc": 7,
+		"Chest": "SK_chest_knight_02_c",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_armour_pants_01_b",
+		"Boots": "SK_ma_medieval_boot_01_b",
+		"Cloak": "",
+		"Mainhand": "Mace03",
+		"Offhand": "Shield3",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/SwordAndShield/SwordAndShield_Combo02_Montage.SwordAndShield_Combo02_Montage'",
+		"PreviewArmors":
+		{
+			"0": "6",
+			"1": "Paladin02",
+			"2": "Paladin03",
+			"3": "Paladin04",
+			"4": "Paladin05",
+			"5": "Paladin06"
+		},
+		"Skills":
+		{
+			"Two Handed Weapons": 2,
+			"Spirituality": 3
+		}
+	},
+	{
+		"Name": "7",
+		"Str": 16,
+		"Dex": 4,
+		"Int": 4,
+		"Vig": 12,
+		"Agi": 7,
+		"Luc": 7,
+		"Chest": "SK_ma_metal_tal_nrw_barbar_chest_01_a",
+		"Helmet": "SK_fe_meta_tal_nrw_headband_circle",
+		"Gloves": "",
+		"Pants": "SK_ma_meta_tal_nrw_slave_pants_short_01",
+		"Boots": "SK_ma_meta_tal_nrw_barbar_boots_heavy_c",
+		"Cloak": "",
+		"Mainhand": "SM_wp_axe_1h_barber_02",
+		"Offhand": "",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/Barbarian/Barbarian_Combo01_Montage.Barbarian_Combo01_Montage'",
+		"PreviewArmors":
+		{
+			"0": "7",
+			"1": "Barbarian02",
+			"2": "Barbarian03",
+			"3": "Barbarian04",
+			"4": "Barbarian05",
+			"5": "Barbarian06"
+		},
+		"Skills":
+		{
+			"Two Handed Weapons": 3,
+			"Combat With Weapons": 2
+		}
+	},
+	{
+		"Name": "8",
+		"Str": 5,
+		"Dex": 5,
+		"Int": 20,
+		"Vig": 6,
+		"Agi": 7,
+		"Luc": 7,
+		"Chest": "SK_ma_meta_tal_nrw_cultist_dress_a",
+		"Helmet": "SK_ma_meta_tal_nrw_skullmask_01",
+		"Gloves": "",
+		"Pants": "SK_ma_meta_tal_nrw_slave_pants_short_01",
+		"Boots": "SK_ma_meta_tal_nrw_cultist_shoe_01_b",
+		"Cloak": "",
+		"Mainhand": "wpn_staff_cultist_01",
+		"Offhand": "",
+		"StartMontage": "/Script/Engine.AnimMontage'/Game/_ToS/Animations/Humanoid/Mage/Frank_RPG_Mage_Skill08_Montage.Frank_RPG_Mage_Skill08_Montage'",
+		"PreviewArmors":
+		{
+			"0": "8",
+			"1": "Necromancy02",
+			"2": "Necromancy03",
+			"3": "Necromancy04",
+			"4": "Necromancy05",
+			"5": "Necromancy06"
+		},
+		"Skills":
+		{
+			"Necromancy": 3,
+			"Alchemy": 2
+		}
+	},
+	{
+		"Name": "9",
+		"Str": 8,
+		"Dex": 10,
+		"Int": 10,
+		"Vig": 6,
+		"Agi": 8,
+		"Luc": 8,
+		"Chest": "SK_ma_medieval_chest_villager_02_b",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_pants_02",
+		"Boots": "SK_ma_medieval_shoe_03_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_staff_druid_01_a",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "9",
+			"1": "Tamer02",
+			"2": "Tamer03",
+			"3": "Tamer04",
+			"4": "Tamer05"
+		},
+		"Skills":
+		{
+			"AnimalKnowledge": 3,
+			"Musician": 1,
+			"Language": 1
+		}
+	},
+	{
+		"Name": "10",
+		"Str": 9,
+		"Dex": 4,
+		"Int": 15,
+		"Vig": 10,
+		"Agi": 5,
+		"Luc": 7,
+		"Chest": "SK_ma_medieval_chest_spiritual_03_b",
+		"Helmet": "SK_fe_medieval_hat_01",
+		"Gloves": "",
+		"Pants": "",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_staff_druid_01_a",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "10",
+			"1": "Healer02",
+			"2": "Healer03",
+			"3": "Healer04",
+			"4": "Healer05"
+		},
+		"Skills":
+		{
+			"Spirituality": 3,
+			"Magic Resistence": 1,
+			"Herbalism": 1
+		}
+	},
+	{
+		"Name": "11",
+		"Str": 8,
+		"Dex": 8,
+		"Int": 13,
+		"Vig": 4,
+		"Agi": 7,
+		"Luc": 10,
+		"Chest": "SK_ma_medieval_chest_citizen_01_a",
+		"Helmet": "SK_fe_medieval_hat_02",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_pants_03",
+		"Boots": "SK_ma_medieval_shoe_02_a",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "11",
+			"1": "Bard02",
+			"2": "Bard03",
+			"3": "Bard04",
+			"4": "Bard05"
+		},
+		"Skills":
+		{
+			"Musician": 3,
+			"Diplomacy": 1,
+			"Language": 1
+		}
+	},
+	{
+		"Name": "12",
+		"Str": 88,
+		"Dex": 5,
+		"Int": 8,
+		"Vig": 8,
+		"Agi": 6,
+		"Luc": 15,
+		"Chest": "SK_ma_medieval_chest_villager_01_a",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_pants_04",
+		"Boots": "SK_ma_medieval_shoe_01_c",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "12",
+			"1": "Merchant02",
+			"2": "Merchant03",
+			"3": "Merchant04",
+			"4": "Merchant05"
+		},
+		"Skills":
+		{
+			"Diplomacy": 2,
+			"Language": 2,
+			"Jewelry": 1
+		}
+	},
+	{
+		"Name": "13",
+		"Str": 8,
+		"Dex": 8,
+		"Int": 14,
+		"Vig": 6,
+		"Agi": 7,
+		"Luc": 7,
+		"Chest": "SK_ma_druid_set_01_a",
+		"Helmet": "SK_fe_druid_helm_02_a",
+		"Gloves": "",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_fe_meta_tal_nrw_shoe_01_d",
+		"Cloak": "",
+		"Mainhand": "SM_wp_staff_druid_01_a",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+			"0": "13",
+			"1": "Druid02",
+			"2": "Druid03",
+			"3": "Druid04",
+			"4": "Druid05",
+			"5": "Druid06"
+		},
+		"Skills":
+		{
+			"Druidy": 3,
+			"Herbalism": 1,
+			"Alchemy": 1
+		}
+	},
+	{
+		"Name": "Custom02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_north_02_d",
+		"Helmet": "SK_helmet_knight_01_c",
+		"Gloves": "SK_gloves_01_b",
+		"Pants": "SK_ma_medieval_armour_pants_01_a",
+		"Boots": "SK_ma_medieval_armour_boot_03_b",
+		"Cloak": "",
+		"Mainhand": "SM_wp_club_01_a",
+		"Offhand": "SM_wp_shield_round_01_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Custom03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_knight_01_d",
+		"Helmet": "SK_helmet_crusader_02_a",
+		"Gloves": "SK_gloves_01_b",
+		"Pants": "SK_ma_medieval_armour_pants_05_a",
+		"Boots": "SK_ma_medieval_armour_boot_04",
+		"Cloak": "",
+		"Mainhand": "ArzaonSword06",
+		"Offhand": "SM_wp_shield_round_01_c",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Custom04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_03_a",
+		"Helmet": "SK_ma_heavy_helm_paladin_a",
+		"Gloves": "SK_ma_bracers_heavy_04_b",
+		"Pants": "SK_ma_pants_heavy_01_a",
+		"Boots": "sk_ma_shoe_heavy_01_f",
+		"Cloak": "",
+		"Mainhand": "ArzaonSword06",
+		"Offhand": "SM_wp_shield_square_02_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Custom05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_05_c",
+		"Helmet": "SK_ma_helm_03_c",
+		"Gloves": "SK_ma_bracers_heavy_04_a",
+		"Pants": "SK_ma_pants_heavy_01_d",
+		"Boots": "SK_ma_shoe_heavy_04_c",
+		"Cloak": "SK_ma_tal_nrw_cloak_base",
+		"Mainhand": "ArzaonSword03",
+		"Offhand": "AncientUndeadShield02",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Custom06",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_plated_b",
+		"Helmet": "SK_ma_helm_darkknight_02_a",
+		"Gloves": "sk_ma_gauntlet_death_01_a",
+		"Pants": "SK_ma_pants_heavy_01_d",
+		"Boots": "SK_ma_dragon_boots_01_b",
+		"Cloak": "SK_fe_meta_tal_nrw_cloak_base_V1",
+		"Mainhand": "SM_wp_2h_sword_01",
+		"Offhand": "SM_wp_shield_heavy_05_b",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Necromancy02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_cultist_dress_e",
+		"Helmet": "SK_ma_meta_tal_nrw_cultist_hood_trim",
+		"Gloves": "SK_ma_tal_nrw_skeleton_bracers_02",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_cultist_shoe_01_a",
+		"Cloak": "",
+		"Mainhand": "wpn_staff_cultist_02",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Necromancy03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_cultist_dress_b",
+		"Helmet": "SK_ma_meta_tal_nrw_cultist_hood_trim",
+		"Gloves": "SK_ma_tal_nrw_skeleton_bracers_02",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_boots_a",
+		"Cloak": "",
+		"Mainhand": "wpn_staff_cultist_03",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Necromancy04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_cultist_dress_knight_01",
+		"Helmet": "SK_ma_meta_tal_nrw_cultist_hood_full_mask",
+		"Gloves": "SK_ma_meta_tal_nrw_cultist_bracers_d",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_boots_a",
+		"Cloak": "",
+		"Mainhand": "wpn_staff_cultist_04",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Necromancy05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_cultist_dress_knight_02",
+		"Helmet": "SK_ma_meta_tal_nrw_cultist_hood_full_mask",
+		"Gloves": "SK_ma_meta_tal_nrw_cultist_bracers_d",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_boots_a",
+		"Cloak": "SK_fe_meta_tal_nrw_cloak_base_V1",
+		"Mainhand": "wpn_staff_cultist_04",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Archer02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_rogue_01_b",
+		"Helmet": "SK_helmet_merc_01_a",
+		"Gloves": "SK_gloves_01_d",
+		"Pants": "SK_ma_medieval_armour_pants_04_b",
+		"Boots": "SK_ma_meta_tal_nrw_shoes_01_d",
+		"Cloak": "",
+		"Mainhand": "SM_wp_bow_01_rouge",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Archer03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_elv_chest_01_a",
+		"Helmet": "SK_ma_tal_nrw_helm_base",
+		"Gloves": "SK_gloves_01_d",
+		"Pants": "SK_ma_meta_tal_nrw_caster_pants_02",
+		"Boots": "SK_ma_meta_tal_nrw_shoes_01_d",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "Bow-Elf_1",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Archer04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_elv_chest_01_a2",
+		"Helmet": "SK_ma_tal_nrw_helm_elegant_a",
+		"Gloves": "SK_gloves_01_b",
+		"Pants": "SK_ma_pants_heavy_01_c",
+		"Boots": "SK_ma_meta_tal_nrw_shoes_01_d",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "ArzaonShortBow2",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Archer05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_05_d",
+		"Helmet": "SK_ma_helm_03_d",
+		"Gloves": "SK_ma_bracers_heavy_04_d",
+		"Pants": "SK_ma_pants_heavy_01_a",
+		"Boots": "SK_ma_meta_tal_nrw_shoes_01_d",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "SM_wp_bow_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Warrior02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_knight_02_b",
+		"Helmet": "SK_helmet_crusader_01_a",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_ma_medieval_armour_pants_01_b",
+		"Boots": "SK_ma_medieval_boot_01_b",
+		"Cloak": "",
+		"Mainhand": "SM_wp_sword_01",
+		"Offhand": "ArzaonShield06",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Warrior03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_knight_01_c_",
+		"Helmet": "SK_helmet_knight_01_a_hood",
+		"Gloves": "SK_gloves_03_a",
+		"Pants": "SK_ma_medieval_armour_pants_05_a",
+		"Boots": "SK_ma_medieval_boot_01_b",
+		"Cloak": "",
+		"Mainhand": "ArzaonSword05",
+		"Offhand": "SM_wp_shield_guard_01_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Warrior04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_05_b",
+		"Helmet": "SK_ma_heavy_helm_paladin_a",
+		"Gloves": "SK_ma_bracers_heavy_03_a",
+		"Pants": "SK_ma_pants_heavy_01_b",
+		"Boots": "SK_ma_shoe_heavy_04_e",
+		"Cloak": "",
+		"Mainhand": "ArzaonSword05",
+		"Offhand": "SM_wp_shield_round_01_d",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Warrior05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "sk_ma_chest_deathknight_02_c",
+		"Helmet": "SK_ma_helm_elegant_05_a",
+		"Gloves": "SK_ma_bracers_heavy_04_b",
+		"Pants": "SK_ma_pants_heavy_01_b",
+		"Boots": "SK_ma_shoe_heavy_04_a",
+		"Cloak": "SK_ma_tal_nrw_cloak_hood_down",
+		"Mainhand": "ArzaonSword05",
+		"Offhand": "SM_wp_shield_square_02_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Warrior06",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "sk_ma_chest_deathknight_02_b",
+		"Helmet": "SK_ma_helm_spiky_04_b",
+		"Gloves": "sk_ma_gauntlet_death_01_d",
+		"Pants": "SK_ma_pants_heavy_01_a",
+		"Boots": "SK_ma_dragon_boots_01_b",
+		"Cloak": "SK_ma_tal_nrw_cloak_hood_down",
+		"Mainhand": "Executioner",
+		"Offhand": "SM_wp_shield_heavy_01_b",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Mage02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "sk_ma_meta_tal_nrw_mage_dress_01_b",
+		"Helmet": "sk_ma_meta_tal_nrwhat_caster_01_a",
+		"Gloves": "",
+		"Pants": "SK_fe_meta_tal_nrw_caster_pants_03",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_wpn_mage_staff_04",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Mage03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "sk_ma_meta_tal_nrw_mage_dress_01_b_tome",
+		"Helmet": "sk_ma_meta_tal_nrwhat_caster_01_b",
+		"Gloves": "",
+		"Pants": "SK_fe_meta_tal_nrw_caster_pants_03",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_fantasy_staff_set05_04",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Mage04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_mage_dress_02_b",
+		"Helmet": "SK_fe_meta_tal_nrw_caster_hood_hair_01",
+		"Gloves": "SK_fe_meta_tal_nrw_caster_bracers_cloth_a",
+		"Pants": "SK_ma_meta_tal_nrw_caster_pants_01_001",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_wpn_mage_staff_02",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Mage05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_mage_dress_02_b_bags",
+		"Helmet": "SK_fe_meta_tal_nrw_caster_hood_hair_01",
+		"Gloves": "SK_fe_meta_tal_nrw_caster_bracers_01_light",
+		"Pants": "SK_fe_meta_tal_nrw_caster_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_boots_01_b",
+		"Cloak": "",
+		"Mainhand": "SM_fantasy_staff_set05_07",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Druid02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_druid_set_01_b",
+		"Helmet": "SK_fe_druid_helm_03_a",
+		"Gloves": "",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_fe_meta_tal_nrw_shoe_01_c",
+		"Cloak": "",
+		"Mainhand": "SKM_wp_staff_druid_01_b",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Druid03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_druid_set_01_c",
+		"Helmet": "SK_ma_mask_wood_b_feather",
+		"Gloves": "",
+		"Pants": "SK_ma_meta_tal_nrw_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_boots_03",
+		"Cloak": "SK_fe_meta_tal_nrw_cloak_base_V1",
+		"Mainhand": "SM_wp_staff_druid_01_b",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Druid04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_druid_set_02_a",
+		"Helmet": "sk_ma_druid_helm_01_b",
+		"Gloves": "",
+		"Pants": "SK_ma_meta_tal_nrw_pants_02",
+		"Boots": "SK_ma_meta_tal_nrw_boots_b",
+		"Cloak": "SK_fe_meta_tal_nrw_cloak_base_V1",
+		"Mainhand": "SM_wpn_mage_staff_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Assassin02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_soldier_02_a",
+		"Helmet": "SK_ma_medieval_hat_02",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_ma_meta_tal_nrw_pants_02",
+		"Boots": "SK_ma_medieval_armour_boot_03_b",
+		"Cloak": "",
+		"Mainhand": "SM_wp_dagger_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Assassin03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_rogue_01_b",
+		"Helmet": "SK_ma_meta_tal_nrw_scarf_mask",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_ma_meta_tal_nrw_pants_02",
+		"Boots": "SK_ma_medieval_armour_boot_03_a",
+		"Cloak": "SK_fe_meta_tal_nrw_cloak_base_V1",
+		"Mainhand": "SM_wp_sword_elegant_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Assassin04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "sk_ma_meta_tal_nrw_mage_dress_02_c_red",
+		"Helmet": "SK_ma_meta_tal_nrw_cultist_hood_full_mask",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_medieval_armour_boot_03_a",
+		"Cloak": "SK_ma_tal_nrw_cloak_base",
+		"Mainhand": "AncientUndeadDagger",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Paladin02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_knight_01_d",
+		"Helmet": "SK_helmet_crusader_02_a",
+		"Gloves": "SK_gloves_03_a",
+		"Pants": "SK_ma_medieval_armour_pants_05_a",
+		"Boots": "SK_ma_medieval_armour_boot_04",
+		"Cloak": "",
+		"Mainhand": "ArzaonMace07",
+		"Offhand": "SM_wp_shield_guard_01_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Paladin03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_04_a",
+		"Helmet": "SK_ma_heavy_helm_paladin_a",
+		"Gloves": "SK_ma_bracers_heavy_04_b",
+		"Pants": "SK_ma_medieval_armour_pants_05_a",
+		"Boots": "SK_ma_shoe_heavy_03_a",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "ArzaonHammer03",
+		"Offhand": "SM_wp_shield_heavy_06_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Paladin04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_05_b",
+		"Helmet": "SK_ma_helm_03_b",
+		"Gloves": "SK_ma_bracers_heavy_04_b",
+		"Pants": "SK_ma_pants_heavy_01_b",
+		"Boots": "SK_ma_shoe_heavy_04_e",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "ArzaonHammer05",
+		"Offhand": "SM_wp_shield_heavy_06_a",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Paladin05",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_chest_heavy_05_c",
+		"Helmet": "SK_ma_helm_03_c",
+		"Gloves": "SK_ma_bracers_heavy_04_b",
+		"Pants": "SK_ma_pants_heavy_01_b",
+		"Boots": "SK_ma_shoe_heavy_04_a",
+		"Cloak": "SK_ma_tal_nrw_cloak_base_high",
+		"Mainhand": "ArzaonHammer01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Barbarian02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_metal_tal_nrw_barbar_chest_01_b",
+		"Helmet": "SK_fe_meta_tal_nrw_helm_heavy_01_a",
+		"Gloves": "SK_ma_meta_tal_nrw_barbar_bracers_leather_02_001",
+		"Pants": "SK_ma_meta_tal_nrw_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_barbar_boots_heavy_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_axe_1h_barber_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Barbarian03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_metal_tal_nrw_barbar_chest_05_d",
+		"Helmet": "SK_ma_tal_nrw_barbar_helm_03_a",
+		"Gloves": "SK_fe_meta_tal_nrw_musc_bracers_04_metal_001",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_meta_tal_nrw_barbar_boots_heavy_a",
+		"Cloak": "",
+		"Mainhand": "SM_wp_blunt_02_brutal_short",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Barbarian04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_north_02_a_fur",
+		"Helmet": "SK_fe_meta_tal_nrw_helm_heavy_01_f",
+		"Gloves": "SK_fe_meta_tal_nrw_musc_gloves_spiky_001",
+		"Pants": "SK_fe_meta_tal_nrw_musc_pants_01",
+		"Boots": "SK_ma_medieval_boot_01_d",
+		"Cloak": "",
+		"Mainhand": "SM_wp_blunt_2h",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Tamer02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_villager_03_b",
+		"Helmet": "SK_helmet_merc_01_a",
+		"Gloves": "SK_gloves_01_b",
+		"Pants": "SK_ma_medieval_pants_01",
+		"Boots": "SK_ma_medieval_boot_01_a",
+		"Cloak": "SM_tool_pitchfork_01",
+		"Mainhand": "SM_tool_pitchfork_01",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Tamer03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_soldier_01_b",
+		"Helmet": "SK_helmet_soldier_05_a",
+		"Gloves": "SK_gloves_02_a",
+		"Pants": "SK_ma_medieval_armour_pants_02",
+		"Boots": "SK_ma_medieval_boot_01_c",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Tamer04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_chest_merc_02_b",
+		"Helmet": "SK_helmet_north_01_b",
+		"Gloves": "SK_gloves_04_a",
+		"Pants": "SK_ma_medieval_armour_pants_01_c",
+		"Boots": "SK_ma_medieval_armour_boot_03_a",
+		"Cloak": "SK_ma_tal_nrw_cloak_base",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Merchant02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_citizen_02_b",
+		"Helmet": "SK_ma_medieval_hat_02",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_ma_medieval_pants_02",
+		"Boots": "SK_ma_medieval_armour_boot_02",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Merchant03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_citizen_02_a",
+		"Helmet": "SK_fe_medieval_hat_03",
+		"Gloves": "SK_gloves_01_a",
+		"Pants": "SK_ma_medieval_pants_03",
+		"Boots": "SK_ma_medieval_armour_boot_03_b",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Merchant04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_citizen_02_c",
+		"Helmet": "SK_fe_medieval_hat_02",
+		"Gloves": "SK_gloves_02_a",
+		"Pants": "SK_ma_medieval_pants_03",
+		"Boots": "SK_ma_medieval_armour_boot_03_b",
+		"Cloak": "",
+		"Mainhand": "",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Healer02",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_spiritual_01_b",
+		"Helmet": "SK_ma_medieval_hat_03",
+		"Gloves": "",
+		"Pants": "",
+		"Boots": "SK_ma_medieval_boot_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_fantasy_staff_set05_03",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Healer03",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_medieval_chest_spiritual_01_a",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "",
+		"Boots": "SK_ma_medieval_boot_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_fantasy_staff_set05_09",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	},
+	{
+		"Name": "Healer04",
+		"Str": 0,
+		"Dex": 0,
+		"Int": 0,
+		"Vig": 0,
+		"Agi": 0,
+		"Luc": 0,
+		"Chest": "SK_ma_meta_tal_nrw_mage_dress_02_b_white",
+		"Helmet": "",
+		"Gloves": "",
+		"Pants": "SK_ma_medieval_pants_02",
+		"Boots": "SK_ma_medieval_boot_01_a",
+		"Cloak": "",
+		"Mainhand": "SM_fantasy_staff_set05_05",
+		"Offhand": "",
+		"StartMontage": "None",
+		"PreviewArmors":
+		{
+		},
+		"Skills":
+		{
+		}
+	}
+]
