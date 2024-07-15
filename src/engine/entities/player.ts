@@ -956,6 +956,7 @@ export class Player extends Humanoid {
                 
             if(hasAllItems){
                 let successRemoveItems = true;
+                let bonusExp = 0;
 
                 for(let resource of recipe.resources){
                     let slotId = this.inventory.getSlotByItemNamespace(resource.ItemName);
@@ -979,10 +980,10 @@ export class Player extends Humanoid {
 
                     if(playerSkill >= recipe.skillLevel || recipe.skillReq === SkillName.Manufacturing){                        
                         const chanceCraft = [50,75,100];
-                        const craftChance = Math.max((playerSkill > (recipe.skillLevel + 1)) ? 100 : chanceCraft[playerSkill - recipe.skillLevel], 50);                        
+                        const craftChance = Math.max((playerSkill >= (recipe.skillLevel + 1)) ? 100 : Math.round((playerSkill * 100) / recipe.skillLevel), 50);                        
                         const successCraft = (craftChance < 100 && recipe.skillReq !== SkillName.Manufacturing) ? Random.MinMaxInt(1, 100) <= craftChance : true;
 
-                        if(successCraft || recipe.skillReq === SkillName.Manufacturing){
+                        if(successCraft || recipe.skillReq === SkillName.Manufacturing || craftChance >= 100){
                             if(craftChance >= 100 && baseItem instanceof Equipament)
                                 baseItem.randomRarity(this);
 
@@ -1007,9 +1008,12 @@ export class Player extends Humanoid {
                                 props, 
                                 (hasStackableItem === -1)
                             );
+
+                            if(baseItem instanceof Equipament)
+                                bonusExp = playerSkill * 3;
     
-                            if(playerSkill < (recipe.skillLevel + 1))
-                                this.gainSkillExperiencie(recipe.skillReq, playerSkill);
+                            if(playerSkill <= (recipe.skillLevel + 1))
+                                this.gainSkillExperiencie(recipe.skillReq, playerSkill + bonusExp);
 
                             if(baseItem.Rarity === ItemRarity.Legendary)
                                 packetSpecialMessage.send(this, `You crafted a legendary item!!!!`);
@@ -1026,8 +1030,8 @@ export class Player extends Humanoid {
                         else {
                             this.inventoryChange();
 
-                            if(playerSkill < (recipe.skillLevel + 1))
-                                this.gainSkillExperiencie(recipe.skillReq, Math.round(playerSkill * 2));
+                            if(playerSkill <= (recipe.skillLevel + 1))
+                                this.gainSkillExperiencie(recipe.skillReq, Math.round(playerSkill * 2) + bonusExp);
 
                             packetSystemMessage.sendDirectSocket(this.socket, `You failed in your attempt to create ${baseItem.Name} but you receive double experience for the attempt`);
                             packetCraftingLog.send(this, "Crafting Fail!", false);
@@ -1035,9 +1039,9 @@ export class Player extends Humanoid {
                     }
                     else {
                         this.inventoryChange();
-
-                        if(playerSkill < (recipe.skillLevel + 1))
-                            this.gainSkillExperiencie(recipe.skillReq, Math.round(playerSkill * 2));
+                        
+                        if(playerSkill <= (recipe.skillLevel + 1))
+                            this.gainSkillExperiencie(recipe.skillReq, Math.round(playerSkill * 4));
 
                         packetSystemMessage.sendDirectSocket(this.socket, `You failed in your attempt to create ${baseItem.Name} but you receive triple experience for the attempt`);
                         packetCraftingLog.send(this, "Crafting Fail!", false);

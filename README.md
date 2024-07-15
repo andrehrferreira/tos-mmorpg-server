@@ -58,8 +58,8 @@ SMTP_HOST=""
 SMTP_USERNAME=""
 SMTP_PASSWORD=""
 
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
 
 DATABASE_TYPE=sqlite
 DATABASE_MONGODB_URI=""
@@ -68,6 +68,7 @@ DATABASE_SQLITE_PATH="./database.sqlite"
 REDIS_URL="redis://localhost:6379"
 REDIS_HOST="localhost"
 REDIS_PORT="6379"
+
 MONGODB_URL="mongodb://localhost:27017/tos?directConnection=true&authSource=admin"
 MONGODB_DATABASE="tos"
 MONGODB_USER=""
