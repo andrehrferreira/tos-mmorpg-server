@@ -35,7 +35,7 @@ export class AuthService {
     }
 
 	async getAllUsers(token: string){
-		const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+		const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 		const userInfo = await this.accountModel.findOne({ _id: decoded.data.masterId });
 
 		if(userInfo.plevel >= Plevel.Administrator){
@@ -69,7 +69,7 @@ export class AuthService {
 		if(user.plevel > 1){
 			try{
 				if(token){
-					const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+					const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 					const userInfo = await this.accountModel.findOne({ _id: decoded.data.masterId });
 
 					if(userInfo.plevel < Plevel.Administrator)
@@ -106,7 +106,7 @@ export class AuthService {
 	}
 
 	async updateUser(user: IUser, accountId: string, token: string, system: boolean = false){
-		const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+		const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 		const userInfo = await this.accountModel.findOne({ _id: decoded.data.masterId });
 
 		if(userInfo.plevel < Plevel.Administrator && !system)
@@ -290,7 +290,7 @@ export class AuthService {
 	}
 
 	async loginToServer(token: string){
-		const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+		const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 		
 		const userInfo: any = await this.accountModel.findOne({ _id: decoded.data.masterId });
 

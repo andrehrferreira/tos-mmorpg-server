@@ -50,7 +50,7 @@ export class CharactersService {
 	async createCharacter(characterPayload: ICharacterCreatePayload, token: string){
         try{
             const limitCharsPerAccount = parseInt(this.configService.get('TOR_CHARS_PER_ACCOUNT'));
-            const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+            const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 
             const characterCount = await this.repository.getCharacterCount(decoded.data.masterId);
             const payload : ICharacterPayloadInfo = JSON.parse(characterPayload.payload);
@@ -209,7 +209,7 @@ export class CharactersService {
     }
 
     async getAllCharacters(token: string){
-        const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+        const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
         const characters = await this.repository.getCharacters(decoded.data.masterId);
 
         for(let key in characters){
@@ -235,7 +235,7 @@ export class CharactersService {
 
     async getFullCharacterInfo(token: string, characterId: string){
         try{
-            const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+            const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
             const character = Player.getData(characterId);
 
             if(!character)
