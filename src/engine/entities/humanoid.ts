@@ -33,6 +33,10 @@ export class Humanoid extends Entity {
     public petInstance: Pet;
     public mount: IEquipament;
 
+    public pickaxetool: IEquipament;
+    public axetool: IEquipament;
+    public scythetool: IEquipament;
+
     public equipaments: Array<Equipament> = new Array<Equipament>();
 
     public init(){
@@ -96,6 +100,9 @@ export class Humanoid extends Entity {
                         this.mount = equipamentRef; 
                         (equipament as MountItem).onEquip(this);
                     break;
+                    case EquipamentType.PickaxeTool: this.pickaxetool = equipamentRef; break;
+                    case EquipamentType.AxeTool: this.axetool = equipamentRef; break;
+                    case EquipamentType.ScytheTool: this.scythetool = equipamentRef; break;
                 }
 
                 if(equipament.EquipamentType === EquipamentType.Weapon){
@@ -356,6 +363,42 @@ export class Humanoid extends Entity {
                     this.save();
                 }               
             break;
+            case EquipamentType.PickaxeTool: 
+                if(this.pickaxetool){
+                    const pickaxetoolRef = this.pickaxetool.ItemRef;
+                    this.pickaxetool = null; 
+
+                    this.addToInventory(pickaxetoolRef, 1, slotId);
+
+                    this.refreshEquipamentsList();
+                    this.calculateStatics();
+                    this.save();
+                }               
+            break;
+            case EquipamentType.AxeTool: 
+                if(this.axetool){
+                    const axetoolRef = this.axetool.ItemRef;
+                    this.axetool = null; 
+
+                    this.addToInventory(axetoolRef, 1, slotId);
+
+                    this.refreshEquipamentsList();
+                    this.calculateStatics();
+                    this.save();
+                }               
+            break;
+            case EquipamentType.ScytheTool: 
+                if(this.scythetool){
+                    const scythetoolRef = this.scythetool.ItemRef;
+                    this.scythetool = null; 
+
+                    this.addToInventory(scythetoolRef, 1, slotId);
+
+                    this.refreshEquipamentsList();
+                    this.calculateStatics();
+                    this.save();
+                }               
+            break;
         }
     }
 
@@ -469,6 +512,27 @@ export class Humanoid extends Entity {
                 equipaments.push(mountItem as Equipament);
         }
 
+        if(this.pickaxetool){
+            const pickaxetoolItem = Items.getItemByRef(this.pickaxetool.ItemRef);
+
+            if(pickaxetoolItem)
+                equipaments.push(pickaxetoolItem as Equipament);
+        }
+
+        if(this.axetool){
+            const axetoolItem = Items.getItemByRef(this.axetool.ItemRef);
+
+            if(axetoolItem)
+                equipaments.push(axetoolItem as Equipament);
+        }
+
+        if(this.scythetool){
+            const scythetoolItem = Items.getItemByRef(this.scythetool.ItemRef);
+
+            if(scythetoolItem)
+                equipaments.push(scythetoolItem as Equipament);
+        }
+        
         this.equipaments = equipaments;
         this.calculateStatics();
         this.refreshEquipamentsHeavy();
@@ -624,5 +688,10 @@ export class Humanoid extends Entity {
         this.energyDamage = this.getEquipamentsAttr(AttributeType.EnergyDamage);
         this.lightDamage = this.getEquipamentsAttr(AttributeType.LightDamage);
         this.darkDamage = this.getEquipamentsAttr(AttributeType.DarkDamage);
+
+        //Collect
+        this.bonusCollectsMineral = this.getEquipamentsAttr(AttributeType.BonusCollectsMineral);
+        this.bonusCollectsSkins = this.getEquipamentsAttr(AttributeType.BonusCollectsSkins);
+        this.bonusCollectsWood = this.getEquipamentsAttr(AttributeType.BonusCollectsWood);
     }
 }

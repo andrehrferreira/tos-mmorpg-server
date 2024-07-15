@@ -279,6 +279,10 @@ export class Player extends Humanoid {
         this.pet = this.characterModel.pet;
         this.mount = this.characterModel.mount;
 
+        this.pickaxetool = this.characterModel.pickaxetool;
+        this.axetool = this.characterModel.axetool;
+        this.scythetool = this.characterModel.scythetool;
+
         this.transform = new Transform(
             new Vector3(this.characterModel.x, this.characterModel.y, this.characterModel.z),  
             new Rotator(0, 0, this.characterModel.r)
@@ -412,7 +416,10 @@ export class Player extends Humanoid {
             this.mainhand?.ItemRef,
             this.instrument?.ItemRef,
             this.pet?.ItemRef,
-            this.mount?.ItemRef
+            this.mount?.ItemRef,
+            this.pickaxetool?.ItemRef,
+            this.axetool?.ItemRef,
+            this.scythetool?.ItemRef
         ].filter(ref => ref);
 
         Object.entries(inventoryParsed).forEach(([slotId, item] : [string, any]) => {
@@ -470,6 +477,9 @@ export class Player extends Humanoid {
             instrument: (this.instrument) ? JSON.stringify(this.instrument) : null,
             pet: (this.pet) ? JSON.stringify(this.pet) : null,
             mount: (this.mount) ? JSON.stringify(this.mount) : null,
+            pickaxetool: (this.pickaxetool) ? JSON.stringify(this.pickaxetool) : null,
+            axetool: (this.axetool) ? JSON.stringify(this.axetool) : null,
+            scythetool: (this.mount) ? JSON.stringify(this.scythetool) : null,
             actionbar: (actionbarParsed) ? JSON.stringify(actionbarParsed) : null,
             skills: (skillsParsed) ? JSON.stringify(skillsParsed) : null,
             inventory: (inventoryParsed) ? inventoryParsed : "{}",
@@ -552,6 +562,9 @@ export class Player extends Humanoid {
         character.instrument = (character.instrument) ? Player.getRarity(JSON.parse(character.instrument)) : null;
         character.pet = (character.pet) ? Player.getRarity(JSON.parse(character.pet)) : null;
         character.mount = (character.mount) ? Player.getRarity(JSON.parse(character.mount)) : null;
+        character.pickaxetool = (character.pickaxetool) ? Player.getRarity(JSON.parse(character.pickaxetool)) : null;
+        character.axetool = (character.axetool) ? Player.getRarity(JSON.parse(character.axetool)) : null;
+        character.scythetool = (character.scythetool) ? Player.getRarity(JSON.parse(character.scythetool)) : null;
 
         //Daily Quests
         let dailyMetadata = character.dailyQuestsMetadata || null;
@@ -574,14 +587,6 @@ export class Player extends Humanoid {
         
         //Steam
         character.archivements = (character.archivements && typeof character.archivements === "string") ? JSON.parse(character.archivements) : []
-
-        try{
-            /*if(character.guild){
-                character.guildName = character.guild
-            }   
-            else*/
-        }
-        catch{}
         
         return JSON.stringify(character);
     }
@@ -608,7 +613,7 @@ export class Player extends Humanoid {
                 set: data
             });
 
-            if(this.map.namespace === "_Dev") {
+            if(this.map?.namespace === "_Dev") {
                 delete data.map;
                 delete data.x;
                 delete data.y;
@@ -857,6 +862,7 @@ export class Player extends Humanoid {
         if(action !== null || item !== null){
             this.actionbar.set(index, new ActionbarRef(action, item, index));
             this.save();
+            this.saveToDatabase();
         }
     }
 
@@ -864,17 +870,18 @@ export class Player extends Humanoid {
         if(this.actionbar.has(index)){
             this.actionbar.delete(index);
             this.save();
+            this.saveToDatabase();
         }
     }
 
-    //Equip/Desquip
+    //Equipments
     public async equip(type: EquipamentType, itemId: string, itemRef: string, ring02: boolean = false) {
         await super.equip(type, itemId, itemRef, ring02);
         this.calculateStats();
         packetUpdateStats.send(this);
         packetPlayerStatics.send(this);  
         this.save();
-        await this.saveToDatabase();
+        this.saveToDatabase();
     }
 
     public async desequip(type: EquipamentType, ring02: boolean = false, broadcast: boolean = false, slotId: number = -1) {
@@ -885,14 +892,70 @@ export class Player extends Humanoid {
         packetUpdateStats.send(this);
         packetPlayerStatics.send(this);  
         this.save();
-        await this.saveToDatabase();
+        this.saveToDatabase();
     }
 
-    public playerActions(type: PlayerActions, medatata: any){
-
+    public async reduceDurability(type: EquipamentType) {
         switch(type){
-            case PlayerActions.RequestFriend: this.requestFriend(medatata.characterId); break;
+            case EquipamentType.Helmet: 
+                await Items.reduceDurability(this.helmet.ItemRef, this); 
+                const helmetItem = Items.getItemByRef(this.helmet.ItemRef);
+                packetRefreshTooltip.send(this, this.helmet.ItemRef, helmetItem.serealize());
+            break;
+            case EquipamentType.Chest: 
+                await Items.reduceDurability(this.chest.ItemRef, this); 
+                const chestItem = Items.getItemByRef(this.chest.ItemRef);
+                packetRefreshTooltip.send(this, this.chest.ItemRef, chestItem.serealize());
+            break;
+            case EquipamentType.Gloves: 
+                await Items.reduceDurability(this.gloves.ItemRef, this); 
+                const glovesItem = Items.getItemByRef(this.gloves.ItemRef);
+                packetRefreshTooltip.send(this, this.gloves.ItemRef, glovesItem.serealize());
+            break;
+            case EquipamentType.Pants: 
+                await Items.reduceDurability(this.pants.ItemRef, this); 
+                const pantsItem = Items.getItemByRef(this.pants.ItemRef);
+                packetRefreshTooltip.send(this, this.pants.ItemRef, pantsItem.serealize());
+            break;
+            case EquipamentType.Boots: 
+                await Items.reduceDurability(this.boots.ItemRef, this); 
+                const bootsItem = Items.getItemByRef(this.boots.ItemRef);
+                packetRefreshTooltip.send(this, this.boots.ItemRef, bootsItem.serealize());
+            break;
+            case EquipamentType.Offhand: 
+                await Items.reduceDurability(this.offhand.ItemRef, this); 
+                const offhandItem = Items.getItemByRef(this.offhand.ItemRef);
+                packetRefreshTooltip.send(this, this.offhand.ItemRef, offhandItem.serealize());
+            break;
+            case EquipamentType.Weapon: 
+                await Items.reduceDurability(this.mainhand.ItemRef, this);
+                const mainhandItem = Items.getItemByRef(this.mainhand.ItemRef);
+                packetRefreshTooltip.send(this, this.mainhand.ItemRef, mainhandItem.serealize()); 
+            break;
+            case EquipamentType.Instrument: 
+                await Items.reduceDurability(this.instrument.ItemRef, this); 
+                const instrumentItem = Items.getItemByRef(this.instrument.ItemRef);
+                packetRefreshTooltip.send(this, this.instrument.ItemRef, instrumentItem.serealize()); 
+            break;
+            case EquipamentType.PickaxeTool: 
+                await Items.reduceDurability(this.pickaxetool.ItemRef, this); 
+                const pickaxetoolItem = Items.getItemByRef(this.pickaxetool.ItemRef);
+                packetRefreshTooltip.send(this, this.pickaxetool.ItemRef, pickaxetoolItem.serealize());                 
+            break;
+            case EquipamentType.AxeTool: 
+                await Items.reduceDurability(this.axetool.ItemRef, this); 
+                const axetoolItem = Items.getItemByRef(this.axetool.ItemRef);
+                packetRefreshTooltip.send(this, this.axetool.ItemRef, axetoolItem.serealize()); 
+            break;
+            case EquipamentType.ScytheTool: 
+                await Items.reduceDurability(this.scythetool.ItemRef, this);
+                const scythetoolItem = Items.getItemByRef(this.scythetool.ItemRef);
+                packetRefreshTooltip.send(this, this.scythetool.ItemRef, scythetoolItem.serealize());
+            break;
         }
+
+        this.refreshEquipamentsList();
+        this.calculateStatics();
     }
 
     //Collect / Gathering
@@ -1539,6 +1602,12 @@ export class Player extends Humanoid {
         //Se for fila, entra pro sistema de procura/match de grupo
             //Ao finalizar a fila, teleporta tudo mundo
         //Se for solo, teleporta
+    }
+
+    public playerActions(type: PlayerActions, medatata: any){
+        switch(type){
+            case PlayerActions.RequestFriend: this.requestFriend(medatata.characterId); break;
+        }
     }
 
     //Steam

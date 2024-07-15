@@ -17,7 +17,8 @@ import {
     Player, Random, RedFruit, Root, SilverOre, Stone, Tin, 
     Vector3, Weapon, WeaponType, YellowFlower,
     Cotton, IpeWood, OakWood, ArcaneFiber, MapleWood, 
-    DarkOre, HeavenlyOre, Emerald, Diamond, Ametist, Ruby, Sunstone 
+    DarkOre, HeavenlyOre, Emerald, Diamond, Ametist, Ruby, 
+    Sunstone, EquipamentType, ItemStates, Gemstone 
 } from ".";
 
 export enum GatherableType {
@@ -88,21 +89,22 @@ export class GatherableResource {
     public resourceWithWrongEquipament: { new (): any };
     public indexGreatLevel = 0;
     public skill: SkillName = SkillName.None;
-    public equipamentNeed: WeaponType = WeaponType.None;
-    public equipamentNeed2: WeaponType = WeaponType.None;
+    public equipamentNeed: EquipamentType = EquipamentType.None;
     public consumeAllTicks: boolean = false;
     public maxSkillGain: number = 5;
 
     public static Resources: Map<GatherableType, { new (): any }> = new Map<GatherableType, { new (): any }>();
 
     public async collect(player: Player) {
-        if(this.tick <= 0)
-            player.gatherableInteract = null;
+        if(this.tick <= 0){
+            packetFinishCollect.send(player, this.settings.foliageId);
+            player.gatherableInteract = null;            
+        }            
 
         if(this.tick > 0) {
             let position = new Vector3(this.settings.x, this.settings.y, this.settings.z);
             let skill = Math.abs(player.getSkillValue(this.skill));
-            const mainHandEquipament = (player.mainhand) ? Items.getItemByRef(player.mainhand.ItemRef) : null;
+            let bonusCollect = 1;
             let withoutEquipament = true;
 
             if(skill <= 1)
@@ -110,14 +112,43 @@ export class GatherableResource {
 
             let resouces = [{ Item: this.resourceWithWrongEquipament, Chance: 100 }];
 
-            if(
-                mainHandEquipament && 
-                ((mainHandEquipament as Weapon).WeaponType === this.equipamentNeed ||
-                (mainHandEquipament as Weapon).WeaponType === this.equipamentNeed2)
-            ){
-                resouces = this.resourcePerLevel[Math.round(skill)];
-                resouces = (!resouces) ? this.resourcePerLevel[this.indexGreatLevel] : resouces;
-                withoutEquipament = false;
+            switch(this.equipamentNeed){
+                case EquipamentType.AxeTool: 
+                    if(player.axetool){
+                        const axetoolItem = Items.getItemByRef(player.axetool.ItemRef);
+
+                        if(axetoolItem && axetoolItem.Flags.dontHasFlag(ItemStates.Broken)){
+                            resouces = this.resourcePerLevel[Math.round(skill)];
+                            resouces = (!resouces) ? this.resourcePerLevel[this.indexGreatLevel] : resouces;
+                            withoutEquipament = false;
+                            bonusCollect = Math.round(Math.max(player.bonusCollectsWood, 0));
+                        }
+                    }
+                break;
+                case EquipamentType.PickaxeTool: 
+                    if(player.pickaxetool) {
+                        const pickaxetoolItem = Items.getItemByRef(player.pickaxetool.ItemRef);
+
+                        if(pickaxetoolItem && pickaxetoolItem.Flags.dontHasFlag(ItemStates.Broken)){
+                            resouces = this.resourcePerLevel[Math.round(skill)];
+                            resouces = (!resouces) ? this.resourcePerLevel[this.indexGreatLevel] : resouces;
+                            withoutEquipament = false;
+                            bonusCollect = Math.round(Math.max(player.bonusCollectsMineral, 0));
+                        }
+                    }
+                break;
+                case EquipamentType.ScytheTool: 
+                    if(player.scythetool){
+                        const scythetoolItem = Items.getItemByRef(player.scythetool.ItemRef);
+
+                        if(scythetoolItem && scythetoolItem.Flags.dontHasFlag(ItemStates.Broken)){
+                            resouces = this.resourcePerLevel[Math.round(skill)];
+                            resouces = (!resouces) ? this.resourcePerLevel[this.indexGreatLevel] : resouces;
+                            withoutEquipament = false;
+                            bonusCollect = Math.round(Math.max(player.bonusCollectsSkins, 0));
+                        }
+                    }
+                break;
             }
 
             if(
@@ -130,8 +161,17 @@ export class GatherableResource {
 
                 for(let i = 0; i < generateTicks; i++){
                     const itemBase = this.selectRandomItem(resouces);
-                    const amount = Random.MinMaxInt(1, skill);
-                    const baseItem = new itemBase();                    
+                    const max = Math.max(itemBase.Max ? itemBase.Max : 1, skill);
+
+                    if(bonusCollect < 0)
+                        bonusCollect = 1;
+
+                    let amount = Random.MinMaxInt(1, max) + Math.max(Math.round(max * (bonusCollect / 100)), 0);
+
+                    if(amount < 1 || isNaN(amount) || itemBase instanceof Gemstone)
+                        amount = 1;
+
+                    const baseItem = new itemBase.Item();                    
                     const hasStackableItem = player.inventory.hasStackableItem(baseItem);
                     this.tick--;
 
@@ -155,26 +195,33 @@ export class GatherableResource {
 
                     if(playerSkill < this.maxSkillGain)
                         player.gainSkillExperiencie(this.skill);
+
+                    switch(this.equipamentNeed){
+                        case EquipamentType.AxeTool: Items.reduceDurability(player.axetool.ItemRef, player); break;
+                        case EquipamentType.PickaxeTool: Items.reduceDurability(player.pickaxetool.ItemRef, player); break;
+                        case EquipamentType.ScytheTool: Items.reduceDurability(player.scythetool.ItemRef, player); break;
+                    }
                 }
                     
                 player.save();
 
                 if(this.tick <= 0){
-                    packetFinishCollect.send(player, this.foliageId);
+                    packetFinishCollect.send(player, this.settings.foliageId);
 
                     this.map.entitiesMapIndex.forEach((entity) => {
                         if(entity instanceof Player)
-                            packetFinishCollect.send(entity as Player, this.foliageId);
+                            packetFinishCollect.send(entity as Player, this.settings.foliageId);
                     });
                 }                
             }
         }
         else {
-            packetFinishCollect.send(player, this.foliageId);
+            packetFinishCollect.send(player, this.settings.foliageId);
+            packetSystemMessage.sendDirectSocket(player.socket, `The resource has been exhausted and can no longer be collected`);
 
             this.map.entitiesMapIndex.forEach((entity) => {
                 if(entity instanceof Player)
-                    packetFinishCollect.send(entity as Player, this.foliageId);
+                    packetFinishCollect.send(entity as Player, this.settings.foliageId);
             });
         }
     }
@@ -194,18 +241,27 @@ export class GatherableResource {
         return null
     }
 
-    protected selectRandomItem(items: { Item: any; Chance: number }[]): { new (): any } {
+    protected selectRandomItem(items: { Item: any; Chance: number, Max?: number }[]): { Item: { new (): any }, Max: number } {
         const totalChances = items.reduce((acc, curr) => acc + curr.Chance, 0);
         let random = Math.random() * totalChances;
+        let Max = 1;
 
         for (const item of items) {
             random -= item.Chance;
-            if (random <= 0) {
-                return item.Item;
-            }
+
+            try{
+                Max = item.Max;
+            } catch { }
+
+            if (random <= 0) 
+                return { Item: item.Item, Max };
         }
 
-        return items[items.length - 1].Item;
+        try{
+            Max = items[items.length - 1].Max;
+        } catch { }
+
+        return { Item: items[items.length - 1].Item, Max: 1 };
     }
 
     public setEntityId(foliageId: string){
@@ -220,30 +276,37 @@ export class GatherableResource {
 export class TreeSpot extends GatherableResource {
     public override skill = SkillName.Lumberjack;
     public override indexGreatLevel = 5;
-    public override equipamentNeed = WeaponType.Axe;
-    public override equipamentNeed2 = WeaponType.TwoHandedAxe;
+    public override equipamentNeed = EquipamentType.AxeTool;
     public override resourceWithWrongEquipament = Stick;
     public override maxSkillGain = 5;
 
     public override resourcePerLevel = {
-        1: [{ Item: Stick, Chance: 16 }, { Item: Wood, Chance: 80 }, { Item: Leaves, Chance: 5 }],
-        2: [{ Item: Stick, Chance: 5 }, { Item: Wood, Chance: 90 }, { Item: Leaves, Chance: 5 }],
+        1: [
+            { Item: Stick, Chance: 16, Max: 20 }, 
+            { Item: Wood, Chance: 80, Max: 20 }, 
+            { Item: Leaves, Chance: 5, Max: 20 }
+        ],
+        2: [
+            { Item: Stick, Chance: 5, Max: 20 }, 
+            { Item: Wood, Chance: 90, Max: 20 }, 
+            { Item: Leaves, Chance: 5, Max: 20 }
+        ],
         3: [
-            { Item: Stick, Chance: 10 }, 
-            { Item: Wood, Chance: 80 }, 
-            { Item: Leaves, Chance: 5 }, 
-            { Item: IpeWood, Chance: 5 }
+            { Item: Stick, Chance: 10, Max: 20 }, 
+            { Item: Wood, Chance: 80, Max: 20 }, 
+            { Item: Leaves, Chance: 5, Max: 20 }, 
+            { Item: IpeWood, Chance: 5, Max: 20 }
         ],
         4: [
-            { Item: Wood, Chance: 75 },
-            { Item: Root, Chance: 5 }, 
-            { Item: IpeWood, Chance: 20 }
+            { Item: Wood, Chance: 75, Max: 20 },
+            { Item: Root, Chance: 5, Max: 20 }, 
+            { Item: IpeWood, Chance: 20, Max: 20 }
         ],
         5: [
-            { Item: Wood, Chance: 60 },  
-            { Item: IpeWood, Chance: 25 }, 
-            { Item: OakWood, Chance: 10 }, 
-            { Item: MapleWood, Chance: 1 }
+            { Item: Wood, Chance: 30, Max: 20 },  
+            { Item: IpeWood, Chance: 40, Max: 20 }, 
+            { Item: OakWood, Chance: 25, Max: 20 }, 
+            { Item: MapleWood, Chance: 5, Max: 20 }
         ]
     };    
 }
@@ -251,36 +314,49 @@ export class TreeSpot extends GatherableResource {
 export class StoneSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override indexGreatLevel = 4;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 5;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 70 }, { Item: Tin, Chance: 5 }, { Item: CopperOre, Chance: 25 }],
-        2: [{ Item: Stone, Chance: 45 }, { Item: CopperOre, Chance: 25 }, { Item: IronOre, Chance: 25 }, { Item: Tin, Chance: 5 }],
+        1: [
+            { Item: Stone, Chance: 70, Max: 20 }, 
+            { Item: Tin, Chance: 5, Max: 20 }, 
+            { Item: CopperOre, Chance: 25, Max: 20 }
+        ],
+        2: [
+            { Item: Stone, Chance: 45, Max: 20 }, 
+            { Item: CopperOre, Chance: 25, Max: 20 }, 
+            { Item: IronOre, Chance: 25, Max: 20 }, 
+            { Item: Tin, Chance: 5, Max: 20 }
+        ],
         3: [
-            { Item: Stone, Chance: 10 }, { Item: CopperOre, Chance: 35 }, 
-            { Item: IronOre, Chance: 35 }, { Item: Tin, Chance: 20 }
+            { Item: Stone, Chance: 10, Max: 20 }, 
+            { Item: CopperOre, Chance: 35, Max: 20 }, 
+            { Item: IronOre, Chance: 35, Max: 20 }, 
+            { Item: Tin, Chance: 20, Max: 20 }
         ],
         4: [
-            { Item: Stone, Chance: 10 }, { Item: CopperOre, Chance: 35 }, 
-            { Item: IronOre, Chance: 35 }, { Item: Tin, Chance: 10 }, 
-            { Item: SilverOre, Chance: 9 }, { Item: GoldOre, Chance: 1 }
+            { Item: Stone, Chance: 10, Max: 20 }, 
+            { Item: CopperOre, Chance: 35, Max: 20 }, 
+            { Item: IronOre, Chance: 35, Max: 20 }, 
+            { Item: Tin, Chance: 10, Max: 20 }, 
+            { Item: SilverOre, Chance: 9, Max: 10 }, 
+            { Item: GoldOre, Chance: 1, Max: 5 }
         ]
     };
 }
 
 export class BigStoneSpot extends StoneSpot {
     public override skill = SkillName.Mining;
-    public override tick: number = Random.MinMaxInt(20, 30);
+    public override tick: number = Random.MinMaxInt(30, 40);
+    public override maxSkillGain = 5;
 }
 
 export class BushSpot extends GatherableResource {
     public override skill = SkillName.Herbalism;
     public override indexGreatLevel = 5;
-    public override equipamentNeed = WeaponType.Dagger;
-    public override equipamentNeed2 = WeaponType.Sword;
+    public override equipamentNeed = EquipamentType.ScytheTool;
     public override resourceWithWrongEquipament = Fiber;
     public override consumeAllTicks = false;
     public override maxSkillGain = 5;
@@ -369,8 +445,7 @@ export class CooperSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(10, 20);
     public override indexGreatLevel = 2;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 5;
 
@@ -392,30 +467,29 @@ export class IronSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(10, 20);
     public override indexGreatLevel = 4;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 5;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
         2: [
-            { Item: Stone, Chance: 50 }, 
-            { Item: IronOre, Chance: 40 }, 
-            { Item: CopperOre, Chance: 10 }
+            { Item: Stone, Chance: 50, Max: 20 }, 
+            { Item: IronOre, Chance: 40, Max: 20 }, 
+            { Item: CopperOre, Chance: 10, Max: 20 }
         ],
         3: [
-            { Item: Stone, Chance: 20 }, 
-            { Item: IronOre, Chance: 70 }, 
-            { Item: CopperOre, Chance: 10 }
+            { Item: Stone, Chance: 20, Max: 20 }, 
+            { Item: IronOre, Chance: 70, Max: 20 }, 
+            { Item: CopperOre, Chance: 10, Max: 20 }
         ],
         4: [
-            { Item: IronOre, Chance: 100 },
-            { Item: Emerald, Chance: 1 },
-            { Item: Diamond, Chance: 0.1 },
-            { Item: Ametist, Chance: 0.1 },
-            { Item: Ruby, Chance: 0.1 },
-            { Item: Sunstone, Chance: 0.1 }
+            { Item: IronOre, Chance: 100, Max: 20 },
+            { Item: Emerald, Chance: 1, Max: 1 },
+            { Item: Diamond, Chance: 0.1, Max: 1 },
+            { Item: Ametist, Chance: 0.1, Max: 1 },
+            { Item: Ruby, Chance: 0.1, Max: 1 },
+            { Item: Sunstone, Chance: 0.1, Max: 1 }
         ],
     };
 }
@@ -424,26 +498,25 @@ export class SilverSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(5, 10);
     public override indexGreatLevel = 5;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 6;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
-        2: [{ Item: Stone, Chance: 100 }],
-        3: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
+        2: [{ Item: Stone, Chance: 100, Max: 20 }],
+        3: [{ Item: Stone, Chance: 100, Max: 20 }],
         4: [
-            { Item: Stone, Chance: 80 }, 
-            { Item: SilverOre, Chance: 20 }
+            { Item: Stone, Chance: 80, Max: 20 }, 
+            { Item: SilverOre, Chance: 20, Max: 20 }
         ],
         5: [
-            { Item: SilverOre, Chance: 100 },
-            { Item: Emerald, Chance: 1 },
-            { Item: Diamond, Chance: 0.1 },
-            { Item: Ametist, Chance: 0.1 },
-            { Item: Ruby, Chance: 0.1 },
-            { Item: Sunstone, Chance: 0.1 }
+            { Item: SilverOre, Chance: 98, Max: 20 },
+            { Item: Emerald, Chance: 1, Max: 1 },
+            { Item: Diamond, Chance: 0.1, Max: 1 },
+            { Item: Ametist, Chance: 0.1, Max: 1 },
+            { Item: Ruby, Chance: 0.1, Max: 1 },
+            { Item: Sunstone, Chance: 0.1, Max: 1 }
         ],
     };
 }
@@ -452,27 +525,26 @@ export class GoldSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(5, 10);
     public override indexGreatLevel = 6;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
-    public override maxSkillGain = 7;
+    public override maxSkillGain = 8;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
-        2: [{ Item: Stone, Chance: 100 }],
-        3: [{ Item: Stone, Chance: 100 }],
-        4: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
+        2: [{ Item: Stone, Chance: 100, Max: 20 }],
+        3: [{ Item: Stone, Chance: 100, Max: 20 }],
+        4: [{ Item: Stone, Chance: 100, Max: 20 }],
         5: [
-            { Item: GoldOre, Chance: 5 }, 
-            { Item: Stone, Chance: 95 }
+            { Item: GoldOre, Chance: 5, Max: 20 }, 
+            { Item: Stone, Chance: 95, Max: 20 }
         ],
         6: [
-            { Item: GoldOre, Chance: 100 },
-            { Item: Emerald, Chance: 1 },
-            { Item: Diamond, Chance: 0.1 },
-            { Item: Ametist, Chance: 0.1 },
-            { Item: Ruby, Chance: 0.1 },
-            { Item: Sunstone, Chance: 0.1 }
+            { Item: GoldOre, Chance: 95, Max: 20 },
+            { Item: Emerald, Chance: 1, Max: 1 },
+            { Item: Diamond, Chance: 1, Max: 1 },
+            { Item: Ametist, Chance: 1, Max: 1 },
+            { Item: Ruby, Chance: 1, Max: 1 },
+            { Item: Sunstone, Chance: 1, Max: 1 }
         ],
     };
 }
@@ -481,25 +553,24 @@ export class DarkSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(2, 5);
     public override indexGreatLevel = 7;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 10;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
-        2: [{ Item: Stone, Chance: 100 }],
-        3: [{ Item: Stone, Chance: 100 }],
-        4: [{ Item: Stone, Chance: 100 }],
-        5: [{ Item: Stone, Chance: 100 }],
-        6: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
+        2: [{ Item: Stone, Chance: 100, Max: 20 }],
+        3: [{ Item: Stone, Chance: 100, Max: 20 }],
+        4: [{ Item: Stone, Chance: 100, Max: 20 }],
+        5: [{ Item: Stone, Chance: 100, Max: 20 }],
+        6: [{ Item: Stone, Chance: 100, Max: 20 }],
         7: [
-            { Item: DarkOre, Chance: 100 },
-            { Item: Emerald, Chance: 1 },
-            { Item: Diamond, Chance: 0.1 },
-            { Item: Ametist, Chance: 0.1 },
-            { Item: Ruby, Chance: 0.1 },
-            { Item: Sunstone, Chance: 0.1 }
+            { Item: DarkOre, Chance: 90, Max: 20 },
+            { Item: Emerald, Chance: 2, Max: 1 },
+            { Item: Diamond, Chance: 2, Max: 1 },
+            { Item: Ametist, Chance: 2, Max: 1 },
+            { Item: Ruby, Chance: 2, Max: 1 },
+            { Item: Sunstone, Chance: 2, Max: 1 }
         ],
     };
 }
@@ -508,27 +579,26 @@ export class MithrilSpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = Random.MinMaxInt(1, 3);
     public override indexGreatLevel = 9;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 11;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
-        2: [{ Item: Stone, Chance: 100 }],
-        3: [{ Item: Stone, Chance: 100 }],
-        4: [{ Item: Stone, Chance: 100 }],
-        5: [{ Item: Stone, Chance: 100 }],
-        6: [{ Item: Stone, Chance: 100 }],
-        7: [{ Item: Stone, Chance: 100 }],
-        8: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
+        2: [{ Item: Stone, Chance: 100, Max: 20 }],
+        3: [{ Item: Stone, Chance: 100, Max: 20 }],
+        4: [{ Item: Stone, Chance: 100, Max: 20 }],
+        5: [{ Item: Stone, Chance: 100, Max: 20 }],
+        6: [{ Item: Stone, Chance: 100, Max: 20 }],
+        7: [{ Item: Stone, Chance: 100, Max: 20 }],
+        8: [{ Item: Stone, Chance: 100, Max: 20 }],
         9: [
-            { Item: MithrilSpot, Chance: 80 },
-            { Item: Emerald, Chance: 5 },
-            { Item: Diamond, Chance: 5 },
-            { Item: Ametist, Chance: 5 },
-            { Item: Ruby, Chance: 3 },
-            { Item: Sunstone, Chance: 2 }
+            { Item: MithrilSpot, Chance: 80, Max: 10 },
+            { Item: Emerald, Chance: 5, Max: 1 },
+            { Item: Diamond, Chance: 5, Max: 1 },
+            { Item: Ametist, Chance: 5, Max: 1 },
+            { Item: Ruby, Chance: 3, Max: 1 },
+            { Item: Sunstone, Chance: 2, Max: 1 }
         ],
     };
 }
@@ -537,32 +607,31 @@ export class HeavenlySpot extends GatherableResource {
     public override skill = SkillName.Mining;
     public override tick = 1;
     public override indexGreatLevel = 11;
-    public override equipamentNeed = WeaponType.Pickaxe;
-    public override equipamentNeed2 = WeaponType.Pickaxe;
+    public override equipamentNeed = EquipamentType.PickaxeTool;
     public override resourceWithWrongEquipament = Stone;
     public override maxSkillGain = 13;
 
     public resourcePerLevel = {
-        1: [{ Item: Stone, Chance: 100 }],
-        2: [{ Item: Stone, Chance: 100 }],
-        3: [{ Item: Stone, Chance: 100 }],
-        4: [{ Item: Stone, Chance: 100 }],
-        5: [{ Item: Stone, Chance: 100 }],
-        6: [{ Item: Stone, Chance: 100 }],
-        7: [{ Item: Stone, Chance: 100 }],
-        8: [{ Item: Stone, Chance: 100 }],
-        9: [{ Item: Stone, Chance: 100 }],
+        1: [{ Item: Stone, Chance: 100, Max: 20 }],
+        2: [{ Item: Stone, Chance: 100, Max: 20 }],
+        3: [{ Item: Stone, Chance: 100, Max: 20 }],
+        4: [{ Item: Stone, Chance: 100, Max: 20 }],
+        5: [{ Item: Stone, Chance: 100, Max: 20 }],
+        6: [{ Item: Stone, Chance: 100, Max: 20 }],
+        7: [{ Item: Stone, Chance: 100, Max: 20 }],
+        8: [{ Item: Stone, Chance: 100, Max: 20 }],
+        9: [{ Item: Stone, Chance: 100, Max: 20 }],
         10: [
-            { Item: HeavenlyOre, Chance: 10 }, 
-            { Item: Stone, Chance: 90 }
+            { Item: HeavenlyOre, Chance: 10, Max: 5 }, 
+            { Item: Stone, Chance: 90, Max: 20 }
         ],
         11: [
-            { Item: HeavenlyOre, Chance: 80 },
-            { Item: Emerald, Chance: 5 },
-            { Item: Diamond, Chance: 5 },
-            { Item: Ametist, Chance: 5 },
-            { Item: Ruby, Chance: 3 },
-            { Item: Sunstone, Chance: 2 }
+            { Item: HeavenlyOre, Chance: 80, Max: 5 },
+            { Item: Emerald, Chance: 5, Max: 1 },
+            { Item: Diamond, Chance: 5, Max: 1 },
+            { Item: Ametist, Chance: 5, Max: 1 },
+            { Item: Ruby, Chance: 3, Max: 1 },
+            { Item: Sunstone, Chance: 2, Max: 1 }
         ],
     };
 }

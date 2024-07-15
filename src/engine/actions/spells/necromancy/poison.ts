@@ -20,11 +20,13 @@ export class Poison extends BaseAction {
     
     public override exec(owner: Entity, target: Entity){
         if(target){
-            const damageMods = this.getMods(owner, SkillName.Necromancy, this.weaponAmplify);
-            target.takeDamage(owner, this.damage, DamageType.Poison, damageMods);
-            target.applyCondition(new Condition(ConditionType.Poisoned, 12, owner, this.damage, damageMods));
-            target.states.addFlag(EntityStates.Poisoned);
-            this.gainSkillExperience(owner); 
+            if(owner.transform.position.distanceTo(target.transform.position) <= 2500) {
+                const damageMods = this.getMods(owner, SkillName.Necromancy, this.weaponAmplify);
+                target.takeDamage(owner, this.damage, DamageType.Poison, damageMods);
+                target.applyCondition(new Condition(ConditionType.Poisoned, 12, owner, this.damage, damageMods));
+                target.states.addFlag(EntityStates.Poisoned);
+                this.gainSkillExperience(owner); 
+            }
         }
     }
 }

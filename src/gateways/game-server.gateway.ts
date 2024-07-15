@@ -93,13 +93,16 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     }
     
     handleDisconnect(socket: any) {
-        const map = Maps.getOrCreateMap(socket.character.map, this.mapsService);
+        if(socket.character && socket.character.map){
+            const map = Maps.getOrCreateMap(socket.character.map, this.mapsService);
         
-        if(Player.players.has(socket.characterId))
-            map.leaveMap(Player.players.get(socket.characterId));
+            if(socket.characterId && Player.players.has(socket.characterId))
+                map.leaveMap(Player.players.get(socket.characterId));
+        }
+            
+        if(socket.mapIndex)
+            QueueBuffer.removeSocket(socket.mapIndex);
         
-        QueueBuffer.removeSocket(socket.mapIndex);
-
         this.clients.delete(socket.id);
         this.logger.verbose(`Client disconnected: ${socket.id}`);
     }

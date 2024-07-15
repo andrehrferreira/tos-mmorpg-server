@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { Dices } from "@enums";
 import { packetPlayMontageEntity } from "@network";
-import { Entity, ItemStates, Random, StateFlags, Player, PowerScroll, Pet, Humanoid, Mount } from "..";
+import { Entity, ItemStates, Random, StateFlags, Player, PowerScroll, Pet, Humanoid, Mount, packetRefreshTooltip } from "..";
 
 export enum EquipamentType {
     None, 
@@ -18,7 +18,10 @@ export enum EquipamentType {
     Offhand,
     Pet,
     Mount,
-    Instrument
+    Instrument,
+    PickaxeTool,
+    AxeTool,
+    ScytheTool
 }
 
 export enum EquipmentWeight {
@@ -71,7 +74,10 @@ export enum AttributeType {
     EnergyDamage,
     PoisonDamage,
     LightDamage,
-    DarkDamage
+    DarkDamage,
+    BonusCollectsMineral,
+    BonusCollectsSkins,
+    BonusCollectsWood,
 }
 
 export enum WeaponType {
@@ -146,7 +152,7 @@ export class Items {
     public static BaseItems: Map<string, { new (): any }> = new Map<string, { new (): any }>();
     public static CachedItems: Map<string, Item> = new Map<string, Item>();
 
-    public static AddBaseItem(refs: string[] | string, clas: any){
+    public static AddBaseItem(refs: string[] | string, clas: any) {
         if(Array.isArray(refs)) {
             for(let namespace of refs){
                 Items.BaseItems.set(namespace, clas);
@@ -280,12 +286,54 @@ export class Items {
         return Items.CachedItems.has(ref) ? Items.CachedItems.get(ref) : null;
     }
 
-    public static setItem(ref: string, item: Item){
+    public static setItem(ref: string, item: Item) {
         Items.CachedItems.set(ref, item);
     }
 
-    public static removeItem(ref: string){
+    public static removeItem(ref: string) {
         Items.CachedItems.delete(ref);
+    }
+
+    public static async reduceDurability(ref: string, owner: Player) {
+        if(Items.CachedItems.has(ref)) {
+            let item = Items.CachedItems.get(ref);
+
+            if(item instanceof Equipament){
+                let equipament = (item as Equipament);
+                let newDurability = Math.max(equipament.Durability - 1, 0);
+                equipament.setDurability(newDurability, equipament.MaxDurability);
+
+                if(newDurability <= 0)
+                    equipament.Flags.addFlag(ItemStates.Broken);
+
+                let props = equipament.serealize();
+
+                const cleanProps = (props: any) => {
+                    if (typeof props === 'object' && props !== null) {
+                        return Object.keys(props).reduce((acc, key) => {
+                            if (props[key]) {
+                                acc[key] = props[key];
+                            }
+                            return acc;
+                        }, {} as any);
+                    }
+                    return null;
+                };
+        
+                const filteredProps = cleanProps(props);
+
+                await owner.socket.services.gameServerQueue.add("update", {
+                    table: "item", 
+                    id: item.Ref,
+                    set: { 
+                        props: (typeof props === "object") ? JSON.stringify(filteredProps) : null 
+                    }                        
+                });
+
+                Items.CachedItems.set(ref, equipament);
+                packetRefreshTooltip.send(owner, item.Ref, filteredProps);               
+            }
+        }
     }
 }
 
@@ -507,67 +555,74 @@ export abstract class Equipament extends Item {
             break;
         }
 
-        minAttrs = Math.min(minAttrs, 4);
-        let attrsCounts = (this.MaxAttrs > minAttrs) ? Random.MinMaxInt(minAttrs, this.MaxAttrs) : minAttrs;
-        this.Attrs.clear();
-        
-        for(let i = 0; i < attrsCounts; i++){
-            let attrType = (this instanceof Weapon) ? Random.ArrRandom(attrsWeapon) : 
-            Random.ArrRandom(attrsEquipaments);
-
-            const value = this.getTierValueAttr();
-
-            if(!this.Attrs.has(attrType))
-                this.Attrs.set(attrType, value);            
-            else
-                i--;
+        if(this instanceof Tool) {
+            
         }
+        else {
+            minAttrs = Math.min(minAttrs, 4);
+            let attrsCounts = (this.MaxAttrs > minAttrs) ? Random.MinMaxInt(minAttrs, this.MaxAttrs) : minAttrs;
+            this.Attrs.clear();
+            
+            for(let i = 0; i < attrsCounts; i++){
+                let attrType = (this instanceof Weapon) ? Random.ArrRandom(attrsWeapon) : 
+                Random.ArrRandom(attrsEquipaments);
 
-        //Exeptional
-        if(this.Flags.hasFlag(ItemStates.Exceptional)){
-            baseDurability += 50;
+                const value = this.getTierValueAttr();
 
-            if(this.Armor > 0)
-                this.Armor++;
+                if(!this.Attrs.has(attrType))
+                    this.Attrs.set(attrType, value);            
+                else
+                    i--;
+            }
 
-            if(this.FireResistence > 0)
-                this.FireResistence++;
+            //Exeptional
+            if(this.Flags.hasFlag(ItemStates.Exceptional)){
+                baseDurability += 50;
 
-            if(this.ColdResistence > 0)
-                this.ColdResistence++;
+                if(this.Armor > 0)
+                    this.Armor++;
 
-            if(this.PoisonResistence > 0)
-                this.PoisonResistence++;
+                if(this.FireResistence > 0)
+                    this.FireResistence++;
 
-            if(this.EnergyResistence > 0)
-                this.EnergyResistence++;
+                if(this.ColdResistence > 0)
+                    this.ColdResistence++;
 
-            if(this.LightResistence > 0)
-                this.LightResistence++;
+                if(this.PoisonResistence > 0)
+                    this.PoisonResistence++;
 
-            if(this.DarkResistence > 0)
-                this.DarkResistence++;
-        }
+                if(this.EnergyResistence > 0)
+                    this.EnergyResistence++;
 
-        //Durability
-        this.setDurability(Math.min(baseDurability, 450));
+                if(this.LightResistence > 0)
+                    this.LightResistence++;
 
-        //Cards
-        if(this.Tier >= EquipamentTier.T3){
-            if(this.MaxSlots > 0 && this.CardSlots <= 0){
-                const slotChance = Random.MinMaxInt(0, 100);
+                if(this.DarkResistence > 0)
+                    this.DarkResistence++;
+            }
 
-                if(slotChance <= 10){
-                    const slotAmount = Random.MinMaxInt(1, this.MaxSlots);
-                    this.removeRandomAttributes(slotAmount);
-                    this.CardSlots = slotAmount;
+            //Durability
+            this.setDurability(Math.min(baseDurability, 450));
+
+            //Cards
+            if(this.Tier >= EquipamentTier.T3){
+                if(this.MaxSlots > 0 && this.CardSlots <= 0){
+                    const slotChance = Random.MinMaxInt(0, 100);
+
+                    if(slotChance <= 10){
+                        const slotAmount = Random.MinMaxInt(1, this.MaxSlots);
+                        this.removeRandomAttributes(slotAmount);
+                        this.CardSlots = slotAmount;
+                        this.Name = `${this.Name} (${this.CardSlots})`;
+                    }
+                }   
+                else if(this.CardSlots > 0){
                     this.Name = `${this.Name} (${this.CardSlots})`;
-                }
-            }   
-            else if(this.CardSlots > 0){
-                this.Name = `${this.Name} (${this.CardSlots})`;
-            }  
-        } 
+                }  
+            } 
+        }
+
+        
     }
 
     public randomRarity(player: Player) {
@@ -782,7 +837,22 @@ export abstract class Weapon extends Equipament {
     }
 }
 
-export abstract class Tool extends Equipament {}
+export abstract class Tool extends Equipament {
+    public MaxSlots: number = 0;
+}
+
+export abstract class PickaxeTool extends Tool {
+    public EquipamentType: EquipamentType = EquipamentType.PickaxeTool;
+    
+}
+
+export abstract class AxeTool extends Tool {
+    public EquipamentType: EquipamentType = EquipamentType.AxeTool;
+}
+
+export abstract class ScytheTool extends Tool {
+    public EquipamentType: EquipamentType = EquipamentType.ScytheTool;
+}
 
 export abstract class PetItem extends Equipament {
     public abstract PetCreature: { new (owner: Player): Pet };

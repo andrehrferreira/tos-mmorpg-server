@@ -1,5 +1,5 @@
 import { Boss, Entity } from "../../../entities";
-import { BaseAction } from "../../../";
+import { BaseAction, DarknessEssence } from "../../../";
 import { CreatureCombatMode, DamageType, Dices } from "@enums";
 
 import { 
@@ -43,7 +43,7 @@ export class Reaper extends Boss {
         this.loot.dropChance(GoldCoin, 100, 300, 1000);
         this.loot.dropChance(NatureEssence, 100, 10, 20);
         this.loot.dropChance(ElementalDust, 100, 10, 20);
-        this.loot.dropChance(ColdEssence, 100, 20, 50);  
+        this.loot.dropChance(DarknessEssence, 100, 2, 20);  
         this.loot.dropChance(FragmentWhiteCrystal, 100, 5, 10);
         this.loot.dropChance(FragmentGreenCrystal, 50, 1, 5);
         this.loot.dropChance(FragmentBlueCrystal, 50, 1);

@@ -24,10 +24,10 @@ export class ArrowAutoAttack extends BaseAction {
     ) {
         if(owner instanceof Creature){
             if((owner as Creature).creatureType === CreatureType.Undead)
-                return damage / 2;
+                return damage / 4;
         }
 
-        return damage;
+        return damage / 2;
     }
 }
 

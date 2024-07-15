@@ -231,7 +231,7 @@ export class PacketUpdateTick extends Packet {
             owner.socket.send(
                 new ByteBuffer()
                 .putByte(this.type)
-                .putId(ref)
+                .putString(ref)
                 .putInt32(tick)
                 .getBuffer()
             );
@@ -247,7 +247,7 @@ export class PacketFinishCollect extends Packet {
             owner.socket.send(
                 new ByteBuffer()
                 .putByte(this.type)
-                .putId(ref)
+                .putString(ref)
                 .getBuffer()
             );
         }

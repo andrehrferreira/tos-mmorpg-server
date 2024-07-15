@@ -9,14 +9,6 @@ import { ConfigModule } from '@nestjs/config';
 import { GameServerConsumer } from "@consumers";
 
 import { 
-	ServersController,
-	DashboardAuthController,
-	CharactersController,
-	MapController,
-	SteamController
-} from "@controllers";
-
-import { 
 	GameServerGateway, 
 	EntitiesGateway,
 	PlayerGateway,
@@ -51,13 +43,6 @@ export let OnLoadModules = new Subject();
 		Globals.forRoot(),	
 		ConfigModule.forRoot(),		
 		...Imports
-	],
-	controllers: [ 
-		ServersController,
-		DashboardAuthController,
-		CharactersController,
-		MapController,
-		SteamController
 	],
 	providers: [
 		...Providers,

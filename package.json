@@ -15,6 +15,7 @@
 		"start:debug": "UV_THREADPOOL_SIZE=12 nest start --debug --watch",
 		"start:prod": "UV_THREADPOOL_SIZE=12 node dist/main",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+		"email": "node ./dist/email.js",
 		"redis": "sudo service redis-server start"
 	},
 	"dependencies": {
@@ -75,6 +76,7 @@
 		"yaml": "^2.3.4"
 	},
 	"devDependencies": {
+		"@aws-sdk/types": "^3.609.0",
 		"@nestjs/cli": "^8.0.0",
 		"@nestjs/schematics": "^8.0.0",
 		"@nestjs/testing": "^8.0.0",

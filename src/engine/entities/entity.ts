@@ -4,10 +4,10 @@ import { Logger } from "@nestjs/common";
 
 import { 
     Maps, Transform, Vector3, 
-    Rotator, BaseAction, Actions, Respawn,
+    BaseAction, Actions, Respawn,
     Condition, ConditionType, Container, Team,
     Player, WeaponType, Loot, Random, Party, 
-    BuffDebuff, Guild, QueueBuffer, packetSay, EquipamentType
+    BuffDebuff, Guild, QueueBuffer
 } from "@engine";
 
 import { 
@@ -22,26 +22,17 @@ import {
 } from "@enums";
 
 import { 
-    Packet,
-    packetActionAreaEntity,
-    packetActionEntity,
-    packetCancelTargetEntity,
-    packetHealEntity,
-    packetPlayMontageEntity,
-    packetSelectTargetEntity,
-    packetTakeDamageEntity,
-    packetTakeMissEntity,
-    packetCreateEntity, 
-    packetEventEntity, 
-    packetRemoveEntity,
-    packetSystemMessage,
-    packetUpdateEntity,    
-    packetSkillExperience,
-    packetEntityDie,
-    packetDissolveEntity,
-    packetEventReviveEntity,
-    packetSpecialMessage,
-    packetUpdateSkillInfo
+    Packet, packetActionAreaEntity,
+    packetActionEntity, packetCancelTargetEntity,
+    packetHealEntity, packetPlayMontageEntity,
+    packetSelectTargetEntity, packetTakeDamageEntity,
+    packetTakeMissEntity, packetCreateEntity, 
+    packetEventEntity, packetRemoveEntity,
+    packetSystemMessage, packetUpdateEntity,    
+    packetSkillExperience, packetEntityDie,
+    packetDissolveEntity, packetEventReviveEntity,
+    packetSpecialMessage, packetUpdateSkillInfo,
+    packetSay
 } from "@network";
 
 import { LinkedList } from "../utils";
@@ -217,6 +208,11 @@ export class Entity extends LinkedList<Entity> {
     public poisonDamage: number = 0;
     public lightDamage: number = 0;
     public darkDamage: number = 0;
+
+    //Bonus collect
+    public bonusCollectsMineral: number = 0;
+    public bonusCollectsSkins: number = 0;
+    public bonusCollectsWood: number = 0;
 
     //Events
     public OnDie: Subject<Entity> = new Subject<Entity>();
@@ -972,7 +968,7 @@ export class Entity extends LinkedList<Entity> {
             if(!this.validateHit(data, actor))
                 throw new Error("Invalid data hit");
 
-            actor.takeDamage(this, Dices.D1D4, DamageType.Physic, 0);   
+            actor.takeDamage(this, Dices.D1D4, DamageType.Physic, 0, null, false, true);   
             
             this.checkElementalDamage(actor);
         }
@@ -1166,7 +1162,8 @@ export class Entity extends LinkedList<Entity> {
         damageType: DamageType, 
         bonusDamage: number = 0, 
         action: BaseAction = null,
-        ignoreBuffEffect: boolean = false
+        ignoreBuffEffect: boolean = false,
+        autoattack: boolean = false
     ) : void {
         const entities = new Set([...this.areaOfInterece, causer, this]);
 
@@ -1209,6 +1206,9 @@ export class Entity extends LinkedList<Entity> {
 
             if(this.states.hasFlag(EntityStates.Invulnerable))
                 damage = 0;
+
+            if(autoattack)
+                damage = Math.round(damage / 2);
 
             const dodge = (Random.MinMaxInt(1,100) < this.dodgeChance);
 

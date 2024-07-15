@@ -142,6 +142,15 @@ export class CharacterEntity extends BaseEntity {
     @Column({ nullable : true })
     mount: string;
 
+    @Column({ nullable : true })
+    pickaxetool: string;
+
+    @Column({ nullable : true })
+    axetool: string;
+
+    @Column({ nullable : true })
+    scythetool: string;
+
     @Column({ nullable : false, default: 0 })
     karma: number;
 

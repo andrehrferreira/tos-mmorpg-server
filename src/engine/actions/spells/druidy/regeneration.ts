@@ -1,7 +1,7 @@
 import { WeaponType } from "@items";
 import { Entity } from "../../../entities/entity";
 import { Actions, ActionType, BaseAction } from "../..";
-import { ActionCostType, Dices, SkillName } from "@enums";
+import { ActionCostType, Dices, SkillName, StatusType } from "@enums";
 import { Vector3 } from "@engine";
 
 export class Regeneration extends BaseAction {
@@ -38,6 +38,7 @@ export class Regeneration extends BaseAction {
     public override exec(owner: Entity, position: Vector3){
         if(position){
             const skillLevel = owner.getSkillValue(SkillName.Druidy);
+            const modInt = owner.bonusDamageMod(StatusType.Int);
             this.gainSkillExperience(owner); 
             let totalHeal = 0;
             
@@ -47,7 +48,7 @@ export class Regeneration extends BaseAction {
                 allys.map((entity) => {
                     let effect = this.getEffectValue(owner) / 2;
                     totalHeal += effect;
-                    entity.heal(owner, effect);                    
+                    entity.heal(owner, Math.round(effect + modInt));                    
                 });
             });            
         }

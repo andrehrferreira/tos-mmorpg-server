@@ -1,4 +1,4 @@
-import { ActionCostType, Dices, DamageType, SkillName } from "@enums";
+import { ActionCostType, Dices, DamageType, SkillName, StatusType } from "@enums";
 import { packetSay } from "@network";
 import { Entity, Player, Summon, Vector3 } from "..";
 import { WeaponType } from "../items/items";
@@ -180,7 +180,8 @@ export abstract class BaseHealAction extends BaseAction {
     public exec(owner: Entity, target: Entity){
         if(target){
             this.gainSkillExperience(owner);
-            target.heal(owner, this.getEffectValue(owner));
+            const modInt = owner.bonusDamageMod(StatusType.Int);
+            target.heal(owner, Math.round(this.getEffectValue(owner) + modInt));
         }
     }
 }

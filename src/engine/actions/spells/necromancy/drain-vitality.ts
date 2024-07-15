@@ -1,7 +1,7 @@
 import { BaseAction, Actions, ActionType } from "../..";
 import { WeaponType } from "../../../items/items";
 import { ActionCostType, DamageType, Dices, SkillName } from "@enums";
-import { Condition, ConditionType, Entity } from "@engine";
+import { Entity } from "@engine";
 
 export class DrainVitality extends BaseAction {
     public override id = 38;
@@ -33,11 +33,13 @@ export class DrainVitality extends BaseAction {
 
     public override exec(owner: Entity, target: Entity){
         if(target){
-            const skillLevel = owner.getSkillValue(SkillName.Necromancy);
-            const lifeDrained = this.rollDice(Dices.D2D8) + skillLevel;
-            target.takeDamage(owner, Dices.D1D4, DamageType.Dark, lifeDrained);
-            owner.heal(owner, lifeDrained);
-            this.gainSkillExperience(owner); 
+            if(owner.transform.position.distanceTo(target.transform.position) <= 2500) {
+                const skillLevel = owner.getSkillValue(SkillName.Necromancy);
+                const lifeDrained = this.rollDice(Dices.D2D8) + skillLevel;
+                target.takeDamage(owner, Dices.D1D4, DamageType.Dark, lifeDrained);
+                owner.heal(owner, lifeDrained);
+                this.gainSkillExperience(owner); 
+            }
         }
     }
 }

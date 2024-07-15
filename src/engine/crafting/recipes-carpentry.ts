@@ -9,7 +9,8 @@ import {
     PriestStaff, CrystalStaff, EnervatedStaff, CursedStaff, DoubleEdgedStaff, 
     DruidicStaff, PlankShield, RoundLightShield, SimpleProtector, 
     FrameShield, HeraldicShield, Protector, AshwoodBow, LongBow, 
-    CompositeBow
+    CompositeBow,
+    Quillshooter
 } from "../items";
 
 //Woods
@@ -145,7 +146,7 @@ CraftRecipe.addRecipe("ASHWOODBOW", new CraftRecipe(
         { ItemName: "IpeBoard", Quantity: 5 },
         { ItemName: "Leather", Quantity: 1 },
         { ItemName: "Fiber", Quantity: 5 }
-    ], SkillName.Carpentry, 2, "Bows"
+    ], SkillName.Carpentry, 1, "Bows"
 ));
 
 CraftRecipe.addRecipe("LONGBOW", new CraftRecipe(
@@ -153,7 +154,7 @@ CraftRecipe.addRecipe("LONGBOW", new CraftRecipe(
         { ItemName: "IpeBoard", Quantity: 10 },
         { ItemName: "Leather", Quantity: 1 },
         { ItemName: "Fiber", Quantity: 10 }
-    ], SkillName.Carpentry, 3, "Bows"
+    ], SkillName.Carpentry, 2, "Bows"
 ));
 
 CraftRecipe.addRecipe("COMPOSITEBOW", new CraftRecipe(
@@ -161,6 +162,15 @@ CraftRecipe.addRecipe("COMPOSITEBOW", new CraftRecipe(
         { ItemName: "MapleBoard", Quantity: 5 },
         { ItemName: "Leather", Quantity: 1 },
         { ItemName: "Fiber", Quantity: 10 }
+    ], SkillName.Carpentry, 4, "Bows"
+));
+
+CraftRecipe.addRecipe("Quillshooter", new CraftRecipe(
+    Quillshooter, 1, [
+        { ItemName: "MapleBoard", Quantity: 20 },
+        { ItemName: "IpeBoard", Quantity: 10 },
+        { ItemName: "HardLeather", Quantity: 10 },
+        { ItemName: "ArcaneFiber", Quantity: 10 }
     ], SkillName.Carpentry, 5, "Bows"
 ));
 

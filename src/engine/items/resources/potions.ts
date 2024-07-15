@@ -64,8 +64,7 @@ export class SmallLifePotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D2D8);
-        entity.heal(entity, value);
+        entity.heal(entity, 50);
     }
 }
 
@@ -77,8 +76,7 @@ export class LifePotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D3D10);
-        entity.heal(entity, value);
+        entity.heal(entity, 100);
     }
 }
 
@@ -90,8 +88,7 @@ export class LargeLifePotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D5D12);
-        entity.heal(entity, value);
+        entity.heal(entity, 200);
     }
 }
 
@@ -104,7 +101,7 @@ export class SmallManaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D2D8);
+        let value = 50;
         entity.mana = Math.min(entity.mana + value, entity.maxMana);
         entity.healBroadcast(entity, value, HealType.Mana);
     }
@@ -118,7 +115,7 @@ export class ManaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D3D10);
+        let value = 100;
         entity.mana = Math.min(entity.mana + value, entity.maxMana);
         entity.healBroadcast(entity, value, HealType.Mana);
     }
@@ -132,7 +129,7 @@ export class LargeManaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D5D12);
+        let value = 200;
         entity.mana = Math.min(entity.mana + value, entity.maxMana);
         entity.healBroadcast(entity, value, HealType.Mana);
     }
@@ -147,7 +144,7 @@ export class SmallStaminaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D2D8);
+        let value = 50;
         entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
         entity.healBroadcast(entity, value, HealType.Stamina);
     }
@@ -161,7 +158,7 @@ export class StaminaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D3D10);
+        let value = 100;
         entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
         entity.healBroadcast(entity, value, HealType.Stamina);
     }
@@ -175,7 +172,7 @@ export class LargeStaminaPotion extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D5D12);
+        let value = 150;
         entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
         entity.healBroadcast(entity, value, HealType.Stamina);
     }
@@ -203,8 +200,7 @@ export class CurePotion extends BasePotion {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
         entity.states.removeFlag(EntityStates.Poisoned);
-        let value = entity.rollDice(Dices.D2D8);
-        entity.heal(entity, value);
+        entity.heal(entity, 50);
     }
 }
 
@@ -217,8 +213,7 @@ export class LargeCurePotion extends BasePotion {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
         entity.states.removeFlag(EntityStates.Poisoned);
-        let value = entity.rollDice(Dices.D3D12);
-        entity.heal(entity, value);
+        entity.heal(entity, 100);
     }
 }
 
@@ -231,10 +226,9 @@ export class SmallRestoreElixir extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D1D8);
-        entity.heal(entity, value);
-        entity.mana = Math.min(entity.mana + value, entity.maxMana);
-        entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
+        entity.heal(entity, 50);
+        entity.mana = Math.min(entity.mana + 50, entity.maxMana);
+        entity.stamina = Math.min(entity.stamina + 50, entity.maxStamina);
     }
 }
 
@@ -246,10 +240,9 @@ export class RestoreElixir extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D3D10);
-        entity.heal(entity, value);
-        entity.mana = Math.min(entity.mana + value, entity.maxMana);
-        entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
+        entity.heal(entity, 100);
+        entity.mana = Math.min(entity.mana + 100, entity.maxMana);
+        entity.stamina = Math.min(entity.stamina + 100, entity.maxStamina);
     }
 }
 
@@ -261,10 +254,9 @@ export class BigRestoreElixir extends BasePotion {
     public override async use(entity: Entity) {
         super.use(entity);
         this.playAnimation(entity, ConsumePotionAnim);
-        let value = entity.rollDice(Dices.D5D12);
-        entity.heal(entity, value);
-        entity.mana = Math.min(entity.mana + value, entity.maxMana);
-        entity.stamina = Math.min(entity.stamina + value, entity.maxStamina);
+        entity.heal(entity, 100);
+        entity.mana = Math.min(entity.mana + 100, entity.maxMana);
+        entity.stamina = Math.min(entity.stamina + 100, entity.maxStamina);
     }
 }
 

@@ -10,4 +10,5 @@ export interface IGatherable {
     timeout: number;
     entities: Array<GatherableType>;
     meshIndex: string;
+    foliageId: string;
 }

@@ -1,19 +1,16 @@
 import * as bodyParser from "body-parser";
 import * as dotenv from 'dotenv';
-import newrelic from 'newrelic';
-
-process.env.UV_THREADPOOL_SIZE = "8";
 
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule, OnLoadModules } from './app.module';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { WsAdapter, AllExceptionsFilter, NewrelicInterceptor } from "@utils";
+import { WsAdapter, AllExceptionsFilter } from "@utils";
 import { Logger } from "@nestjs/common";
 
-process.on("uncaughtException", function () {
-	//console.error(err);
-});
+process.env.UV_THREADPOOL_SIZE = "12";
+process.on("uncaughtException", () => {});
+process.on('warning', (warning) => {});
 
 const cors = {
 	origin: [
@@ -66,8 +63,6 @@ async function bootstrap() {
 
 	const httpAdapterHost = app.get(HttpAdapterHost);
 	app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
-	app.useGlobalInterceptors(new NewrelicInterceptor());
-
 	app.useWebSocketAdapter(new WsAdapter(app));
 	app.enableCors(cors);
 	app.use(bodyParser.json({ limit: "50mb" }));

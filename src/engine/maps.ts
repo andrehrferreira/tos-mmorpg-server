@@ -66,24 +66,26 @@ export class Maps extends LinkedList<Maps> {
                     map: levelName,
                     respawnOnStart: true,
                     timeout: new Date().getTime(),
-                    timer: 10, //300
+                    timer: 120, //300
                     entities: [parseInt(type) as GatherableType],
                     x: parseInt(x), 
                     y: parseInt(y), 
                     z: parseInt(z),
-                    meshIndex
+                    meshIndex,
+                    foliageId
                 }));
 
                 map.foliage.set(meshIndex, new Gatherable({
                     map: levelName,
                     respawnOnStart: true,
                     timeout: new Date().getTime(),
-                    timer: 10, //300
+                    timer: 120, //300
                     entities: [parseInt(type) as GatherableType],
                     x: parseInt(x), 
                     y: parseInt(y), 
                     z: parseInt(z),
-                    meshIndex
+                    meshIndex,
+                    foliageId
                 }));
             }
 
@@ -148,13 +150,18 @@ export class Maps extends LinkedList<Maps> {
                     entity.id === otherEntity.id
                 ) {
                     otherEntity.areaOfInterece.map((entity) => packetRemoveEntity.send(entity, otherEntity));  
+
+                    try{
+                        if(otherEntity.socket)
+                            otherEntity.socket.disconnect();
+                    } catch {}
+                    
                     (otherEntity as Player).save();
                     (otherEntity as Player).saveToDatabase();
                     (otherEntity as Player).destroy();                                   
                     this.entitiesIndexById.delete(otherEntity.id);
                     this.entitiesMapIndex.delete(otherEntity.mapIndex);
                     otherEntity.OnDetroy.next(otherEntity);
-                    otherEntity.socket.disconnect();
                    
                     await new Promise((resolve) => {
                         setTimeout(() => resolve, 2000);
