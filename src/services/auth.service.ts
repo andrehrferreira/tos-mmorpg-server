@@ -164,7 +164,7 @@ export class AuthService {
 		await this.accountModel.updateOne({ _id: userInfo._id }, { $set: { lastLogin: new Date() } });
 
 		const token = JWT.sign({			
-			exp: Math.floor(Date.now()) + (60 * 60 * 24),
+			exp: Math.floor(Date.now()) + (60 * 60 * 24 * 1000),
 			data: { 
 				masterId: userInfo._id,
 				applicant: "X-Unreal-Engine",
@@ -278,7 +278,7 @@ export class AuthService {
 		await this.accountModel.updateOne({ _id: userInfo._id }, { $set: { lastLogin: new Date() } });
 			
 		const token = JWT.sign({			
-			exp: Math.floor(Date.now()) + (60 * 60 * 24),
+			exp: Math.floor(Date.now()) + (60 * 60 * 24 * 1000),
 			data: { 
 				masterId: userInfo._id,
 				applicant: user.applicant,
