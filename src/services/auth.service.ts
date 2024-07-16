@@ -348,7 +348,10 @@ export class AuthService {
 			const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
 			return decoded;
 		}
-		catch{ return false; }
+		catch(e){
+			console.log(e); 
+			return false; 
+		}
 	}
 
 	/*async changePassword(masterId: string, oldPassword: string, newPassword: string) : Promise<boolean> {

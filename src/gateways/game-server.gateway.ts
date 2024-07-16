@@ -186,15 +186,18 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
 
         if(messageData.token){
             const tokenData = this.authService.decodeToken(messageData.token);
-            socket.token = messageData.token;
-            socket.plevel = tokenData.data.plevel;
-            socket.accountId = tokenData.data.masterId;
-            let storedSocket = this.clients.get(socket.id);
-            storedSocket.token = messageData.token;
-            this.clients.set(socket.id, storedSocket);
 
-            const characters = await this.charactersService.getAllCharacters(messageData.token);
-            packetCharacterList.send(socket, characters);
+            if(tokenData){
+                socket.token = messageData.token;
+                socket.plevel = tokenData.data.plevel;
+                socket.accountId = tokenData.data.masterId;
+                let storedSocket = this.clients.get(socket.id);
+                storedSocket.token = messageData.token;
+                this.clients.set(socket.id, storedSocket);
+
+                const characters = await this.charactersService.getAllCharacters(messageData.token);
+                packetCharacterList.send(socket, characters);
+            }
         }
     }
 

@@ -194,6 +194,11 @@ export class Player extends Humanoid {
 
             if(this.party)
                 this.party.tick(tickNumber);
+
+            if(tickNumber % 100 === 0){
+                this.save();
+                this.saveToDatabase();
+            }
         }
         else if(Player.players.has(this.characterId) && this.removed) 
             Player.players.delete(this.characterId);
@@ -202,9 +207,9 @@ export class Player extends Humanoid {
     public override destroy() : void {
         Player.onlinePlayers.add(this.characterId);
         this.areaOfInterece.map((entity) => entity.removeFromAreaOfInterest(this));
-        super.destroy();        
         this.save();
         this.saveToDatabase();
+        super.destroy();   
     }
 
     //DB / Network
