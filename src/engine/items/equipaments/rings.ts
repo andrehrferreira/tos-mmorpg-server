@@ -188,8 +188,11 @@ export class WizardRing extends Ring {
 
 Items.AddBaseItem("SilverRing", SilverRing);
 Items.AddBaseItem("RubySilverRing", RubySilverRing);
+Items.AddBaseItem("SunstoneSilverRing", SunstoneSilverRing);
+Items.AddBaseItem("SilverAndDiamondRing", SilverAndDiamondRing);
 Items.AddBaseItem("GoldRing", GoldRing);
 Items.AddBaseItem("BoneRing", BoneRing);
 Items.AddBaseItem("ArcherRing", ArcherRing);
 Items.AddBaseItem("WarriorRing", WarriorRing);
 Items.AddBaseItem("WizardRing", WizardRing);
+

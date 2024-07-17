@@ -20,7 +20,7 @@ import {
     DefenderHelm, IronGreathelm, IronHeadguard, ArmoredRoyalGuardHelm, 
     ConquerorsMailHelm, BattleplateGloves, SoldierGloves, RecruitsGauntlets, 
     IvoryGloves, TrooperBracer, ReinforcedBoot, IvoryBoots, SoldierBoots, 
-    ArmoredRoyalGuardBoots, IvoryLegs, WrathfulPants, BattleplateLegs
+    ArmoredRoyalGuardBoots, IvoryLegs, WrathfulPants, BattleplateLegs, SilverPickaxe, GoldPickaxe, SilverLumberjackAxe, GoldLumberjackAxe, SilverSickle, GoldSickle
 } from "../items";
 
 //Ingot
@@ -94,6 +94,49 @@ CraftRecipe.addRecipe("HeavenlyIngot", new CraftRecipe(
         { ItemName: "HeavenlyOre", Quantity: 3 },
         { ItemName: "MithrilOre", Quantity: 1 }
     ], SkillName.Blacksmithing, 11, "Ingots"
+));
+
+//Tools
+CraftRecipe.addRecipe("SilverPickaxe", new CraftRecipe(
+    SilverPickaxe, 1, [
+        { ItemName: "SilverIngot", Quantity: 10 },
+        { ItemName: "OakBoard", Quantity: 5 }
+    ], SkillName.Blacksmithing, 5, "Tools"
+));
+
+CraftRecipe.addRecipe("GoldPickaxe", new CraftRecipe(
+    GoldPickaxe, 1, [
+        { ItemName: "GoldIngot", Quantity: 10 },
+        { ItemName: "MapleBoard", Quantity: 10 }
+    ], SkillName.Blacksmithing, 7, "Tools"
+));
+
+CraftRecipe.addRecipe("SilverLumberjackAxe", new CraftRecipe(
+    SilverLumberjackAxe, 1, [
+        { ItemName: "SilverIngot", Quantity: 10 },
+        { ItemName: "OakBoard", Quantity: 5 }
+    ], SkillName.Blacksmithing, 5, "Tools"
+));
+
+CraftRecipe.addRecipe("GoldLumberjackAxe", new CraftRecipe(
+    GoldLumberjackAxe, 1, [
+        { ItemName: "GoldIngot", Quantity: 10 },
+        { ItemName: "MapleBoard", Quantity: 10 }
+    ], SkillName.Blacksmithing, 7, "Tools"
+));
+
+CraftRecipe.addRecipe("SilverSickle", new CraftRecipe(
+    SilverSickle, 1, [
+        { ItemName: "SilverIngot", Quantity: 10 },
+        { ItemName: "OakBoard", Quantity: 5 }
+    ], SkillName.Blacksmithing, 5, "Tools"
+));
+
+CraftRecipe.addRecipe("GoldSickle", new CraftRecipe(
+    GoldSickle, 1, [
+        { ItemName: "GoldIngot", Quantity: 10 },
+        { ItemName: "MapleBoard", Quantity: 10 }
+    ], SkillName.Blacksmithing, 7, "Tools"
 ));
 
 //Daggers

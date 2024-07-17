@@ -20,12 +20,12 @@ CraftRecipe.addRecipe("RubySilverRing", new CraftRecipe(
     ], SkillName.Jewelry, 2, "Rings"
 ));
 
-/*CraftRecipe.addRecipe("SilverAndDiamondRing", new CraftRecipe(
+CraftRecipe.addRecipe("SilverAndDiamondRing", new CraftRecipe(
     SilverAndDiamondRing, 1, [
         { ItemName: "SilverIngot", Quantity: 10 },
         { ItemName: "Diamond", Quantity: 1 }
     ], SkillName.Jewelry, 3, "Rings"
-));*/
+));
 
 CraftRecipe.addRecipe("SunstoneSilverRing", new CraftRecipe(
     SunstoneSilverRing, 1, [
