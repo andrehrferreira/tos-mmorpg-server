@@ -130,12 +130,12 @@ export class AuthService {
 	}
 
 	async loginSteam(steamId: string, token: string){
-		let authSteamValidade = await this.steamService.verifySteamToken(token);
-
-		if(!authSteamValidade)
-			authSteamValidade = await this.steamService.verifySteamToken(token, true);
-
 		try {
+			let authSteamValidade = await this.steamService.verifySteamToken(token);
+
+			if(!authSteamValidade)
+				authSteamValidade = await this.steamService.verifySteamToken(token, true);
+
 			if(authSteamValidade && authSteamValidade.response.params.steamid === steamId){
 				const steamAuthId = authSteamValidade.response.params.steamid;
 				const hashedUsername = this.cryptoService.hashUsername(steamAuthId);
@@ -189,6 +189,7 @@ export class AuthService {
 			}
 		}
 		catch (e) {
+			console.log(e);
 			return null;
 		}
 	}

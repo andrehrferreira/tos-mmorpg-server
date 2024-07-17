@@ -20,9 +20,7 @@ export class SteamService {
                 }),
             );
 
-            console.log(validateSteamToken);
-
-            return validateSteamToken.data;
+            return (validateSteamToken.data) ? validateSteamToken.data : null;
         }
         else{
             return null;
