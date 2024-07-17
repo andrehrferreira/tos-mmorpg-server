@@ -628,7 +628,7 @@ export class Loot extends Container {
 
     public async generateLoot(player: Player) : Promise<void> {
         if(player && player.socket){
-            this.dropsPossibility.forEach(async (ref, cls) => {
+            await this.dropsPossibility.forEach(async (ref, cls) => {
                 if(Random.DropChance(ref.chance)){
                     const baseItem = Items.createItemByClass(cls);                    
                     const amount = Random.MinMaxInt(ref.amountMin, ref.amountMax);
@@ -643,11 +643,10 @@ export class Loot extends Container {
                         baseItem.serealize()
                     );
 
-                    await this.addItem(itemRef, amount, -1);
+                    await this.addItem(itemRef, amount);
+                    Containers.set(this.containerId, this);
                 }
             });
-
-            Containers.set(this.containerId, this);
         }
     }
 
