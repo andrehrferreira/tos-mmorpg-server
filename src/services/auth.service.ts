@@ -133,8 +133,10 @@ export class AuthService {
 		try {
 			let authSteamValidade = await this.steamService.verifySteamToken(token);
 
-			if(!authSteamValidade)
-				authSteamValidade = await this.steamService.verifySteamToken(token, true);
+			try{
+				if(!authSteamValidade || authSteamValidade.response.error.errorcode === 102)
+					authSteamValidade = await this.steamService.verifySteamToken(token, true);
+			} catch {}
 
 			console.log(authSteamValidade);
 
