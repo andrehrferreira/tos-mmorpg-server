@@ -1173,24 +1173,48 @@ export class Player extends Humanoid {
 
                             if(total <= playerGoldCoins && baseItem){
                                 if(await this.removeGoldCoins(total)){
-                                    const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
-                                        this.inventory.containerId,
-                                        this.characterId,
-                                        baseItem.Namespace,
-                                        amount,
-                                        "buy",
-                                        null,
-                                        baseItem.serealize()
-                                    );
+                                    if(baseItem instanceof Equipament){
+                                        for(let i = 0; i < amount; i++){
+                                            const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
+                                                this.inventory.containerId,
+                                                this.characterId,
+                                                baseItem.Namespace,
+                                                1,
+                                                "buy",
+                                                null,
+                                                baseItem.serealize()
+                                            );
 
-                                    this.gainSkillExperiencie(SkillName.Diplomacy);
+                                            const item = Items.getItemByRef(itemRef);
+                                            packetSystemMessage.sendDirectSocket(this.socket, `You received +1 ${baseItem.Name}`);
+                                            await this.inventory.addItem(itemRef, 1);
 
-                                    const item = Items.getItemByRef(itemRef);
-                                    packetSystemMessage.sendDirectSocket(this.socket, `You received +${amount} ${baseItem.Name}`);
-                                    await this.inventory.addItem(itemRef, amount, -1);
+                                            if(baseItem instanceof Equipament)
+                                                packetTooltip.send(this, itemRef, item.serealize());
+                                        }
 
-                                    if(baseItem instanceof Equipament)
-                                        packetTooltip.send(this, itemRef, item.serealize()); 
+                                        this.gainSkillExperiencie(SkillName.Diplomacy);
+                                    }
+                                    else{
+                                        const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
+                                            this.inventory.containerId,
+                                            this.characterId,
+                                            baseItem.Namespace,
+                                            amount,
+                                            "buy",
+                                            null,
+                                            baseItem.serealize()
+                                        );
+    
+                                        this.gainSkillExperiencie(SkillName.Diplomacy);
+    
+                                        const item = Items.getItemByRef(itemRef);
+                                        packetSystemMessage.sendDirectSocket(this.socket, `You received +${amount} ${baseItem.Name}`);
+                                        await this.inventory.addItem(itemRef, amount, -1);
+    
+                                        if(baseItem instanceof Equipament)
+                                            packetTooltip.send(this, itemRef, item.serealize());
+                                    }                                     
                                 }
                             }
                         }

@@ -125,7 +125,7 @@ export class Container {
         return -1;
     }
 
-    addItem(ref: string, amount: number = 1, slotId: number = -1, showHint: boolean = true) : number {
+    async addItem(ref: string, amount: number = 1, slotId: number = -1, showHint: boolean = true) : Promise<number> {
         if(this.containerId){
             let item = Items.getItemByRef(ref); 
             
@@ -143,65 +143,64 @@ export class Container {
                         slotId = -1;
                     }
         
-                    if(item){
-                        if(slotId > -1 && item){
-                            this.itemIndex.set(ref, new SlotRef(slotId, item));
-                            this.slots.set(slotId, item);
-                            Items.setItem(ref, item);
-        
-                            if(this.owner){
-                                if(this.owner && this.owner.socket) {
-                                    this.owner.socket.services.gameServerQueue.add("update", {
-                                        table: "item", 
-                                        id: ref,
-                                        set: { slotId, containerId: this.containerId }                        
-                                    });
-                                }
+                    if(slotId > -1 && item){
+                        const itemRef = await (this.owner.socket.services.itemsService as ItemsService).createItem(
+                            this.containerId,
+                            this.owner.characterId,
+                            item.Namespace,
+                            amount,
+                            "slipt",
+                            null,
+                            item.serealize()
+                        );
 
-                                observers.forEach((observer) => {
-                                    packetAddItemContainer.send(observer, {
-                                        containerId: this.containerId,
-                                        slotId,
-                                        itemRef: ref,
-                                        itemName: item.Namespace,
-                                        amount: amount,
-                                        itemRarity: item.Rarity,
-                                        goldCost: item.GoldCost,
-                                        weight: item.Weight
-                                    }, showHint);
+                        const newItem = Items.getItemByRef(itemRef);
+                        this.itemIndex.set(ref, new SlotRef(slotId, newItem));
+                        this.slots.set(slotId, newItem);
+    
+                        observers.forEach((observer) => {
+                            packetAddItemContainer.send(observer, {
+                                containerId: this.containerId,
+                                slotId,
+                                itemRef: itemRef,
+                                itemName: item.Namespace,
+                                amount: amount,
+                                itemRarity: item.Rarity,
+                                goldCost: item.GoldCost,
+                                weight: item.Weight
+                            }, showHint);
 
-                                    if(
-                                        item instanceof Equipament || item instanceof PowerScroll || 
-                                        item instanceof PetItem || item instanceof MountItem
-                                    ) {
-                                        packetTooltip.send(observer as Player, ref, item.serealize()); 
-                                    }                                    
-                                });   
-                                
-                                this.onChange.next(this);
-                            }
-                        }                
-                    }
-
+                            if(
+                                item instanceof Equipament || item instanceof PowerScroll || 
+                                item instanceof PetItem || item instanceof MountItem
+                            ) {
+                                packetTooltip.send(observer as Player, itemRef, newItem.serealize()); 
+                            }                                    
+                        });   
+                        
+                        this.onChange.next(this);
+                    }                
+                    
                     this.owner.save();    
                     return slotId;
                 }
                 else {
-                    const item = this.slots.get(stackableItemSlotId);
+                    let itemRef = this.slots.get(stackableItemSlotId);
+                    let itemInSlot = Items.getItemByRef(itemRef.Ref);
         
                     if(stackableItemSlotId > -1 && item){
-                        item.Amount += amount;
+                        itemInSlot.Amount += amount;
         
-                        this.itemIndex.set(item.Ref, new SlotRef(stackableItemSlotId, item));
-                        this.slots.set(stackableItemSlotId, item);
-                        Items.setItem(ref, item);
+                        this.itemIndex.set(itemInSlot.Ref, new SlotRef(stackableItemSlotId, itemInSlot));
+                        this.slots.set(stackableItemSlotId, itemInSlot);
+                        Items.setItem(ref, itemInSlot);
         
                         if(this.owner){
                             if(this.owner && this.owner.socket){
                                 this.owner.socket.services.gameServerQueue.add("update", {
                                     table: "item", 
-                                    id: item.Ref,
-                                    set: { amount: item.Amount }                        
+                                    id: itemInSlot.Ref,
+                                    set: { amount: itemInSlot.Amount }                        
                                 });
 
                                 this.owner.socket.services.gameServerQueue.add("delete", {
@@ -214,7 +213,7 @@ export class Container {
                                 packetChangeItemAmountContainer.send(observer, {
                                     containerId: this.containerId,
                                     slotId: stackableItemSlotId,
-                                    amount: item.Amount
+                                    amount: itemInSlot.Amount
                                 });
                             }); 
 
@@ -465,7 +464,7 @@ export class Container {
             const totalItem = (currentItem.Amount === amount);
             const hasItem = containerTo.hasItemBySlotId(newSlotId);
 
-            if(!totalItem){
+            if(!totalItem) {
                 if(this.owner.socket){
                     const newAmount = currentItem.Amount - amount;
 
@@ -479,16 +478,8 @@ export class Container {
                             currentItem.serealize()
                         );
 
-                        Items.itemFromDatabase({
-                            itemName: currentItem.Namespace,
-                            amount: amount,
-                            itemRef: itemRef,
-                            props: currentItem.serealize()
-                        });
-
-                        this.changeAmount(currentSlotId, newAmount);
-                        let slotId = (hasItem) ? containerTo.getEmptySlot() : newSlotId;    
-                        containerTo.addItem(itemRef, amount, slotId);                                           
+                        await this.changeAmount(currentSlotId, newAmount);    
+                        containerTo.addItem(itemRef, amount);                                           
                     }
                     else {
                         return;
@@ -497,8 +488,19 @@ export class Container {
             }
             else {
                 const observers = new Set([...this.observers, this.owner]);
-                let slotId = (hasItem) ? containerTo.getEmptySlot() : newSlotId;            
-                let realSlotAlloc = containerTo.addItem(currentItem.Ref, amount, slotId);
+                let slotId = (hasItem) ? containerTo.getEmptySlot() : newSlotId; 
+                                
+                const itemRef = await (this.owner.socket.services.itemsService as ItemsService).createItem(
+                    this.containerId,
+                    this.owner.characterId,
+                    currentItem.Namespace,
+                    amount,
+                    "slipt",
+                    null,
+                    currentItem.serealize()
+                );
+
+                let realSlotAlloc = await containerTo.addItem(itemRef, amount, slotId);                   
                 this.clearSlot(currentSlotId);
 
                 if(this.owner && this.owner.socket){
