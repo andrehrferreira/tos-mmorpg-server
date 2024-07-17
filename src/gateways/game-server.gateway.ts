@@ -129,12 +129,8 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     async handleLoginSteam(@MessageBody() data: ByteBuffer, @ConnectedSocket() socket: any){
         try{
             const messageData = data.readDataFromBuffer({ "steamid": "string", "token": "string" });
-
-            console.log(messageData);
-            const result = await this.authService.loginSteam(messageData.steamid, messageData.token);
-
-            console.log(result);
-
+            let result = await this.authService.loginSteam(messageData.steamid, messageData.token);
+            
             if(result && result.token) {
                 let storedSocket = this.clients.get(socket.id);
                 storedSocket.token = result.token;

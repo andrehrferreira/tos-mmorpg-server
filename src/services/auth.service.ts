@@ -130,7 +130,10 @@ export class AuthService {
 	}
 
 	async loginSteam(steamId: string, token: string){
-		const authSteamValidade = await this.steamService.verifySteamToken(token);
+		let authSteamValidade = await this.steamService.verifySteamToken(token);
+
+		if(!authSteamValidade)
+			authSteamValidade = await this.steamService.verifySteamToken(token, true);
 
 		try {
 			if(authSteamValidade && authSteamValidade.response.params.steamid === steamId){
