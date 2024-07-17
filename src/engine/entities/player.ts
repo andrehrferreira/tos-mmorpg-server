@@ -129,6 +129,7 @@ export class Player extends Humanoid {
         this.syncCharacterModel();
         setInterval(this.syncPlayerStats.bind(this), 1000);
         setInterval(this.saveToDatabase.bind(this), 300000);
+        setInterval(() => { this.refreshLocalPlayerData() }, 10000);
     }
 
     public static getPlayerByTag(hashtag: string) : Player | null {
