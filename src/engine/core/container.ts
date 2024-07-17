@@ -643,7 +643,7 @@ export class Loot extends Container {
                         baseItem.serealize()
                     );
 
-                    this.addItem(itemRef, amount, -1);
+                    await this.addItem(itemRef, amount, -1);
                 }
             });
 
