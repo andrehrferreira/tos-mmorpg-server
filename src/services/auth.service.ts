@@ -136,6 +136,8 @@ export class AuthService {
 			if(!authSteamValidade)
 				authSteamValidade = await this.steamService.verifySteamToken(token, true);
 
+			console.log(authSteamValidade);
+
 			if(authSteamValidade && authSteamValidade.response.params.steamid === steamId){
 				const steamAuthId = authSteamValidade.response.params.steamid;
 				const hashedUsername = this.cryptoService.hashUsername(steamAuthId);
