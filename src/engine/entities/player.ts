@@ -33,7 +33,7 @@ import {
     Item, GatherableResource, Equipament, Gatherable, 
     CraftRecipe, EntityStates, Quest, DailyQuests, QuestType, 
     SafeTrade, ItemRarity, PowerScroll, PetItem, MountItem,
-    Guild, Guilds, Maps, EventInstanceType, EventInstance, GuildAccessLevel, packetSteamArchivement, Stackable
+    Guild, Guilds, Maps, EventInstanceType, EventInstance, GuildAccessLevel, packetSteamArchivement, Stackable, packetFullCharacter
 } from "..";
 
 export class ActionbarRef {
@@ -178,7 +178,7 @@ export class Player extends Humanoid {
 
             for(let key in data)
                 character[key] = data[key];
-
+                            
             Player.playerData.set(characterId, character);
         }
     }
@@ -186,6 +186,13 @@ export class Player extends Humanoid {
     public updatePosition(location: Vector3) {
         super.updatePosition(location);
         this.save();
+    }
+
+    public refreshLocalPlayerData(){
+        const playerData = Player.parseData(this.characterId);
+        const character = JSON.parse(playerData);
+        this.socket.character = character;
+        packetFullCharacter.send(this.socket, playerData);
     }
 
     public override tick(tickNumber: number){
@@ -388,10 +395,8 @@ export class Player extends Humanoid {
         if(!this.map || this.removed)
             return;
 
-        if(this.map && this.loaded && !this.removed){
-            const data = this.serialize();
-            Player.update(data.id, data);
-        }        
+        const data = this.serialize();
+        Player.update(data.id, data);   
     }
 
     public serialize(){

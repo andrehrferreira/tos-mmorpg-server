@@ -243,6 +243,7 @@ export class Maps extends LinkedList<Maps> {
         player.setMap(null, "");
         player.save();
         player.saveToDatabase();
+        player.refreshLocalPlayerData();
         setTimeout(() => { packetLoadLevel.send(player, this.namespace, waypoint); }, 300);
     }
 

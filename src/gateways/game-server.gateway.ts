@@ -217,10 +217,11 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
         const messageData = data.readDataFromBuffer({ "characterId": "string" });
 
         if(Player.playerData.has(messageData.characterId)){
-            const character = JSON.parse(Player.parseData(messageData.characterId));
+            const playerData = Player.parseData(messageData.characterId);
+            const character = JSON.parse(playerData);
             socket.character = character;
             socket.characterId = messageData.characterId;
-            packetFullCharacter.send(socket, JSON.stringify(character));
+            packetFullCharacter.send(socket, playerData);
         }
     }
 
