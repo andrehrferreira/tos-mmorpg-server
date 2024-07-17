@@ -15,6 +15,9 @@ Commands.add("unstuck", Plevel.Player, (params: string[], socket: any, server: a
                 (entity as Player).revive(); 
             }
 
+            (entity as Player).save();
+            (entity as Player).saveToDatabase();
+
             const map = Maps.getMap("1_tutorial");
             map.teleportTo(entity as Player, "Start");     
         }     

@@ -484,8 +484,8 @@ export class Player extends Humanoid {
             mount: (this.mount) ? JSON.stringify(this.mount) : null,
             pickaxetool: (this.pickaxetool) ? JSON.stringify(this.pickaxetool) : null,
             axetool: (this.axetool) ? JSON.stringify(this.axetool) : null,
-            scythetool: (this.mount) ? JSON.stringify(this.scythetool) : null,
-            actionbar: (actionbarParsed) ? JSON.stringify(actionbarParsed) : null,
+            scythetool: (this.scythetool) ? JSON.stringify(this.scythetool) : null,
+            actionbar: (actionbarParsed) ? JSON.stringify(actionbarParsed) : "[]",
             skills: (skillsParsed) ? JSON.stringify(skillsParsed) : null,
             inventory: (inventoryParsed) ? inventoryParsed : "{}",
             inventoryId: this.inventory.containerId,
@@ -755,6 +755,9 @@ export class Player extends Humanoid {
     }
 
     public teleport(mapName: string, mapWaypoint: string){
+        this.save();
+        this.saveToDatabase();
+
         const map = Maps.getMap(mapName.trim());
 
         if(map)
