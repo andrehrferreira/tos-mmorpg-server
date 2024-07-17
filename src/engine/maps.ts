@@ -242,9 +242,12 @@ export class Maps extends LinkedList<Maps> {
         player.socket.character.map = this.namespace;
         player.setMap(null, "");
         player.save();
-        player.saveToDatabase();
+        player.saveToDatabase();        
         player.refreshLocalPlayerData();
-        setTimeout(() => { packetLoadLevel.send(player, this.namespace, waypoint); }, 1000);
+
+        setTimeout(() => {
+            packetLoadLevel.send(player, { levelName: this.namespace, waypoint });
+        }, 1000);
     }
 
     //Respawn
@@ -372,7 +375,6 @@ export class Maps extends LinkedList<Maps> {
 
     public onTick() {
         this.mapTick++;
-        
         this.entitiesIndexById.forEach(entity => {
             if(entity instanceof Player)
                 (entity as Player).tick(this.mapTick);

@@ -316,13 +316,16 @@ export class PacketChatMessage extends Packet {
 export class PacketLoadLevel extends Packet {
     public override type = ServerPacketType.LoadLevel;
     
-    public override send(owner: Entity, levelName: string, waypoint: string){
+    public override send(owner: Entity, data: {
+        levelName: string, 
+        waypoint: string
+    }){
         if(owner.socket){    
             owner.socket.send(
                 new ByteBuffer()
                 .putByte(this.type)
-                .putString(levelName)
-                .putString(waypoint)
+                .putString(data.levelName)
+                .putString(data.waypoint)
                 .getBuffer()
             );
         }
