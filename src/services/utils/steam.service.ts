@@ -20,6 +20,8 @@ export class SteamService {
                 }),
             );
 
+            console.log(validateSteamToken);
+
             return validateSteamToken.data;
         }
         else{

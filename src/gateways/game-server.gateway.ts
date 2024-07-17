@@ -150,7 +150,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
             }
         }
         catch (e) {
-            //packetLogin.send(socket, "");
+            packetLogin.send(socket, "");
         }
     }
 

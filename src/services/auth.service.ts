@@ -185,8 +185,7 @@ export class AuthService {
 				return null;
 			}
 		}
-		catch (e){
-			console.log(e);
+		catch (e) {
 			return null;
 		}
 	}
