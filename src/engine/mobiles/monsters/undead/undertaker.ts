@@ -33,7 +33,7 @@ export class Undertaker extends BaseUndead {
         this.setInt(10, 12);
         this.setVig(10, 20);
 
-        this.loot.dropChance(GoldCoin, 100, 500, 1200);
+        this.loot.dropChance(GoldCoin, 100, 200, 500);
     }
 }
 

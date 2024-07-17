@@ -27,7 +27,7 @@ export class SkeletonAssassin extends BaseUndead {
     constructor(){
         super();
 
-        this.setLife(100, 150);
+        this.setLife(50, 100);
 
         this.setStr(20, 30);
         this.setDex(40, 60); 

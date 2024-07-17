@@ -651,21 +651,22 @@ export abstract class Creature extends Entity {
             if(!this.hasState(EntityStates.Dead))
                 throw new Error(`To start skinning the creature needs to be dead`);
 
-            if(distance > 2000)
-                throw new Error("Entity too far from the creature to initiate skinning");
+            //if(distance > 2000)
+            //    throw new Error("Entity too far from the creature to initiate skinning");
 
             if(this.skinnerTick > 0) {
                 this.skinnerTick--;
 
                 const baseItem = new this.skinnerResources();
                 const hasStackableItem = entity.inventory.hasStackableItem(baseItem);
+                const totalAmount = Math.abs(this.skinnerAmount + entity.getSkillValue(SkillName.Skinning));
 
                 if(entity && entity.socket){
                     const itemRef = await (entity.socket.services.itemsService as ItemsService).createItem(
                         entity.inventory.containerId,
                         entity.characterId,
                         baseItem.Namespace,
-                        this.skinnerAmount,
+                        totalAmount,
                         "skinning",
                         null,
                         null, 

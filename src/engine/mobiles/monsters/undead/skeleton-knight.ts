@@ -28,7 +28,7 @@ export class SkeletonKnight extends BaseUndead {
     constructor(){
         super();
 
-        this.setLife(200, 300);
+        this.setLife(100, 150);
 
         this.setStr(20, 30);
         this.setDex(5, 12); 

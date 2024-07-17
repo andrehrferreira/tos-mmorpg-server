@@ -15,9 +15,10 @@ import { AccountDocument, LoginDTO } from "@repositories";
 import { Plevel, Applicant, ApplicantByHeader } from "@enums";
 import { GUID } from "@utils";
 
-import { CryptoService } from '../services/utils/crypto.service';
-import { RepositoryService } from '../services/utils/repository.service';
-import { EmailService } from '../services/utils/email.service';
+import { CryptoService } from "./utils/crypto.service";
+import { RepositoryService } from "./utils/repository.service";
+import { EmailService } from "./utils/email.service";
+import { SteamService } from "./utils/steam.service";
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
 		private readonly configService: ConfigService,
 		private readonly cryptoService: CryptoService,
 		private readonly emailService: EmailService,
+		private readonly steamService: SteamService,
 		private repository: RepositoryService			
 	){}
 
@@ -127,52 +129,65 @@ export class AuthService {
 		await this.accountModel.updateOne({ _id: accountId }, { $set: data });
 	}
 
-	async loginSteam(steamId: string){
-		const hashedUsername = this.cryptoService.hashUsername(steamId);
-		let userInfo: any = await this.accountModel.findOne({ username: hashedUsername });
+	async loginSteam(steamId: string, token: string){
+		const authSteamValidade = await this.steamService.verifySteamToken(token);
 
-		if(!userInfo){
-			const ref = steamId.replace("@", "").substring(0, 6);
-			const emailToken = this.cryptoService.encryptEmail(steamId);
-			const hashedPassword = this.cryptoService.hashPassword(GUID.Generate());
-		
-			await this.accountModel.insertMany({
-				hashtag: `${ ref.substring(0,10).toUpperCase() }#${this.createHash()}`,
-				username: hashedUsername, 
-				password: hashedPassword,
-				optin: authenticator.generateSecret(),
-				emailToken,
-				emailValidation: true,
-				plevel: 1,
-				othersId: [steamId] 
-			});
-
-			userInfo = await this.accountModel.findOne({ username: hashedUsername, password: hashedPassword });
-		}
-
-		if(!userInfo)
-			throw new UnauthorizedException("It was not possible to log in because your username was not found or the password was invalid.");
-
-		if(userInfo.banned)
-			throw new UnauthorizedException("Your account is banned, if you have any questions or wish to dispute the ban, please contact support on our website https://talesofshadowland.com");
-		
-		if(userInfo.block) {
-			if(userInfo.blockTimeout > new Date().getTime())
-				throw new UnauthorizedException(`Your account is blocked until this date: ${new Date(userInfo.blockTimeout).toISOString()}`);
-		}
-
-		await this.accountModel.updateOne({ _id: userInfo._id }, { $set: { lastLogin: new Date() } });
-
-		const token = JWT.sign({			
-			exp: Math.floor(Date.now()) + (60 * 60 * 24 * 1000),
-			data: { 
-				masterId: userInfo._id,
-				applicant: "X-Unreal-Engine",
-				plevel: userInfo.plevel
+		try {
+			if(authSteamValidade && authSteamValidade.response.params.steamid === steamId){
+				const steamAuthId = authSteamValidade.response.params.steamid;
+				const hashedUsername = this.cryptoService.hashUsername(steamAuthId);
+				let userInfo: any = await this.accountModel.findOne({ username: hashedUsername });
+	
+				if(!userInfo){
+					const ref = steamId.replace("@", "").substring(0, 6);
+					const emailToken = this.cryptoService.encryptEmail(steamId);
+					const hashedPassword = this.cryptoService.hashPassword(GUID.Generate());
+				
+					await this.accountModel.insertMany({
+						hashtag: `${ ref.substring(0,10).toUpperCase() }#${this.createHash()}`,
+						username: hashedUsername, 
+						password: hashedPassword,
+						optin: authenticator.generateSecret(),
+						emailToken,
+						emailValidation: true,
+						plevel: 1,
+						othersId: [steamId] 
+					});
+	
+					userInfo = await this.accountModel.findOne({ username: hashedUsername, password: hashedPassword });
+				}
+	
+				if(!userInfo)
+					throw new UnauthorizedException("It was not possible to log in because your username was not found or the password was invalid.");
+	
+				if(userInfo.banned)
+					throw new UnauthorizedException("Your account is banned, if you have any questions or wish to dispute the ban, please contact support on our website https://talesofshadowland.com");
+				
+				if(userInfo.block) {
+					if(userInfo.blockTimeout > new Date().getTime())
+						throw new UnauthorizedException(`Your account is blocked until this date: ${new Date(userInfo.blockTimeout).toISOString()}`);
+				}
+	
+				await this.accountModel.updateOne({ _id: userInfo._id }, { $set: { lastLogin: new Date() } });
+	
+				const tokenAuth = JWT.sign({			
+					exp: Math.floor(Date.now()) + (60 * 60 * 24 * 1000),
+					data: { 
+						masterId: userInfo._id,
+						applicant: "X-Unreal-Engine",
+						plevel: userInfo.plevel
+					}
+				}, this.configService.get('TOS_JWT_SECRET'), { algorithm: "HS256" });
+	
+				return { token: tokenAuth, id: userInfo._id, plevel: userInfo.plevel };
 			}
-		}, this.configService.get('TOS_JWT_SECRET'), { algorithm: "HS256" });
-
-		return { token, id: userInfo._id, plevel: userInfo.plevel };
+			else {
+				return null;
+			}
+		}
+		catch {
+			return null;
+		}
 	}
 
 	async login(user: LoginDTO, minPlevel: Plevel = Plevel.CommunityManager, recaptchaData: any = null, sendCodeEmail: boolean = false){
@@ -337,7 +352,12 @@ export class AuthService {
 
 	verify(token: string){
 		try{
-			const decoded = JWT.verify(token, this.configService.get('TOS_JWT_SECRET'));
+			const decoded = JWT.verify(
+				token, 
+				this.configService.get('TOS_JWT_SECRET'), 
+				{ algorithm: "HS256" }
+			);
+
 			return decoded;
 		}
 		catch{ return false; }
@@ -345,7 +365,12 @@ export class AuthService {
 
 	decodeToken(token: string){
 		try{
-			const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
+			const decoded = JWT.decode(
+				token, 
+				this.configService.get('TOS_JWT_SECRET'), 
+				{ algorithm: "HS256" }
+			);
+			
 			return decoded;
 		}
 		catch(e){

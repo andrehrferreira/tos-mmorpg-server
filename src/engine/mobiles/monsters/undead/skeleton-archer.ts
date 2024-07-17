@@ -27,20 +27,16 @@ export class SkeletonArcher extends BaseUndead {
     constructor(){
         super();
 
-        this.setLife(50, 100);
+        this.setLife(30, 50);
 
         this.setStr(20, 30);
         this.setDex(50, 60); 
         this.setInt(10, 12);
         this.setVig(10, 20);
 
-        this.addAction("ArrowAutoAttack", 50);
-        this.addAction("PiercingArrow", 30);
-        this.addAction("TripleShot", 20);
-
         this.setSkill(SkillName.LongRangeWeapons, 5);
 
-        this.loot.dropChance(GoldCoin, 90, 20, 50);
+        this.loot.dropChance(GoldCoin, 100, 20, 50);
         this.loot.dropChance(LongBow, 10, 1);
         this.loot.dropChance(Bone, 10, 1, 5);
         this.loot.dropChance(Skull, 10, 1);

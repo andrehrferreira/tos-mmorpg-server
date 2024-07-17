@@ -26,15 +26,15 @@ export class Troll extends Creature {
         super();
 
         this.setLife(1500, 2500);
-        this.setStr(150, 200);
+        this.setStr(80, 100);
         this.setDex(10, 30);
         this.setVig(12, 20);
 
         this.loot.dropChance(GoldCoin, 100, 500, 1000);
-        this.loot.dropChance(MoonStone, 1, 10);
+        this.loot.dropChance(MoonStone, 10, 10);
         this.loot.dropChance(FragmentWhiteCrystal, 100, 1, 3);
         this.loot.dropChance(FragmentGreenCrystal, 50, 1);
-        this.loot.dropChance(DarknessEssence, 50, 1);
+        this.loot.dropChance(DarknessEssence, 80, 1);
         this.loot.dropChance(NatureEssence, 100, 1, 10);
         this.loot.dropChance(Diamond, 20, 1);
         this.loot.dropChance(Emerald, 20, 1);

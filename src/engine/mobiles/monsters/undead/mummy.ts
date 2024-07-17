@@ -35,7 +35,7 @@ export class Mummy extends BaseUndead {
         this.setSkill(SkillName.CombatWithWeapons, 5);
 
         this.loot.dropChance(Bandage, 70, 5, 10);
-        this.loot.dropChance(GoldCoin, 60, 30, 100);
+        this.loot.dropChance(GoldCoin, 100, 100, 200);
     }
 }
 

@@ -104,7 +104,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
             QueueBuffer.removeSocket(socket.mapIndex);
         
         this.clients.delete(socket.id);
-        this.logger.verbose(`Client disconnected: ${socket.id}`);
+        //this.logger.verbose(`Client disconnected: ${socket.id}`);
     }
 
     @SubscribeMessage(ClientPacketType.Ping)
@@ -128,8 +128,8 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     @SubscribeMessage(ClientPacketType.LoginSteam)
     async handleLoginSteam(@MessageBody() data: ByteBuffer, @ConnectedSocket() socket: any){
         try{
-            const messageData = data.readDataFromBuffer({ "steamid": "string" });
-            const result = await this.authService.loginSteam(messageData.steamid);
+            const messageData = data.readDataFromBuffer({ "steamid": "string", "token": "string" });
+            const result = await this.authService.loginSteam(messageData.steamid, messageData.token);
 
             if(result && result.token) {
                 let storedSocket = this.clients.get(socket.id);
@@ -146,7 +146,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
             }
         }
         catch (e) {
-            packetLogin.send(socket, "");
+            //packetLogin.send(socket, "");
         }
     }
 
@@ -159,9 +159,9 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
                 "applicant": "string" 
             });
 
-            const result = await this.authService.login(messageData, Plevel.Player);
+            const result = await this.authService.login(messageData, Plevel.CommunityManager);
 
-            if(result && result.token) {
+            if(result && result.token && result.plevel >= 20) {
                 let storedSocket = this.clients.get(socket.id);
                 storedSocket.token = result.token;
                 this.clients.set(socket.id, storedSocket);
@@ -187,7 +187,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
         if(messageData.token){
             const tokenData = this.authService.decodeToken(messageData.token);
 
-            if(tokenData){
+            if(tokenData && tokenData.data && tokenData.data.masterId){
                 socket.token = messageData.token;
                 socket.plevel = tokenData.data.plevel;
                 socket.accountId = tokenData.data.masterId;

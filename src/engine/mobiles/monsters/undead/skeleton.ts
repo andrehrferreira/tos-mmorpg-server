@@ -27,16 +27,14 @@ export class Skeleton extends BaseUndead {
     constructor(){
         super();
 
-        this.setLife(20, 40);
+        this.setLife(20, 35);
 
-        this.setStr(20, 30);
+        this.setStr(10, 20);
         this.setDex(5, 12); 
         this.setInt(10, 12);
         this.setVig(10, 20);
 
-        this.setSkill(SkillName.CombatWithWeapons, 5);
-
-        this.loot.dropChance(GoldCoin, 90, 5, 10);
+        this.loot.dropChance(GoldCoin, 100, 5, 40);
         this.loot.dropChance(ShortSword, 10, 1);
         this.loot.dropChance(RoundMetalShield, 1, 1);
         this.loot.dropChance(Bone, 10, 1, 5);

@@ -85,6 +85,10 @@ export class LumberjackAxe extends AxeTool {
     public override Name = "Lumberjack Axe";
     public override Tier = EquipamentTier.T0;
     public GoldCost: number = 20;
+
+    public override generateAttrs(){
+        this.setDurability(100);
+    }
 }
 
 export class SilverLumberjackAxe extends AxeTool {
@@ -128,6 +132,10 @@ export class Sickle extends ScytheTool {
     public override Name = "Sickle";
     public override Tier = EquipamentTier.T0;
     public GoldCost: number = 20;
+
+    public override generateAttrs(){
+        this.setDurability(100);
+    }
 }
 
 export class SilverSickle extends ScytheTool {

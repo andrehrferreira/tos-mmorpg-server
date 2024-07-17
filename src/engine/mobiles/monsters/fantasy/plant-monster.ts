@@ -35,12 +35,12 @@ export class PlantMonster extends BasePlant {
         this.addAction("Poisonbolt", 50);
         this.addAction("Poison", 50);
 
-        this.loot.dropChance(ManaMushroom, 25, 5, 10);
-        this.loot.dropChance(DemonMushroom, 25, 5, 10);
-        this.loot.dropChance(BloodBerry, 25, 5, 10);
-        this.loot.dropChance(BlackMushroom, 5, 1, 3);
-        this.loot.dropChance(BlueFlower, 5, 1, 3);  
-        this.loot.dropChance(Leaves, 5, 1, 3); 
+        this.loot.dropChance(ManaMushroom, 80, 5, 10);
+        this.loot.dropChance(DemonMushroom, 80, 5, 10);
+        this.loot.dropChance(BloodBerry, 80, 5, 10);
+        this.loot.dropChance(BlackMushroom, 10, 1, 3);
+        this.loot.dropChance(BlueFlower, 10, 1, 3);  
+        this.loot.dropChance(Leaves, 10, 1, 3); 
         this.loot.dropChance(NatureEssence, 5, 1, 2); 
         this.loot.dropChance(CardPlantMonster, 1, 1);     
     }
