@@ -133,6 +133,8 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
             console.log(messageData);
             const result = await this.authService.loginSteam(messageData.steamid, messageData.token);
 
+            console.log(result);
+
             if(result && result.token) {
                 let storedSocket = this.clients.get(socket.id);
                 storedSocket.token = result.token;
