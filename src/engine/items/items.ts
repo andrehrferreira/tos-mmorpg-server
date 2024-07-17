@@ -297,8 +297,9 @@ export class Items {
     public static async reduceDurability(ref: string, owner: Player) {
         if(Items.CachedItems.has(ref)) {
             let item = Items.CachedItems.get(ref);
+            let chanceReduce = Random.MinMaxInt(1, 10);
 
-            if(item instanceof Equipament){
+            if(item instanceof Equipament && chanceReduce === 1){
                 let equipament = (item as Equipament);
                 let newDurability = Math.max(equipament.Durability - 1, 0);
                 equipament.setDurability(newDurability, equipament.MaxDurability);
