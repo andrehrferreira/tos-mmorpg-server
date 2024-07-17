@@ -33,7 +33,7 @@ import {
     Item, GatherableResource, Equipament, Gatherable, 
     CraftRecipe, EntityStates, Quest, DailyQuests, QuestType, 
     SafeTrade, ItemRarity, PowerScroll, PetItem, MountItem,
-    Guild, Guilds, Maps, EventInstanceType, EventInstance, GuildAccessLevel, packetSteamArchivement
+    Guild, Guilds, Maps, EventInstanceType, EventInstance, GuildAccessLevel, packetSteamArchivement, Stackable
 } from "..";
 
 export class ActionbarRef {
@@ -1173,7 +1173,27 @@ export class Player extends Humanoid {
 
                             if(total <= playerGoldCoins && baseItem){
                                 if(await this.removeGoldCoins(total)){
-                                    if(baseItem instanceof Equipament){
+                                    if(baseItem instanceof Stackable){
+                                        const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
+                                            this.inventory.containerId,
+                                            this.characterId,
+                                            baseItem.Namespace,
+                                            amount,
+                                            "buy",
+                                            null,
+                                            baseItem.serealize()
+                                        );
+    
+                                        this.gainSkillExperiencie(SkillName.Diplomacy);
+    
+                                        const item = Items.getItemByRef(itemRef);
+                                        packetSystemMessage.sendDirectSocket(this.socket, `You received +${amount} ${baseItem.Name}`);
+                                        await this.inventory.addItem(itemRef, amount, -1);
+    
+                                        if(baseItem instanceof Equipament)
+                                            packetTooltip.send(this, itemRef, item.serealize());
+                                    }
+                                    else{
                                         for(let i = 0; i < amount; i++){
                                             const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
                                                 this.inventory.containerId,
@@ -1194,26 +1214,6 @@ export class Player extends Humanoid {
                                         }
 
                                         this.gainSkillExperiencie(SkillName.Diplomacy);
-                                    }
-                                    else{
-                                        const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
-                                            this.inventory.containerId,
-                                            this.characterId,
-                                            baseItem.Namespace,
-                                            amount,
-                                            "buy",
-                                            null,
-                                            baseItem.serealize()
-                                        );
-    
-                                        this.gainSkillExperiencie(SkillName.Diplomacy);
-    
-                                        const item = Items.getItemByRef(itemRef);
-                                        packetSystemMessage.sendDirectSocket(this.socket, `You received +${amount} ${baseItem.Name}`);
-                                        await this.inventory.addItem(itemRef, amount, -1);
-    
-                                        if(baseItem instanceof Equipament)
-                                            packetTooltip.send(this, itemRef, item.serealize());
                                     }                                     
                                 }
                             }
