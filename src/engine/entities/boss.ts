@@ -17,7 +17,7 @@ export abstract class Boss extends Creature {
 
         const playersWhoCausedDamage = new Set<Player>();
 
-        this.damageCauser.forEach((damage, mapIndex) => {
+        (this as Entity).damageCauser.forEach((damage, mapIndex) => {
             const entity = this.map.findEntityById(mapIndex);
 
             if (entity instanceof Player && entity !== causer) 
