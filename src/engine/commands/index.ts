@@ -16,9 +16,7 @@ export * from "./gamemaster/goto-command";
 export * from "./gamemaster/pull-command";
 export * from "./gamemaster/kick-command";
 export * from "./gamemaster/kill-command";
-export * from "./gamemaster/remove-command";
 export * from "./gamemaster/summon-command";
-export * from "./gamemaster/respawn-command";
 
 //Admin
 export * from "./admins/add-command";
@@ -26,3 +24,5 @@ export * from "./admins/give-command";
 export * from "./admins/global-command";
 export * from "./admins/ban-command";
 export * from "./admins/shutdown-command";
+export * from "./admins/respawn-command";
+export * from "./admins/remove-command";

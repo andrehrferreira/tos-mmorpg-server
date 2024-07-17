@@ -5,7 +5,7 @@ import { Maps } from "../../maps";
 import { Entity } from "../../entities/entity";
 import { Commands } from "../commands";
 
-Commands.add("respawn", Plevel.GameMaster, async (params: string[], socket: any, server: any, services: any) => {  
+Commands.add("respawn", Plevel.Administrator, async (params: string[], socket: any, server: any, services: any) => {  
     try{
         const entity = Maps.getEntity(socket, socket.entityId);
         const entityName = params[0];

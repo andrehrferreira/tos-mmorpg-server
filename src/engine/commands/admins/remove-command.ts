@@ -4,7 +4,7 @@ import { packetSystemMessage } from "@network";
 import { Maps } from "../../maps";
 import { Commands } from "../commands";
 
-Commands.add("remove", Plevel.GameMaster, async (params: string[], socket: any, server: any, services: any) => {  
+Commands.add("remove", Plevel.Administrator, async (params: string[], socket: any, server: any, services: any) => {  
     try{
         const entity = Maps.getEntity(socket, socket.entityId);
         
