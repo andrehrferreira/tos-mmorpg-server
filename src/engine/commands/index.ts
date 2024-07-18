@@ -6,7 +6,9 @@ export * from "./player/unstuck-command";
 export * from "./player/leave-command";
 export * from "./player/whisper-command";
 export * from "./player/removeparty-command";
-export * from "./player/killme-cmmand";
+export * from "./player/killme-command";
+export * from "./player/party-command";
+export * from "./player/trade-command";
 
 //Game Master
 export * from "./gamemaster/setallskills-command";
@@ -17,6 +19,7 @@ export * from "./gamemaster/pull-command";
 export * from "./gamemaster/kick-command";
 export * from "./gamemaster/kill-command";
 export * from "./gamemaster/summon-command";
+export * from "./gamemaster/save-command";
 
 //Admin
 export * from "./admins/add-command";

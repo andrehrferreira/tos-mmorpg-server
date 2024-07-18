@@ -108,7 +108,7 @@ export enum ResistenceType {
 
 export enum EquipamentTier {
     T0, T1, T2, T3, T4, T5
-}
+};
 
 let attrsEquipaments = [
     AttributeType.BonusDex, AttributeType.BonusInt, AttributeType.BonusLife,
@@ -125,7 +125,7 @@ let attrsAccessories = [
     AttributeType.HealthRegen, AttributeType.ManaRegen, AttributeType.StaminaRegen, 
     AttributeType.BonusDex, AttributeType.BonusInt, AttributeType.BonusLife,
     AttributeType.BonusAgi, AttributeType.BonusVig, AttributeType.BonusLuc
-]
+];
 
 let attrsWeapon = [
     AttributeType.HealthRegen, AttributeType.ManaRegen, AttributeType.StaminaRegen, 
@@ -137,7 +137,7 @@ let attrsWeapon = [
     AttributeType.ColdDamage, AttributeType.PoisonDamage,
     AttributeType.EnergyDamage, AttributeType.LightDamage,
     AttributeType.DarkDamage
-] 
+];
 
 let attrsWeaponWithoutElementalDamage = [
     AttributeType.HealthRegen, AttributeType.ManaRegen, AttributeType.StaminaRegen, 
@@ -146,7 +146,7 @@ let attrsWeaponWithoutElementalDamage = [
     AttributeType.BonusDamage, AttributeType.BonusMagicDamage,
     AttributeType.CriticalDamage, AttributeType.FasterCasting,
     AttributeType.SpellDamage
-] 
+]; 
 
 export class Items {
     public static BaseItems: Map<string, { new (): any }> = new Map<string, { new (): any }>();

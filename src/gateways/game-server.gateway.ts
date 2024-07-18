@@ -49,7 +49,6 @@ import {
     packetFullCharacter,
     packetEnterToWorld, 
     packetGetServerList,
-    packetMapData,
     packetCreateCharacterFinish,
     packetCreateCharacterError
 } from "@network";

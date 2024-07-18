@@ -3,7 +3,9 @@ import { BaseChest } from ".";
 import { 
     Items, GoldCoin, Emerald, Diamond, Ametist,
     Pearl, Ruby, Sunstone, Topaz, FragmentWhiteCrystal,
-    FragmentGreenCrystal, FragmentBlueCrystal, FragmentOrangeCrystal, CardAkelodon, CardBigSlime, CardFabio, CardBomberBug, CardSkeleton, CardSlime, PowerScroll
+    FragmentGreenCrystal, FragmentBlueCrystal, FragmentOrangeCrystal, 
+    CardAkelodon, CardBigSlime, CardFabio, CardBomberBug, CardSkeleton, 
+    CardSlime, PowerScroll
 } from "../../items";
 
 export class BetaGift extends BaseChest {
