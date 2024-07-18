@@ -116,10 +116,10 @@ export class Maps extends LinkedList<Maps> {
     }
 
     static createMap(namespace: string, mapsService: MapsService) : boolean {
-        if(!this.hasMap(namespace)){
+        if(!this.hasMap(namespace) && namespace){
             const map = new Maps(namespace, mapsService);
             this.maps.set(namespace, map);
-            this.maps.set(namespace.toLowerCase(), map);
+            this.maps.set(namespace?.toLowerCase(), map);
             return true;
         }
 
