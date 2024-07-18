@@ -63,6 +63,7 @@ export abstract class Creature extends Entity {
     public maxRandomOffset: number = 200;
     public minDistanceTarget: number = -100;
     protected nextMovement: number = 10;
+    protected tickNumber: number = 0;
      
     //Special Actions
     public inAction: boolean = false;
@@ -120,6 +121,7 @@ export abstract class Creature extends Entity {
 
     public override tick(tickNumber: number) {
         super.tick(tickNumber);
+        this.tickNumber = tickNumber;
         this.lastUpdate = new Date().getTime() + (60 * 1000);
         
         if(!this.isDead && tickNumber % 5 === 0){
@@ -258,6 +260,7 @@ export abstract class Creature extends Entity {
             this.targetActor = causer;
             this.validateTarget();
             this.IAState = CreatureIAState.InCombat;
+            this.stateInCombat(this.tickNumber);
         }        
     }
 
@@ -328,7 +331,7 @@ export abstract class Creature extends Entity {
         }
         else if(this.idleTick > this.nextMovement){
             this.idleTick = 0;
-            this.nextMovement = Random.MinMaxInt(10, 100);
+            this.nextMovement = Random.MinMaxInt(10, 20);
             this.IAState = CreatureIAState.Patrol;
         }
         else{
@@ -392,7 +395,7 @@ export abstract class Creature extends Entity {
 
                 if(
                     this.moveToPosition && 
-                    this.targetActor.transform.position.distanceTo(this.moveToPosition) > 2000
+                    this.targetActor.transform.position.distanceTo(this.moveToPosition) > 100
                 ) {
                     this.moveToPosition = null;
                 }
@@ -400,13 +403,13 @@ export abstract class Creature extends Entity {
                 if(!this.moveToPosition){
                     let targetPosition = this.targetActor.transform.position
 
-                    if(this.combatMode === CreatureCombatMode.Ranged){
+                    if(this.combatMode === CreatureCombatMode.Ranged) {
                         const angle = Math.random() * 2 * Math.PI; 
                         const radius = this.pawnSenseRadius / 2 + Math.random() * (this.pawnSenseRadius / 2); 
                         const offsetX = Math.cos(angle) * radius;
                         const offsetY = Math.sin(angle) * radius;
                         const randomOffset = new Vector3(offsetX, offsetY, 0);
-                        targetPosition = targetPosition.add(randomOffset);
+                        targetPosition = targetPosition.add(randomOffset);                       
                     }
                     else {
                         targetPosition = this.targetActor.transform.position.addScalar(this.minDistanceTarget);

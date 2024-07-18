@@ -172,13 +172,17 @@ export class Player extends Humanoid {
         return Player.playerData.has(characterId) ? { ...Player.playerData.get(characterId) } : null;
     }
 
-    public static update(characterId: string, data: any){
+    public static update(characterId: string, data: any, entity: Player){
         if(Player.playerData.has(characterId)){
-            let character = { ...Player.playerData.get(characterId) };
+            console.log(`Update player`);
+            let character : any = { ...Player.playerData.get(characterId) };
 
             for(let key in data)
                 character[key] = data[key];
-                            
+
+            console.log( entity.map.namespace, entity.mapIndex);
+
+            //character.map = entity.map.namespace;                            
             Player.playerData.set(characterId, character);
         }
     }
@@ -186,6 +190,12 @@ export class Player extends Humanoid {
     public updatePosition(location: Vector3) {
         super.updatePosition(location);
         this.save();
+    }
+
+    public override setMap(map: Maps, id: string) : void { 
+        super.setMap(map, id);
+        this.save();
+        this.saveToDatabase();
     }
 
     public refreshLocalPlayerData(){
@@ -396,7 +406,7 @@ export class Player extends Humanoid {
             return;
 
         const data = this.serialize();
-        Player.update(data.id, data);   
+        Player.update(data.id, data, this);   
     }
 
     public serialize(){
@@ -617,12 +627,6 @@ export class Player extends Humanoid {
         if(!this.inEvent){
             const data = this.serialize();
 
-            await this.gameServerQueue.add("update", { 
-                table: "character", 
-                id: data.id, 
-                set: data
-            });
-
             if(this.map?.namespace === "_Dev") {
                 delete data.map;
                 delete data.x;
@@ -630,6 +634,12 @@ export class Player extends Humanoid {
                 delete data.z;
                 delete data.r;
             }
+
+            await this.gameServerQueue.add("update", { 
+                table: "character", 
+                id: data.id, 
+                set: data
+            });
     
             if(data.inventory){
                 await this.gameServerQueue.add("update", { 

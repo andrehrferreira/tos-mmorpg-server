@@ -18,7 +18,7 @@ export class Reaper extends Boss {
     public override maxSummons = 10;
 
     public override combatMode = CreatureCombatMode.Ranged;
-    public override movementDistance: number = 1000;
+    public override movementDistance: number = 3000;
     public override maxDistanceToRespawn: number = 6000;
     public override pawnSenseRadius = 5000;
     public override baseDamage = Dices.D6D8;

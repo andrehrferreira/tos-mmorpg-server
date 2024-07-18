@@ -229,9 +229,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
         try{
             const messageData = data.readDataFromBuffer({ "map": "string", "dev": "bool" });
 
-            const map = (!messageData.dev) ? 
-                Maps.getOrCreateMap(socket.character.map, this.mapsService) :
-                Maps.getOrCreateMap(messageData.map, this.mapsService); 
+            const map = Maps.getOrCreateMap(messageData.map, this.mapsService); 
 
             if(Player.playerData.has(socket.characterId)){
                 const character = Player.parseData(socket.characterId);

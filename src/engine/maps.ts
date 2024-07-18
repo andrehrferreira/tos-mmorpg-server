@@ -171,11 +171,15 @@ export class Maps extends LinkedList<Maps> {
         }
 
         if(entity instanceof Player){
+            (entity as Player).map = this;
             (entity as Player).mapIndex = currentId; 
             (entity as Player).socket.entityId = currentId; 
+            (entity as Player).setMap(this, currentId);
         }
-                   
-        entity.setMap(this, currentId);
+        else {   
+            entity.setMap(this, currentId);
+        }
+                           
         this.entitiesIndexById.set(entity.id, entity);
         this.entitiesMapIndex.set(currentId, entity);
         entity.updateAreaOfInterest();
