@@ -58,7 +58,7 @@ export abstract class Creature extends Entity {
     public moveToPosition: Vector3 = null;
     public lastMoveToPosition: Vector3 = null;
     public passive: boolean = true;
-    public pawnSenseRadius: number = 800;
+    public pawnSenseRadius: number = 1200;
     public baseDamage: Dices = Dices.D1D4;
     public maxRandomOffset: number = 200;
     public minDistanceTarget: number = -100;
@@ -100,9 +100,10 @@ export abstract class Creature extends Entity {
     }
 
     public getRandomPosition(){
+        const moveDistance = (this.movementDistance < 1000) ? this.movementDistance : 1000;
         const angle = Math.random() * Math.PI * 2;
-        const dx = Math.cos(angle) * this.movementDistance;
-        const dy = Math.sin(angle) * this.movementDistance;
+        const dx = Math.cos(angle) * moveDistance;
+        const dy = Math.sin(angle) * moveDistance;
 
         const newPosition = new Vector3(
             this.respawnPosition.x + dx,
@@ -299,7 +300,7 @@ export abstract class Creature extends Entity {
             return;
         } 
             
-        if(this.idleTick > 10){
+        if(this.idleTick > 100){
             this.idleTick = 0;
             this.IAState = CreatureIAState.Patrol;
         }
@@ -327,7 +328,7 @@ export abstract class Creature extends Entity {
         }
         else if(this.idleTick > this.nextMovement){
             this.idleTick = 0;
-            this.nextMovement = Random.MinMaxInt(10, 50);
+            this.nextMovement = Random.MinMaxInt(10, 100);
             this.IAState = CreatureIAState.Patrol;
         }
         else{
@@ -391,7 +392,7 @@ export abstract class Creature extends Entity {
 
                 if(
                     this.moveToPosition && 
-                    this.targetActor.transform.position.distanceTo(this.moveToPosition) > 100
+                    this.targetActor.transform.position.distanceTo(this.moveToPosition) > 2000
                 ) {
                     this.moveToPosition = null;
                 }
@@ -400,8 +401,11 @@ export abstract class Creature extends Entity {
                     let targetPosition = this.targetActor.transform.position
 
                     if(this.combatMode === CreatureCombatMode.Ranged){
-                        targetPosition = this.targetActor.transform.position.addScalar(-(this.pawnSenseRadius / 2));
-                        const randomOffset = new Vector3(Math.random() * this.maxRandomOffset, Math.random() * this.maxRandomOffset, 0);
+                        const angle = Math.random() * 2 * Math.PI; 
+                        const radius = this.pawnSenseRadius / 2 + Math.random() * (this.pawnSenseRadius / 2); 
+                        const offsetX = Math.cos(angle) * radius;
+                        const offsetY = Math.sin(angle) * radius;
+                        const randomOffset = new Vector3(offsetX, offsetY, 0);
                         targetPosition = targetPosition.add(randomOffset);
                     }
                     else {

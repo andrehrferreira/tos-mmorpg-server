@@ -49,9 +49,9 @@ export class ItemsService {
         const cleanProps = (props: any) => {
             if (typeof props === 'object' && props !== null) {
                 return Object.keys(props).reduce((acc, key) => {
-                    if (props[key]) {
+                    if (props[key] && key !== "Amount") 
                         acc[key] = props[key];
-                    }
+                    
                     return acc;
                 }, {} as any);
             }
@@ -65,15 +65,16 @@ export class ItemsService {
                 containerId: containerId,
                 id: itemId,
                 owner, itemName,
-                amount, createBy,
+                amount: Math.round(amount), 
+                createBy,
                 createAt: new Date(),
                 createByAdmin,
-                props: (typeof props === "object") ? JSON.stringify(filteredProps) : null
+                props: (typeof filteredProps === "object") ? JSON.stringify(filteredProps) : null
             });
 
             Items.itemFromDatabase({
                 itemName: itemName,
-                amount, itemRef: itemId,
+                amount: Math.round(amount), itemRef: itemId,
                 props: filteredProps
             });
 
@@ -82,7 +83,8 @@ export class ItemsService {
         else {
             Items.itemFromDatabase({
                 itemName: itemName,
-                amount, itemRef: itemId,
+                amount: Math.round(amount), 
+                itemRef: itemId,
                 props: filteredProps
             });
 

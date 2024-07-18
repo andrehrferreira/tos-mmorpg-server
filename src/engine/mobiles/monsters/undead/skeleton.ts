@@ -20,9 +20,9 @@ export class Skeleton extends BaseUndead {
     public override combatMode = CreatureCombatMode.Melee;
     public override movementDistance: number = 100;
     public override maxDistanceToRespawn: number = 4000;
-    public override pawnSenseRadius = 500;
+    public override pawnSenseRadius = 1000;
     public override baseDamage = Dices.D2D8;
-    public override speed = 600;
+    public override speed = 650;
 
     constructor(){
         super();

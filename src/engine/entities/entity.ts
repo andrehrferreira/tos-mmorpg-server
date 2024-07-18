@@ -100,9 +100,9 @@ export class Entity extends LinkedList<Entity> {
     public transform: Transform = new Transform(); 
     public respawnPosition: Vector3 = new Vector3();
     public respawn: Respawn = null;
-    public movementDistance: number = 400;
+    public movementDistance: number = 600;
     public maxDistanceToRespawn: number = 3000;
-    public speed: number = 600;
+    public speed: number = 700;
     public respawnCustomList: string[] = null;
     
     // Character info

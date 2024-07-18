@@ -589,7 +589,7 @@ export class Player extends Humanoid {
         character.dailyQuests = dailyQuests?.GenerateMetadata(true);
 
         if(!character.dailyQuests)
-            character.dailyQuests = "[]";
+            character.dailyQuests = [];
 
         //Friends
         character.friends = (character.friends)  ? JSON.parse(character.friends) : [];
@@ -1649,12 +1649,12 @@ export class Player extends Humanoid {
 
     //Steam
     public setArchivement(archivementName: string){
-        if(this.steamArchivements.indexOf(archivementName) <= -1){
+        //if(this.steamArchivements.indexOf(archivementName) <= -1){
             this.steamArchivements.push(archivementName);
             this.save();
             this.saveToDatabase();
             packetSteamArchivement.send(this, archivementName);
-        }
+        //}
     }
 
     public checkSkillArchivement(){

@@ -19,9 +19,9 @@ export class SkeletonKnight extends BaseUndead {
 
     public override targetMode = CreatureTargetMode.DamageCaused;
     public override combatMode = CreatureCombatMode.Melee;
-    public override movementDistance: number = 2000;
+    public override movementDistance: number = 1000;
     public override maxDistanceToRespawn: number = 6000;
-    public override pawnSenseRadius = 500;
+    public override pawnSenseRadius = 650;
     public override baseDamage = Dices.D2D8;
     public override speed = 600;
 

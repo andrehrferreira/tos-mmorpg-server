@@ -177,9 +177,10 @@ export class Items {
             item.Ref = ref;
 
             if(props){
-                for (let key in props) 
-                    if(key !== "Attr" && key !== "Cards" && key !== "Flags")
+                for (let key in props) {
+                    if(key !== "Attr" && key !== "Cards" && key !== "Flags" && props[key] !== "[object Object]")
                         item[key] = props[key];
+                }
 
                 if(props && Array.isArray(props.Attr) && props.Attr.length > 0 && item instanceof Equipament){
                     for (let key in props.Attr) 
@@ -194,12 +195,13 @@ export class Items {
                 if(props && props["Flags"])
                     item.Flags = new StateFlags(props["Flags"]);
 
+                item.Amount = Math.round(item.Amount);
                 item.updateGoldCost();
             }            
 
             return item;
         }
-        else{
+        else {
             //Logger.log(`No item base found ${namespace}`)
         }
 
@@ -253,9 +255,26 @@ export class Items {
             let props = data.props || data.Props;
             const containerId = data.containerId;
             
-            if(props && typeof props === "string" && props !== "Null")
-                props = JSON.parse(props);            
+            if(props && typeof props === "string" && props !== "Null" && props !== "[object Object]")
+                props = JSON.parse(props);  
+            else if(props !== "[object Object]")  
+                props = {};    
             
+            const cleanProps = (props: any) => {
+                if (typeof props === 'object' && props !== null) {
+                    return Object.keys(props).reduce((acc, key) => {
+                        if (props[key] && key !== "Amount") 
+                            acc[key] = props[key];
+                        
+                        return acc;
+                    }, {} as any);
+                }
+                
+                return null;
+            };
+    
+            props = cleanProps(props);
+                
             const item = Items.loadFromDatabase(itemName, ref, props);
             
             if(item){

@@ -18,11 +18,11 @@ export class SkeletonAssassin extends BaseUndead {
 
     public override targetMode = CreatureTargetMode.DamageCaused;
     public override combatMode = CreatureCombatMode.Melee;
-    public override movementDistance: number = 2000;
+    public override movementDistance: number = 1000;
     public override maxDistanceToRespawn: number = 6000;
-    public override pawnSenseRadius = 500;
+    public override pawnSenseRadius = 1000;
     public override baseDamage = Dices.D3D10;
-    public override speed = 600;
+    public override speed = 650;
 
     constructor(){
         super();

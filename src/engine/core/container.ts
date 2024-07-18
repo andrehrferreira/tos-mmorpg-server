@@ -91,7 +91,7 @@ export class Container {
             if(item){
                 inventory[slotId] = { 
                     ItemName: item.Namespace, 
-                    Amount: item.Amount, 
+                    Amount: Math.round(item.Amount), 
                     ItemRef: item.Ref 
                 };
             }
@@ -144,7 +144,7 @@ export class Container {
                     }
         
                     if(item){
-                        if(slotId > -1 && item){
+                        if(slotId > -1 && item) {
                             this.itemIndex.set(ref, new SlotRef(slotId, item));
                             this.slots.set(slotId, item);
                             Items.setItem(ref, item);
@@ -325,7 +325,7 @@ export class Container {
             let item = this.slots.get(slotId);
             
             if(amount > 0){                
-                item.Amount = amount
+                item.Amount = Math.round(amount);
                 this.slots.set(slotId, item);
                 Items.setItem(item.Ref, item);
 
@@ -471,7 +471,7 @@ export class Container {
                     const newAmount = currentItem.Amount - amount;
 
                     if(newAmount > 0){                        
-                        const itemRef = await this.owner.socket.services.itemsService.createItem(
+                        const itemRef = await (this.owner.socket.services.itemsService as ItemsService).createItem(
                             containerTo.containerId, 
                             containerTo.owner.characterId,
                             currentItem.Namespace,
@@ -506,6 +506,11 @@ export class Container {
                 this.clearSlot(currentSlotId);
 
                 if(this.owner && this.owner.socket){
+                    this.owner.socket.services.gameServerQueue.add("delete", {
+                        table: "item", 
+                        id: currentItem.Ref                     
+                    });
+
                     if(realSlotAlloc === slotId){
                         observers.forEach((observer) => {
                             packetAddItemContainer.send(observer, {
@@ -520,16 +525,6 @@ export class Container {
                             });
                         });
                     }
-                    
-                    this.owner.socket.services.gameServerQueue.add("update", {
-                        table: "item", 
-                        id: currentItem.Ref,
-                        set: { 
-                            containerId: containerTo.containerId, 
-                            slotId: slotId,
-                            owner: this.owner.characterId
-                        }                        
-                    });
                 }                
             }    
             
