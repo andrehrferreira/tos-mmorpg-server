@@ -174,13 +174,10 @@ export class Player extends Humanoid {
 
     public static update(characterId: string, data: any, entity: Player){
         if(Player.playerData.has(characterId)){
-            console.log(`Update player`);
             let character : any = { ...Player.playerData.get(characterId) };
 
             for(let key in data)
                 character[key] = data[key];
-
-            console.log( entity.map.namespace, entity.mapIndex);
 
             //character.map = entity.map.namespace;                            
             Player.playerData.set(characterId, character);
