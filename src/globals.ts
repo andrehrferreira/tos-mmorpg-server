@@ -140,8 +140,8 @@ export class Globals {
                     { name: "servers", schema: ServerGameSchema }
                 ]),  
                 ThrottlerModule.forRoot([{
-                    ttl: 60000,
-                    limit: 30,
+                    ttl: 1000,
+                    limit: 10,
                 }]),   
                 WinstonModule.forRoot({
                     level: 'debug',
