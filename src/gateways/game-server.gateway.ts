@@ -1,7 +1,6 @@
 import Redis from "ioredis";
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
-import WRL from "ws-rate-limit";
 
 import { InjectRedis } from "@nestjs-modules/ioredis";
 import { Logger } from "@nestjs/common";
@@ -79,10 +78,8 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     }
 
     handleConnection(socket: any, ...args: any[]) {
-        const rateLimit = WRL(100, "10s");
         const uuid = uuidv4();
         socket.id = uuid;
-        //rateLimit(socket);
         this.clients.set(socket.id, socket);
 
         const message = new ByteBuffer()
