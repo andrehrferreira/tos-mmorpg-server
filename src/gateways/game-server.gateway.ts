@@ -82,7 +82,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
         const rateLimit = WRL(100, "10s");
         const uuid = uuidv4();
         socket.id = uuid;
-        rateLimit(socket);
+        //rateLimit(socket);
         this.clients.set(socket.id, socket);
 
         const message = new ByteBuffer()
