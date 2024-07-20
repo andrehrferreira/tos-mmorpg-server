@@ -141,7 +141,7 @@ export class Globals {
                 ]),  
                 ThrottlerModule.forRoot([{
                     ttl: 10000,
-                    limit: 20,
+                    limit: 100,
                 }]),   
                 WinstonModule.forRoot({
                     level: 'debug',
