@@ -228,10 +228,9 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     async handleEnterToWorld(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
         try{
             const messageData = data.readDataFromBuffer({ "map": "string", "dev": "bool" });
-
             const map = Maps.getOrCreateMap(messageData.map, this.mapsService); 
 
-            if(Player.playerData.has(socket.characterId)){
+            if(Player.playerData.has(socket.characterId) && map){
                 const character = Player.parseData(socket.characterId);
                 socket.character = JSON.parse(character);
                 
