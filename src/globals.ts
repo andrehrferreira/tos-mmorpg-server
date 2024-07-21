@@ -106,31 +106,6 @@ export class Globals {
                         }
                     }
                 }),
-                /*MailerModule.forRoot({
-                    transport: {
-                        host: process.env.SMTP_HOST,
-                        port: process.env.SMTP_PORT || 465,
-                        secure: (process.env.SMTP_SECURE === "true") || true,
-                        auth: (process.env.SMTP_USE_GOOGLEAPIS == "true") ? {
-                            type: "OAuth2",
-                            user: process.env.SMTP_USERNAME,
-                            serviceClient: GoogleApisCredentials.client_id,
-                            privateKey: GoogleApisCredentials.private_key,
-                            accessUrl: GoogleApisCredentials.token_uri
-                        }: {
-                            user: process.env.SMTP_USERNAME,
-                            passs: process.env.SMTP_PASSWORD,
-                        },
-                    },
-                    defaults: { from: process.env.EMAIL_FROM },
-                    template: {
-                        dir: path.resolve("./src/templates/"),
-                        adapter: new HandlebarsAdapter(),
-                        options: {
-                            strict: true,
-                        }
-                    }
-                }), */ 
                 RedisModule.forRoot({
                     type: "single",
                     url: process.env.REDIS_URL
@@ -139,10 +114,10 @@ export class Globals {
                     { name: "accounts", schema: AccountsSchema },
                     { name: "servers", schema: ServerGameSchema }
                 ]),  
-                ThrottlerModule.forRoot([{
+                /*ThrottlerModule.forRoot([{
                     ttl: 10000,
                     limit: 1000,
-                }]),   
+                }]),  */
                 WinstonModule.forRoot({
                     level: 'debug',
                     transports: [
@@ -157,7 +132,7 @@ export class Globals {
                             ),
                         }),
                     ]
-                }),   
+                }),  
             ],
             providers: Providers,
             exports: [TypeOrmModule, BullModule, ConfigModule, HttpModule]

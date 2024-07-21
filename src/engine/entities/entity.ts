@@ -595,7 +595,7 @@ export class Entity extends LinkedList<Entity> {
         if(!this.map || this.removed)
             return;
 
-        const interestRadius = 4000; 
+        const interestRadius = 8000; 
         const currentArea = new Set(this.areaOfInterece.map(e => e.mapIndex));
 
         this.map.entitiesIndexById.forEach(entity => {

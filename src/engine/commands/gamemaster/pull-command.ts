@@ -11,7 +11,13 @@ Commands.add("pull", Plevel.GameMaster, async (params: string[], socket: any, se
         const playerTagName = params[0];
         const player = Player.getPlayerByTag(playerTagName);
         
-        if(player && commandSender){
+        if(player && commandSender) {
+            player.transform.position.x = commandSender.transform.position.x;
+            player.transform.position.y = commandSender.transform.position.y;
+            player.transform.position.z = commandSender.transform.position.z;
+            player.save();
+            player.saveToDatabase();
+
             packetGoTo.send(player, { 
                 levelName: commandSender.map.namespace, 
                 x: commandSender.transform.position.x,
