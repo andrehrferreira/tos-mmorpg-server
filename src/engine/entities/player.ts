@@ -1038,7 +1038,7 @@ export class Player extends Humanoid {
                     hasAllItems = false;
             }
 
-            if(this.getGoldCoins() < (baseItem.GoldCost / 2)){
+            if(this.getGoldCoins() < ((baseItem.GoldCost / 2) * amount)){
                 hasAllItems = false;
                 packetSystemMessage.sendDirectSocket(this.socket, `You do not have enough gold coins to carry out crafting.`);
             }
@@ -1073,48 +1073,96 @@ export class Player extends Humanoid {
                         const successCraft = (craftChance < 100 && recipe.skillReq !== SkillName.Manufacturing) ? Random.MinMaxInt(1, 100) <= craftChance : true;
 
                         if(successCraft || recipe.skillReq === SkillName.Manufacturing || craftChance >= 100){
-                            if(craftChance >= 100 && baseItem instanceof Equipament)
-                                baseItem.randomRarity(this);
+                            if(baseItem instanceof Stackable){
+                                if(craftChance >= 100 && baseItem instanceof Equipament)
+                                    baseItem.randomRarity(this);
 
-                            let props = null;
+                                let props = null;
         
-                            if(
-                                baseItem instanceof Equipament || baseItem instanceof PowerScroll || 
-                                baseItem instanceof PetItem || baseItem instanceof MountItem
-                            ) {
-                                props = baseItem.serealize();
+                                if(
+                                    baseItem instanceof Equipament || baseItem instanceof PowerScroll || 
+                                    baseItem instanceof PetItem || baseItem instanceof MountItem
+                                ) {
+                                    props = baseItem.serealize();
+                                }
+
+                                const hasStackableItem = this.inventory.hasStackableItem(baseItem);
+
+                                console.log(Math.abs(recipe.resultQuantity * amount));
+                                
+                                const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
+                                    this.inventory.containerId,
+                                    this.characterId,
+                                    baseItem.Namespace,
+                                    Math.abs(recipe.resultQuantity * amount),
+                                    "crafting",
+                                    null,
+                                    props, 
+                                    (hasStackableItem === -1)
+                                );
+
+                                if(baseItem instanceof Equipament)
+                                    bonusExp = playerSkill * 3;
+        
+                                if(playerSkill <= (recipe.skillLevel + 1))
+                                    this.gainSkillExperiencie(recipe.skillReq, playerSkill + bonusExp);
+
+                                if(baseItem.Rarity === ItemRarity.Legendary)
+                                    packetSpecialMessage.send(this, `You crafted a legendary item!!!!`);
+        
+                                const item = Items.getItemByRef(itemRef);
+                                packetSystemMessage.sendDirectSocket(this.socket, `You received +${Math.abs(recipe.resultQuantity * amount)} ${baseItem.Name}`);
+                                packetCraftingLog.send(this, "Crafting Success!", true);
+                                this.inventory.addItem(itemRef, recipe.resultQuantity * amount, -1);
+                                this.inventoryChange();
+
+                                if(baseItem instanceof Equipament)
+                                    packetTooltip.send(this, itemRef, item.serealize()); 
                             }
+                            else {
+                                for(let i = 0; i < amount; i++){
+                                    let baseItemCraft = Items.createItemByClass(recipe.resultItem, this.name);
 
-                            const hasStackableItem = this.inventory.hasStackableItem(baseItem);
-                            
-                            const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
-                                this.inventory.containerId,
-                                this.characterId,
-                                baseItem.Namespace,
-                                recipe.resultQuantity,
-                                "crafting",
-                                null,
-                                props, 
-                                (hasStackableItem === -1)
-                            );
+                                    if(craftChance >= 100 && baseItemCraft instanceof Equipament)
+                                        baseItemCraft.randomRarity(this);
 
-                            if(baseItem instanceof Equipament)
-                                bonusExp = playerSkill * 3;
-    
-                            if(playerSkill <= (recipe.skillLevel + 1))
-                                this.gainSkillExperiencie(recipe.skillReq, playerSkill + bonusExp);
+                                    let props = null;
+            
+                                    if(
+                                        baseItemCraft instanceof Equipament || baseItemCraft instanceof PowerScroll || 
+                                        baseItemCraft instanceof PetItem || baseItemCraft instanceof MountItem
+                                    ) {
+                                        props = baseItemCraft.serealize();
+                                    }
+                                    
+                                    const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
+                                        this.inventory.containerId,
+                                        this.characterId,
+                                        baseItem.Namespace,
+                                        recipe.resultQuantity,
+                                        "crafting",
+                                        null,
+                                        props
+                                    );
 
-                            if(baseItem.Rarity === ItemRarity.Legendary)
-                                packetSpecialMessage.send(this, `You crafted a legendary item!!!!`);
-    
-                            const item = Items.getItemByRef(itemRef);
-                            packetSystemMessage.sendDirectSocket(this.socket, `You received +${recipe.resultQuantity} ${baseItem.Name}`);
-                            packetCraftingLog.send(this, "Crafting Success!", true);
-                            this.inventory.addItem(itemRef, recipe.resultQuantity, -1);
-                            this.inventoryChange();
+                                    if(baseItemCraft instanceof Equipament)
+                                        bonusExp = playerSkill * 3;
+            
+                                    if(playerSkill <= (recipe.skillLevel + 1))
+                                        this.gainSkillExperiencie(recipe.skillReq, playerSkill + bonusExp);
 
-                            if(baseItem instanceof Equipament)
-                                packetTooltip.send(this, itemRef, item.serealize()); 
+                                    if(baseItemCraft.Rarity === ItemRarity.Legendary)
+                                        packetSpecialMessage.send(this, `You crafted a legendary item!!!!`);
+            
+                                    const item = Items.getItemByRef(itemRef);
+                                    packetSystemMessage.sendDirectSocket(this.socket, `You received +${recipe.resultQuantity} ${baseItemCraft.Name}`);
+                                    this.inventory.addItem(itemRef, recipe.resultQuantity, -1);
+                                    this.inventoryChange();
+
+                                    if(baseItemCraft instanceof Equipament)
+                                        packetTooltip.send(this, itemRef, item.serealize()); 
+                                }
+                            }                            
                         }
                         else {
                             this.inventoryChange();
