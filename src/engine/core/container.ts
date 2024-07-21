@@ -148,8 +148,11 @@ export class Container {
                             this.itemIndex.set(ref, new SlotRef(slotId, item));
                             this.slots.set(slotId, item);
                             Items.setItem(ref, item);
-        
+
                             if(this.owner){
+                                if(item instanceof Equipament)
+                                    packetTooltip.send((this.owner as Player), ref, item.serealize()); 
+
                                 if(this.owner && this.owner.socket) {
                                     this.owner.socket.services.gameServerQueue.add("update", {
                                         table: "item", 
@@ -480,6 +483,9 @@ export class Container {
                             currentItem.serealize()
                         );
 
+                        if(currentItem instanceof Equipament)
+                            packetTooltip.send((this.owner as Player), itemRef, currentItem.serealize()); 
+
                         await this.changeAmount(currentSlotId, newAmount);    
                         containerTo.addItem(itemRef, amount);                                           
                     }
@@ -502,6 +508,9 @@ export class Container {
                     currentItem.serealize()
                 );
 
+                if(currentItem instanceof Equipament)
+                    packetTooltip.send((this.owner as Player), itemRef, currentItem.serealize()); 
+
                 let realSlotAlloc = await containerTo.addItem(itemRef, amount, slotId);                   
                 this.clearSlot(currentSlotId);
 
@@ -523,6 +532,9 @@ export class Container {
                                 goldCost: currentItem.GoldCost,
                                 weight: currentItem.Weight
                             });
+
+                            if(currentItem instanceof Equipament)
+                                packetTooltip.send((observer as Player), itemRef, currentItem.serealize()); 
                         });
                     }
                 }                
@@ -639,6 +651,9 @@ export class Loot extends Container {
                         null,
                         baseItem.serealize()
                     );
+
+                    if(baseItem instanceof Equipament)
+                        packetTooltip.send(player, itemRef, baseItem.serealize()); 
 
                     await this.addItem(itemRef, amount);
                     Containers.set(this.containerId, this);

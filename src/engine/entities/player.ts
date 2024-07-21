@@ -1318,14 +1318,7 @@ export class Player extends Humanoid {
                 (baseItem as Equipament).generateRandomAttrs();
                 (baseItem as Equipament).updateGoldCost();
             }
-            
-            if(
-                baseItem instanceof Equipament || baseItem instanceof PowerScroll || 
-                baseItem instanceof PetItem || baseItem instanceof MountItem
-            ) {
-                props = baseItem.serealize();
-            }
-
+       
             const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
                 this.inventory.containerId,
                 this.characterId,
@@ -1333,7 +1326,7 @@ export class Player extends Humanoid {
                 amount,
                 context,
                 null,
-                props
+                baseItem.serealize()
             );
 
             const item = Items.getItemByRef(itemRef);

@@ -46,20 +46,6 @@ export class ItemsService {
     ) {
         const itemId = this.createItemId();
 
-        const cleanProps = (props: any) => {
-            if (typeof props === 'object' && props !== null) {
-                return Object.keys(props).reduce((acc, key) => {
-                    if (props[key] && key !== "Amount") 
-                        acc[key] = props[key];
-                    
-                    return acc;
-                }, {} as any);
-            }
-            return null;
-        };
-
-        const filteredProps = cleanProps(props);
-
         if(createInDatabase){
             const result = this.repository.createItem({
                 containerId: containerId,
@@ -69,13 +55,13 @@ export class ItemsService {
                 createBy,
                 createAt: new Date(),
                 createByAdmin,
-                props: (typeof filteredProps === "object") ? JSON.stringify(filteredProps) : null
+                props: (typeof props === "object") ? JSON.stringify(props) : null
             });
 
             Items.itemFromDatabase({
                 itemName: itemName,
                 amount: Math.round(amount), itemRef: itemId,
-                props: filteredProps
+                props: props
             });
 
             return (result) ? itemId : null;
@@ -85,7 +71,7 @@ export class ItemsService {
                 itemName: itemName,
                 amount: Math.round(amount), 
                 itemRef: itemId,
-                props: filteredProps
+                props: props
             });
 
             return itemId;
