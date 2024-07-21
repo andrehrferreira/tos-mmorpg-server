@@ -889,6 +889,7 @@ export class Player extends Humanoid {
             this.actionbar.set(index, new ActionbarRef(action, item, index));
             this.save();
             this.saveToDatabase();
+            this.refreshLocalPlayerData();
         }
     }
 
@@ -897,6 +898,7 @@ export class Player extends Humanoid {
             this.actionbar.delete(index);
             this.save();
             this.saveToDatabase();
+            this.refreshLocalPlayerData();
         }
     }
 

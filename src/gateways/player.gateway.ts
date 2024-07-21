@@ -23,14 +23,14 @@ export class PlayerGateway {
         });
 
         const entity = Maps.getEntity(socket, socket.entityId);
-        entity?.setAction(messageData.action, messageData.itemRef, messageData.slotId);
+        (entity as Player)?.setAction(messageData.action, messageData.itemRef, messageData.slotId);
     }
 
     @SubscribeMessage(ClientPacketType.ClearAction)
     async handleClearAction(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
         const messageData = data.readDataFromBuffer({ "slotId": "int32" });
         const entity = Maps.getEntity(socket, socket.entityId);
-        entity?.clearAction(messageData.slotId);
+        (entity as Player)?.clearAction(messageData.slotId);
     }
 
     @SubscribeMessage(ClientPacketType.Equip)
