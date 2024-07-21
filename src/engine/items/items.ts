@@ -652,38 +652,44 @@ export abstract class Equipament extends Item {
         let randomValue = Random.MinMaxInt(1, 1000);
         let randomValueExptional = Random.MinMaxInt(1, 5);
     
-        let luckFactor = player.luc / 100; 
-        let commonLimit = 500 - (250 * luckFactor); 
-        let uncommonLimit = commonLimit + (400 * (1 + luckFactor)); 
-        let rareLimit = uncommonLimit + (80 * (1 + luckFactor)); 
-        let magicLimit = rareLimit + (15 * (1 + luckFactor));
-        let legendaryLimit = 1000; 
+        let luckFactor = Math.min(player.luc, 300) / 300;
+        
+        let maxLegendaryChance = 0.02;
+        let maxMagicChance = 0.05;
+        let maxRareChance = 0.10;
     
-        if (commonLimit < 250) commonLimit = 250;
-        if (uncommonLimit > 900) uncommonLimit = 900;
-        if (rareLimit > 980) rareLimit = 980;
-        if (magicLimit > 995) magicLimit = 995;
+        let legendaryChance = maxLegendaryChance * luckFactor;
+        let magicChance = maxMagicChance * luckFactor;
+        let rareChance = maxRareChance * luckFactor;
+        let uncommonChance = 0.5 * luckFactor; 
+    
+        let remainingChance = 1 - (legendaryChance + magicChance + rareChance + uncommonChance);
+        let commonChance = remainingChance;
+    
+        let legendaryLimit = 1000 * legendaryChance;
+        let magicLimit = 1000 * magicChance + legendaryLimit;
+        let rareLimit = 1000 * rareChance + magicLimit;
+        let uncommonLimit = 1000 * uncommonChance + rareLimit;
+        let commonLimit = 1000 - uncommonLimit;
     
         randomValue += player.luc * 3;
-        
+    
         if (randomValueExptional === 1) 
             this.Flags.addFlag(ItemStates.Exceptional);
-            
-        if (randomValue <= commonLimit) 
-            this.Rarity = ItemRarity.Common;
-        else if (randomValue <= uncommonLimit) 
-            this.Rarity = ItemRarity.Uncommon;
-        else if (randomValue <= rareLimit) 
-            this.Rarity = ItemRarity.Rare;
+        
+        if (randomValue <= legendaryLimit) 
+            this.Rarity = ItemRarity.Legendary;
         else if (randomValue <= magicLimit) 
             this.Rarity = ItemRarity.Magic;
-        else if (randomValue <= legendaryLimit) 
-            this.Rarity = ItemRarity.Legendary;
+        else if (randomValue <= rareLimit) 
+            this.Rarity = ItemRarity.Rare;
+        else if (randomValue <= uncommonLimit) 
+            this.Rarity = ItemRarity.Uncommon;
         else
             this.Rarity = ItemRarity.Common; 
             
         this.generateRandomAttrs();
-    }
+    }   
    
     public setDurability(newDurability, maxDurability: number = 0) {
         this.MaxDurability = (maxDurability > 0) ? maxDurability : newDurability;
