@@ -20,10 +20,10 @@ export * from "./gamemaster/kick-command";
 export * from "./gamemaster/kill-command";
 export * from "./gamemaster/summon-command";
 export * from "./gamemaster/save-command";
+export * from "./gamemaster/add-command";
+export * from "./gamemaster/give-command";
 
 //Admin
-export * from "./admins/add-command";
-export * from "./admins/give-command";
 export * from "./admins/global-command";
 export * from "./admins/ban-command";
 export * from "./admins/shutdown-command";
