@@ -116,7 +116,7 @@ export class ElegantBlade extends Weapon {
     ]);
 }
 
-export class Executioner extends Weapon {
+/*export class Executioner extends Weapon {
     public override Namespace = "SM_wp_2h_sword_01";
     public override Name = "Executioner";
     public override WeaponType = WeaponType.TwoHandedSword;
@@ -131,7 +131,7 @@ export class Executioner extends Weapon {
         ["Attributes", "3-4"],
         ["Max Slots", "0-2"]
     ]);
-}
+}*/
 
 export class Falchion extends Weapon {
     public override Namespace = "SM_wp_1h_sword_02";
@@ -368,7 +368,7 @@ Items.AddBaseItem(["ArzaonSword08","Claymore"], Claymore);
 Items.AddBaseItem(["Executioner","CursedSoulsBlade"], CursedSoulsBlade);
 Items.AddBaseItem(["AncientUndeadSword02","CurvedSword"], CurvedSword);
 Items.AddBaseItem(["SM_wp_sword_elegant_01","ElegantBlade"], ElegantBlade);
-Items.AddBaseItem(["SM_wp_2h_sword_01","Executioner"], Executioner);
+//Items.AddBaseItem(["SM_wp_2h_sword_01","Executioner"], Executioner);
 Items.AddBaseItem(["SM_wp_1h_sword_02","Falchion"], Falchion);
 Items.AddBaseItem(["FlambergeFinal","Flamberge"], Flamberge);
 Items.AddBaseItem(["SM_wp_1h_sword_03","Gladius"], Gladius);
