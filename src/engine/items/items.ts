@@ -254,8 +254,11 @@ export class Items {
             const ref = data.id || data.ItemRef || data.itemRef;
             let props = data.props || data.Props;
             const containerId = data.containerId;
-            
+
             if(props && typeof props === "string" && props !== "Null" && props !== "[object Object]")
+                props = JSON.parse(props);
+            
+            /*if(props && typeof props === "string" && props !== "Null" && props !== "[object Object]")
                 props = JSON.parse(props);  
             else if(props !== "[object Object]")  
                 props = {};    
@@ -273,7 +276,7 @@ export class Items {
                 return null;
             };
     
-            props = cleanProps(props);
+            props = cleanProps(props);*/
                 
             const item = Items.loadFromDatabase(itemName, ref, props);
             
@@ -328,7 +331,7 @@ export class Items {
 
                 let props = equipament.serealize();
 
-                const cleanProps = (props: any) => {
+                /*const cleanProps = (props: any) => {
                     if (typeof props === 'object' && props !== null) {
                         return Object.keys(props).reduce((acc, key) => {
                             if (props[key]) {
@@ -340,18 +343,18 @@ export class Items {
                     return null;
                 };
         
-                const filteredProps = cleanProps(props);
+                const filteredProps = cleanProps(props);*/
 
                 await owner.socket.services.gameServerQueue.add("update", {
                     table: "item", 
                     id: item.Ref,
                     set: { 
-                        props: (typeof props === "object") ? JSON.stringify(filteredProps) : null 
+                        props: (typeof props === "object") ? JSON.stringify(props) : null 
                     }                        
                 });
 
                 Items.CachedItems.set(ref, equipament);
-                packetRefreshTooltip.send(owner, item.Ref, filteredProps);               
+                packetRefreshTooltip.send(owner, item.Ref, props);               
             }
         }
     }
