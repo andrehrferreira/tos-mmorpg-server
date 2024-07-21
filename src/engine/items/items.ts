@@ -1,7 +1,7 @@
 import { Logger } from "@nestjs/common";
 import { Dices } from "@enums";
 import { packetPlayMontageEntity } from "@network";
-import { Entity, ItemStates, Random, StateFlags, Player, PowerScroll, Pet, Humanoid, Mount, packetRefreshTooltip } from "..";
+import { Entity, ItemStates, Random, StateFlags, Player, PowerScroll, Pet, Humanoid, Mount, packetRefreshTooltip, EntityStates } from "..";
 
 export enum EquipamentType {
     None, 
@@ -892,6 +892,7 @@ export abstract class PetItem extends Equipament {
             if(entity && entity.map && !entity.petInstance){
                 entity.petInstance = new this.PetCreature(entity as Player);
                 entity.petInstance.transform.position = entity.transform.position;
+                entity.petInstance.states.addFlag(EntityStates.Pet);
                 entity.map.joinMap(entity.petInstance);
             }
         }, 1000);

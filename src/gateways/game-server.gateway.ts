@@ -271,7 +271,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
                 //packetMapData.send(socket, Maps.foliageInitialData.get(map.namespace));
             }
         }
-        catch(e){  console.log(e); }        
+        catch(e){ }        
     }
 
     @SubscribeMessage(ClientPacketType.Command)

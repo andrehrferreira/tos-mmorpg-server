@@ -20,7 +20,8 @@ export enum EntityStates {
     Frenzy = 1 << 18,
     DuelZone = 1 << 19,
     SafeZone = 1 << 20,
-    Admin = 1 << 21
+    Admin = 1 << 21,
+    Pet = 1 << 22
 }
 
 export enum BuffDebuffStates {

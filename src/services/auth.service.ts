@@ -191,7 +191,7 @@ export class AuthService {
 			}
 		}
 		catch (e) {
-			console.log(e);
+			//console.log(e);
 			return null;
 		}
 	}
@@ -380,7 +380,7 @@ export class AuthService {
 			return decoded;
 		}
 		catch(e){
-			console.log(e); 
+			//console.log(e); 
 			return false; 
 		}
 	}

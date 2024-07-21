@@ -209,28 +209,34 @@ export class CharactersService {
     }
 
     async getAllCharacters(token: string){
-        const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
-        const characters = await this.repository.getCharacters(decoded.data.masterId);
+        try{
+            const decoded = JWT.decode(token, this.configService.get('TOS_JWT_SECRET'));
+            const characters = await this.repository.getCharacters(decoded.data.masterId);
 
-        for(let key in characters){
-            characters[key].chestArmor = (characters[key].chestArmor) ? this.getRarity(JSON.parse(characters[key].chestArmor)) : null;
-            characters[key].helmetArmor = (characters[key].helmetArmor) ? this.getRarity(JSON.parse(characters[key].helmetArmor)) : null;
-            characters[key].bootsArmor = (characters[key].bootsArmor) ? this.getRarity(JSON.parse(characters[key].bootsArmor)) : null;
-            characters[key].glovesArmor = (characters[key].glovesArmor) ? this.getRarity(JSON.parse(characters[key].glovesArmor)) : null;
-            characters[key].pantsArmor = (characters[key].pantsArmor) ? this.getRarity(JSON.parse(characters[key].pantsArmor)) : null;
-            characters[key].robe = (characters[key].robe) ? this.getRarity(JSON.parse(characters[key].robe)) : null;
-            characters[key].cloak = (characters[key].cloak) ? this.getRarity(JSON.parse(characters[key].cloak)) : null;
-            characters[key].offhand = (characters[key].offhand) ? this.getRarity(JSON.parse(characters[key].offhand)) : null;
-            characters[key].mainhand = (characters[key].mainhand) ? this.getRarity(JSON.parse(characters[key].mainhand)) : null;
-            characters[key].instrument = (characters[key].instrument) ? this.getRarity(JSON.parse(characters[key].instrument)) : null;
-            characters[key].pet = (characters[key].pet) ? this.getRarity(JSON.parse(characters[key].pet)) : null;
-            characters[key].mount = (characters[key].mount) ? this.getRarity(JSON.parse(characters[key].mount)) : null;
+            for(let key in characters){
+                characters[key].chestArmor = (characters[key].chestArmor) ? this.getRarity(JSON.parse(characters[key].chestArmor)) : null;
+                characters[key].helmetArmor = (characters[key].helmetArmor) ? this.getRarity(JSON.parse(characters[key].helmetArmor)) : null;
+                characters[key].bootsArmor = (characters[key].bootsArmor) ? this.getRarity(JSON.parse(characters[key].bootsArmor)) : null;
+                characters[key].glovesArmor = (characters[key].glovesArmor) ? this.getRarity(JSON.parse(characters[key].glovesArmor)) : null;
+                characters[key].pantsArmor = (characters[key].pantsArmor) ? this.getRarity(JSON.parse(characters[key].pantsArmor)) : null;
+                characters[key].robe = (characters[key].robe) ? this.getRarity(JSON.parse(characters[key].robe)) : null;
+                characters[key].cloak = (characters[key].cloak) ? this.getRarity(JSON.parse(characters[key].cloak)) : null;
+                characters[key].offhand = (characters[key].offhand) ? this.getRarity(JSON.parse(characters[key].offhand)) : null;
+                characters[key].mainhand = (characters[key].mainhand) ? this.getRarity(JSON.parse(characters[key].mainhand)) : null;
+                characters[key].instrument = (characters[key].instrument) ? this.getRarity(JSON.parse(characters[key].instrument)) : null;
+                characters[key].pet = (characters[key].pet) ? this.getRarity(JSON.parse(characters[key].pet)) : null;
+                characters[key].mount = (characters[key].mount) ? this.getRarity(JSON.parse(characters[key].mount)) : null;
+            }
+
+            if(characters)
+                return JSON.stringify({ characters });
+            else 
+                throw new InternalServerErrorException("No characters found on this account");
         }
-
-        if(characters)
-            return JSON.stringify({ characters });
-        else 
-            throw new InternalServerErrorException("No characters found on this account");
+        catch {
+            return "{characters:[]}"
+        }
+        
     }
 
     async getFullCharacterInfo(token: string, characterId: string){
