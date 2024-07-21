@@ -1,6 +1,7 @@
 import Redis from "ioredis";
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
+import * as fs from "fs";
 
 import { InjectRedis } from "@nestjs-modules/ioredis";
 import { Logger } from "@nestjs/common";
@@ -182,10 +183,11 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
     @SubscribeMessage(ClientPacketType.CharacterList)
     async handleCharacterList(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
         const messageData = data.readDataFromBuffer({ "token": "string" });
-
+       
         if(messageData.token){
             const tokenData = this.authService.decodeToken(messageData.token);
-
+            console.log(tokenData);
+            
             if(tokenData && tokenData.data && tokenData.data.masterId){
                 socket.token = messageData.token;
                 socket.plevel = tokenData.data.plevel;

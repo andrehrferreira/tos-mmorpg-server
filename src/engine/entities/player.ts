@@ -165,6 +165,11 @@ export class Player extends Humanoid {
     }
 
     public static fromDatabase(data: any){
+        try{
+            data.steamArchivements = [...new Set([...data.steamArchivements ])];
+        }
+        catch{}
+        
         Player.playerData.set(data.id, data);
     }
 
@@ -604,7 +609,8 @@ export class Player extends Humanoid {
         
         //Steam
         character.archivements = (character.archivements && typeof character.archivements === "string") ? JSON.parse(character.archivements) : []
-        
+        character.archivements = [...new Set([...character.archivements])];
+
         return JSON.stringify(character);
     }
 
@@ -1656,12 +1662,13 @@ export class Player extends Humanoid {
 
     //Steam
     public setArchivement(archivementName: string){
-        //if(this.steamArchivements.indexOf(archivementName) <= -1){
+        if(this.steamArchivements.indexOf(archivementName) <= -1){
             this.steamArchivements.push(archivementName);
+            this.steamArchivements = [...new Set([...this.steamArchivements ])];
             this.save();
             this.saveToDatabase();
             packetSteamArchivement.send(this, archivementName);
-        //}
+        }
     }
 
     public checkSkillArchivement(){
