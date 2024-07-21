@@ -51,7 +51,8 @@ export class PacketCreateCharacter extends Packet {
             .putInt32(owner.buffsDebuffsState.getCurrentFlags())
             .putString(owner.guild ? owner.guild.Name : "")
 
-            entity.socket.send(buffer.getBuffer());
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
+            //entity.socket.send(buffer.getBuffer());
         }
     }
 }
@@ -140,7 +141,8 @@ export class PacketAutoAttack extends Packet {
             .putByte(this.type)            
             .putId(owner.mapIndex)
 
-            entity.socket.send(buffer.getBuffer());
+            //entity.socket.send(buffer.getBuffer());
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -299,16 +301,15 @@ export class PacketChatMessage extends Packet {
         }
     ){
         if(entity.socket && data.message !== "" && data.message !== undefined && data.message !== null){    
-            entity.socket.send(
-                new ByteBuffer()
-                .putByte(this.type)
-                .putString(data.senderName)
-                .putId(data.entityId)
-                .putString(data.messageRef)
-                .putString(data.message)
-                .putByte(data.channel)
-                .getBuffer()
-            );
+            const buffer = new ByteBuffer()
+            .putByte(this.type)
+            .putString(data.senderName)
+            .putId(data.entityId)
+            .putString(data.messageRef)
+            .putString(data.message)
+            .putByte(data.channel)
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);            
         }
     }
 }
@@ -410,14 +411,13 @@ export class PacketSay extends Packet {
         color: string
     }){
         if(entity.socket){    
-            entity.socket.send(
-                new ByteBuffer()
+            const buffer = new ByteBuffer()
                 .putByte(this.type)
                 .putId(data.speaker.mapIndex)
                 .putString(data.message)
-                .putString(data.color)
-                .getBuffer()
-            );
+                .putString(data.color);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer); 
         }
     }
 }

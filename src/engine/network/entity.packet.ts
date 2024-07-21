@@ -22,7 +22,8 @@ export class PacketCreateEntity extends Packet {
             .putInt32(owner.buffsDebuffsState.getCurrentFlags())  
             .putString(owner.guild ? owner.guild.Name : "")
 
-            entity.socket.send(buffer.getBuffer());
+            //entity.socket.send(buffer.getBuffer());
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -40,7 +41,7 @@ export class PacketUpdateEntity extends Packet {
             .putInt32(entity.transform.position.y)
             .putInt32(entity.transform.position.z)
             .putInt32(entity.life)
-            .putInt32(owner.buffsDebuffsState.getCurrentFlags());
+            .putInt32(entity.buffsDebuffsState.getCurrentFlags());
 
             QueueBuffer.addBuffer(owner.mapIndex, buffer);
         }
@@ -65,10 +66,11 @@ export class PacketEntityDie extends Packet {
 
     public override send(owner: Entity, entity: Entity){
         if(entity && entity.socket) {
-            entity.socket.send(new ByteBuffer()
+            const buffer = new ByteBuffer()
             .putByte(this.type)
-            .putId(owner.mapIndex)
-            .getBuffer());
+            .putId(owner.mapIndex);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -78,11 +80,12 @@ export class PacketEventEntity extends Packet {
 
     public override send(owner: Entity, entity: Entity, type: number){
         if(entity.socket && owner.mapIndex != entity.mapIndex){
-            entity.socket.send(new ByteBuffer()
+            const buffer = new ByteBuffer()
             .putByte(this.type)
             .putId(owner.mapIndex)
-            .putByte(type)
-            .getBuffer());
+            .putByte(type);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -127,11 +130,12 @@ export class PacketActionEntity extends Packet {
 
     public override send(owner: Entity, entity: Entity, index: number){
         if(entity.socket){
-            entity.socket.send(new ByteBuffer()
+            const buffer = new ByteBuffer()
             .putByte(this.type)
             .putId(owner.mapIndex)
-            .putByte(index)
-            .getBuffer());
+            .putByte(index);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -141,14 +145,15 @@ export class PacketActionAreaEntity extends Packet {
 
     public override send(owner: Entity, entity: Entity, data : { index: number, position: Vector3 }){
         if(entity.socket){
-            entity.socket.send(new ByteBuffer()
+            const buffer = new ByteBuffer()
             .putByte(this.type)
             .putId(owner.mapIndex)
             .putByte(data.index)
             .putInt32(data.position.x)
             .putInt32(data.position.y)
-            .putInt32(data.position.z)
-            .getBuffer());
+            .putInt32(data.position.z);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }
@@ -158,11 +163,12 @@ export class PacketSelectTargetEntity extends Packet {
 
     public override send(owner: Entity, entity: Entity, target: string){
         if(entity.socket){
-            entity.socket.send(new ByteBuffer()
+            const buffer = new ByteBuffer()
             .putByte(this.type)
             .putId(owner.mapIndex)
-            .putId(target)
-            .getBuffer());
+            .putId(target);
+
+            QueueBuffer.addBuffer(entity.mapIndex, buffer);
         }
     }
 }

@@ -186,7 +186,6 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
        
         if(messageData.token){
             const tokenData = this.authService.decodeToken(messageData.token);
-            console.log(tokenData);
             
             if(tokenData && tokenData.data && tokenData.data.masterId){
                 socket.token = messageData.token;
