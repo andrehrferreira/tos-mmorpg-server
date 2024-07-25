@@ -5,7 +5,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule, OnLoadModules } from './app.module';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { WsAdapter, AllExceptionsFilter } from "@utils";
+import { UWebSocketAdapter, WsAdapter, AllExceptionsFilter } from "@utils";
 import { Logger } from "@nestjs/common";
 
 process.env.UV_THREADPOOL_SIZE = "12";
@@ -63,7 +63,8 @@ async function bootstrap() {
 
 	const httpAdapterHost = app.get(HttpAdapterHost);
 	app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
-	app.useWebSocketAdapter(new WsAdapter(app));
+	//app.useWebSocketAdapter(new WsAdapter(app));
+	app.useWebSocketAdapter(new UWebSocketAdapter({ port: 3011 }));
 	app.enableCors(cors);
 	app.use(bodyParser.json({ limit: "50mb" }));
   	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));

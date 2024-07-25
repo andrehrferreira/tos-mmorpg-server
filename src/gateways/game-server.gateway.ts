@@ -13,7 +13,8 @@ import { GUID } from "@utils";
 import { 
     ClientPacketType, 
     ServerPacketType, 
-    Plevel 
+    Plevel,
+    EventType
 } from "@enums";
 
 import { 
@@ -41,7 +42,14 @@ import {
     Player,
     ByteBuffer,
     Commands,
-    QueueBuffer
+    QueueBuffer,
+    Containers,
+    Humanoid,
+    Vector3,
+    Creature,
+    packetAutoAttack,
+    Interact,
+    packetPlayerStatics
 } from "@engine";
 
 import {
@@ -54,7 +62,8 @@ import {
     packetCreateCharacterError
 } from "@network";
 
-@WebSocketGateway(3011, { cors: { origin: "*" }})
+
+@WebSocketGateway(3011, { cors: { origin: "*" }})//
 export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private logger: Logger = new Logger('GameServer');
 
@@ -158,7 +167,7 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
                 "password": "string",
                 "applicant": "string" 
             });
-
+            
             const result = await this.authService.login(messageData, Plevel.CommunityManager);
 
             if(result && result.token && result.plevel >= 20) {
@@ -281,5 +290,686 @@ export class GameServerGateway implements OnGatewayInit, OnGatewayConnection, On
             itemsService: this.itemsService,
             authService: this.authService
         });
+    }
+
+    //Containers
+    @SubscribeMessage(ClientPacketType.DestroyItem)
+    async handleDestroyItem(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
+        const messageData = data.readDataFromBuffer({ 
+            "itemRef": "string", "containerId": "string", 
+            "slotId": "int32", "intentory": "bool" 
+        });
+
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const player = (entity as Player);
+
+        if(player){
+            if(messageData.intentory && messageData.containerId === player.inventory.containerId){
+                player.inventory.removeItem(messageData.itemRef);
+                player.save();
+            }                
+            else if(Containers.has(messageData.containerId))
+                Containers.get(messageData.containerId)?.removeItem(messageData.itemRef);
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.MoveItem)
+    async handleMoveItem(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
+        const messageData = data.readDataFromBuffer({ 
+            "containerId": "string", "from": "int32", 
+            "to": "int32", "intentory": "bool" 
+        });
+
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const player = (entity as Player);
+
+        if(player){
+            if(messageData.intentory && messageData.containerId === player.inventory.containerId){
+                player.inventory.moveItem(messageData.from, messageData.to);
+                player.save();
+            }                
+            else if(Containers.has(messageData.containerId)){
+                Containers.getOrCreate(messageData.containerId, entity)
+                    .moveItem(messageData.from, messageData.to);
+            }
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.ChangeContainer)
+    async handleChangeContainer(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
+        const messageData = data.readDataFromBuffer({ 
+            "currentContainerId": "string", "currentSlotId": "int32", 
+            "newContainerId": "string", "newSlotId": "int32", 
+            "amount": "int32", 
+        });
+
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const player = (entity as Player);
+
+        if(player){
+            const containerFrom = (player.inventory.containerId === messageData.currentContainerId) ? player.inventory :  
+                Containers.getOrCreate(messageData.currentContainerId, entity);
+
+            const containerTo = (player.inventory.containerId === messageData.newContainerId) ? player.inventory :  
+                Containers.getOrCreate(messageData.newContainerId, entity);
+
+            if(containerTo && containerFrom){
+                containerFrom.changeContainer(
+                    messageData.currentSlotId, 
+                    containerTo, 
+                    messageData.newSlotId, 
+                    messageData.amount
+                );
+            }                
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.Consume)
+    async handleConsume(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
+        const messageData = data.readDataFromBuffer({"slotId": "int32"});
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const player = (entity as Player);
+
+        if(player && messageData.slotId >= 0)
+            player.inventory.consume(messageData.slotId)
+    }
+
+    //Entities
+    @SubscribeMessage(ClientPacketType.UpdateEntity)
+    async handleUpdateEntity(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer) {
+        const messageData = data.readDataFromBuffer({ 
+            "id": "id", 
+            "x": "int32",
+            "y": "int32",
+            "z": "int32" 
+        });
+
+        const map = Maps.getMap(socket.character.map);
+        const newLocation = new Vector3(messageData.x, messageData.y, messageData.z);
+        //const newRotation = new Rotator(0, 0, messageData.r);
+
+        if (!map)
+            return false;
+
+        //const currentEntity = map.findEntityById(socket.entityId);
+        const entity = map.findEntityById(messageData.id);
+        
+        if (!entity)
+            return false;  
+
+        if(!entity.removed)             
+            entity?.updatePosition(newLocation);   
+    }
+
+    @SubscribeMessage(ClientPacketType.GetEntityInfo)
+    async handleGetEntityInfo(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "id" });
+        const map = Maps.getMap(socket.character.map);
+        const currentEntity = map.findEntityById(socket.entityId);
+        const entity = map.findEntityById(messageData.id);
+        entity?.sendInfo(currentEntity);
+    }
+
+    @SubscribeMessage(ClientPacketType.SyncEvent)
+    async hangleSyncEvent(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "byte" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity){
+            switch(messageData.id){
+                case EventType.SprintStart: entity.startSprint(); break;
+                case EventType.SprintEnd: entity.endSprint(); break;
+                case EventType.Roll: entity.roll(); break;
+                case EventType.Revive: entity.revive(); break;
+            }           
+    
+            entity?.updateEvent(messageData.id);
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.PlayMontage)
+    async handlePlayMontage(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "int32" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        entity?.updatePlayMontage(messageData.id);
+    }
+
+    @SubscribeMessage(ClientPacketType.Precast)
+    async handlePrecast(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "id", "index": "byte" });
+        const entity = Maps.getEntity(socket, messageData.id);
+
+        if(
+            entity &&
+            (socket.entityId === messageData.id || 
+            entity?.target === socket.entityId) && 
+            !entity.isDead &&
+            !entity.removed
+        ){
+            entity?.preCast(messageData.index);
+        }        
+    }
+
+    @SubscribeMessage(ClientPacketType.Action)
+    async handleAction(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "id", "index": "byte", "target": "id" });
+        const entity = Maps.getEntity(socket, messageData.id);
+        const target = (messageData.target) ? Maps.getEntity(socket, messageData.target) : null;
+
+        if(
+            entity &&
+            (socket.entityId === messageData.id || 
+            entity?.target === socket.entityId) && 
+            !entity.isDead &&
+            !entity.removed
+        ){
+            entity?.updateAction(messageData.index, target);
+        }           
+    }
+
+    @SubscribeMessage(ClientPacketType.ActionSuccess)
+    async handleActionSuccess(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "id": "id", "index": "byte", "target": "id", "ignoreTarget": "bool" });
+        const entity = Maps.getEntity(socket, messageData.id);
+        const target = (messageData.target) ? Maps.getEntity(socket, messageData.target) : null;
+
+        if(
+            entity &&
+            (socket.entityId === entity?.target || 
+            socket.entityId === messageData?.target || 
+            socket.entityId === messageData.id || 
+            messageData.ignoreTarget ||
+            entity?.isCreature) && target
+        ) {
+            entity?.actionSuccess(messageData.index, target);
+        } 
+    }
+
+    @SubscribeMessage(ClientPacketType.ActionAreaSuccess)
+    async handleActionAreaSuccess(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "id": "id", "index": "byte", "x": "int32", 
+            "y": "int32", "z" : "int32" 
+        });
+
+        const entity = Maps.getEntity(socket, messageData.id);
+
+        if(
+            entity &&
+            socket.entityId === entity?.target || 
+            socket.entityId === messageData.id || 
+            entity?.isCreature && 
+            !entity.isDead &&
+            !entity.removed
+        ) 
+        {
+            entity?.actionSuccess(
+                messageData.index, 
+                new Vector3(messageData.x, messageData.y, messageData.z)
+            );
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.SelectTarget)
+    async handleSelectTarget(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "target": "id" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const target = Maps.getEntity(socket, messageData.target);
+
+        if(entity && target)
+            entity?.selectTarget(messageData.target, target);
+    }
+
+    @SubscribeMessage(ClientPacketType.CancelTarget)
+    async handleCancelTarget(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const entity = Maps.getEntity(socket, socket.entityId);
+        entity?.cancelTarget();
+    }
+
+    @SubscribeMessage(ClientPacketType.CheckHit)
+    async handleCheckHit(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "entityId": "id", "actorId": "id", 
+            "x": "int32", "y": "int32", "z": "int32", 
+            "action": "byte" 
+        });
+
+        const emmiterEntity = Maps.getEntity(socket, messageData.entityId);
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(
+            (socket.entityId === messageData.entityId || 
+            socket.entityId === messageData.actorId || 
+            emmiterEntity?.isCreature) && 
+            emmiterEntity &&
+            !emmiterEntity.isDead &&
+            !emmiterEntity.removed
+        ) {
+            if(emmiterEntity instanceof Humanoid)
+                (emmiterEntity as Humanoid).checkHit(messageData);
+            else
+                emmiterEntity.checkHit(messageData);
+        } 
+    }
+
+    @SubscribeMessage(ClientPacketType.CheckHitAutoAttack)
+    async handleCheckHitAutoAttack(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "entityId": "id", "actorId": "id", 
+            "x": "int32", "y": "int32", "z": "int32", 
+        });
+
+        const emmiterEntity = Maps.getEntity(socket, messageData.entityId);
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(
+            (socket.entityId === messageData.actorId || 
+            socket.entityId === messageData.entityId || 
+            emmiterEntity?.isCreature) && 
+            emmiterEntity &&
+            !emmiterEntity.isDead &&
+            !emmiterEntity.removed
+        ) {
+            if(emmiterEntity instanceof Humanoid)
+                (emmiterEntity as Humanoid).checkHitAutoAttack(messageData);
+            else
+                emmiterEntity?.checkHitAutoAttack(messageData);
+        }        
+    }
+
+    @SubscribeMessage(ClientPacketType.ActionArea)
+    async handleActionArea(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "id": "id", "index": "byte", "x": "int32", 
+            "y": "int32", "z": "int32" 
+        });
+
+        const entity = Maps.getEntity(socket, messageData.id);
+        
+        if(
+            (socket.entityId === messageData.id || 
+            entity?.target === socket.entityId) && 
+            !entity.isDead &&
+            !entity.removed
+        )
+        {
+            entity?.updateActionArea(
+                messageData.index, 
+                new Vector3(messageData.x, messageData.y, messageData.z)
+            );
+        }        
+    }
+
+    @SubscribeMessage(ClientPacketType.CheckAttackRange)
+    async handleCheckAttackRange(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "entityId": "id" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const creature = Maps.getEntity(socket, messageData.entityId);
+        
+        if(creature && entity && creature.isCreature)
+            (creature as Creature).validateAttack(entity);
+    }
+
+    //Player
+    @SubscribeMessage(ClientPacketType.SetAction)
+    async handleSetAction(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "action": "string", "itemRef": "string",
+            "slotId": "int32"
+        });
+
+        const entity = Maps.getEntity(socket, socket.entityId);
+        (entity as Player)?.setAction(messageData.action, messageData.itemRef, messageData.slotId);
+    }
+
+    @SubscribeMessage(ClientPacketType.ClearAction)
+    async handleClearAction(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "slotId": "int32" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        (entity as Player)?.clearAction(messageData.slotId);
+    }
+
+    @SubscribeMessage(ClientPacketType.Equip)
+    async handleEquip(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ 
+            "type": "byte", "itemId": "string", 
+            "itemRef": "string", "ring02": "boolean" 
+        });
+
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && !entity.isDead && !entity.removed){
+            (entity as Player)?.equip(
+                messageData.type, messageData.itemId, 
+                messageData.itemRef, messageData.ring02
+            );
+        }
+    }
+
+    @SubscribeMessage(ClientPacketType.Desequip)
+    async handleDesequip(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "type": "byte", "slotId": "int32", "ring02": "bool" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && !entity.isDead && !entity.removed)
+            (entity as Player)?.desequip(messageData.type, messageData.ring02, true, messageData.slotId);
+    }
+
+    @SubscribeMessage(ClientPacketType.AutoAttack)
+    async handleAutoAttack(@ConnectedSocket() socket: any){
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && !entity.isDead && !entity.removed)
+            entity?.broadcast(packetAutoAttack);
+    }
+
+    @SubscribeMessage(ClientPacketType.ChatMessage)
+    async handleChatMessage(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "message": "string", "type": "byte" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity instanceof Player)
+            (entity as Player).chatMessage(messageData.type, messageData.message);
+    }
+
+    @SubscribeMessage(ClientPacketType.Interact)
+    async handleInteract(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "type": "byte", "payload": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && !entity.isDead && !entity.removed)
+            Interact.interact((entity as Player), messageData.type, messageData.payload);
+    }
+
+    @SubscribeMessage(ClientPacketType.Skinning)
+    async handleSkinning(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "entityId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        const entitySkinning = Maps.getEntity(socket, messageData.entityId);
+
+        if(entity && entitySkinning && !entity.isDead && !entity.removed && entity instanceof Player)
+            (entitySkinning as Creature).skinning(entity as Player);
+    }
+
+    @SubscribeMessage(ClientPacketType.Collect)
+    async handleCollect(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && !entity.isDead && !entity.removed)
+            (entity as Player)?.collect();
+    }
+
+    @SubscribeMessage(ClientPacketType.PlayerStatics)
+    async handlePlayerStatics(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player && !entity.isDead && !entity.removed)
+            packetPlayerStatics.send((entity as Player));
+    }
+
+    @SubscribeMessage(ClientPacketType.AddStat)
+    async handleAddStat(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "type": "byte" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            entity.addStat(messageData.type);
+    }
+
+    @SubscribeMessage(ClientPacketType.CraftItem)
+    async handleCraftItem(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "recipe": "string", "amount": "int32" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player && !entity.isDead && !entity.removed)
+            entity.craftItem(messageData.recipe, messageData.amount);
+    }
+
+    @SubscribeMessage(ClientPacketType.BuyItem)
+    async handleBuyItem(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "namespace": "string", "amount": "int32" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player && !entity.isDead && !entity.removed)
+            (entity as Player).buyItem(messageData.namespace, messageData.amount);
+    }
+
+    @SubscribeMessage(ClientPacketType.SellItem)
+    async handleSellItem(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "namespace": "string", "amount": "int32" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player && !entity.isDead && !entity.removed)
+            (entity as Player).sellItem(messageData.namespace, messageData.amount);
+    }
+
+    @SubscribeMessage(ClientPacketType.RequestParty)
+    async handleRequestParty(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "characterId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).requestJoinParty(messageData.characterId);
+    }
+
+    @SubscribeMessage(ClientPacketType.ConfirmParty)
+    async handleConfirmParty(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "sessionId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).confirmPartyRequest(messageData.sessionId);
+    }
+
+    @SubscribeMessage(ClientPacketType.FinishQuest)
+    async handleFinishQuest(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "namespace": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+        
+        if(entity && entity instanceof Player)
+            (entity as Player).finishQuest(messageData.namespace);
+    }
+
+    @SubscribeMessage(ClientPacketType.QuestFav)
+    async handleQuestFav(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "namespace": "string", "status": "bool" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).favQuest(messageData.namespace, messageData.status);
+    }
+
+    @SubscribeMessage(ClientPacketType.RequestTrade)
+    async handleRequestTrade(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "characterId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).requestTrade(messageData.characterId);
+    }
+
+    @SubscribeMessage(ClientPacketType.AcceptTrade)
+    async handleAcceptTrade(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "sessionId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).acceptTrade(messageData.sessionId);
+    }
+
+    @SubscribeMessage(ClientPacketType.NotAcceptTrade)
+    async handleNotAcceptTrade(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "sessionId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).notAcceptTrade(messageData.sessionId);
+    }
+
+    @SubscribeMessage(ClientPacketType.ChangeStatusTrade)
+    async handleChangeStatusTrade(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "sessionId": "string", "status": "bool" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).changeStatusTrade(messageData.sessionId, messageData.status);
+    }
+
+    @SubscribeMessage(ClientPacketType.CancelTrade)
+    async handleCancelTrade(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        const messageData = data.readDataFromBuffer({ "sessionId": "string" });
+        const entity = Maps.getEntity(socket, socket.entityId);
+
+        if(entity && entity instanceof Player)
+            (entity as Player).cancelTrade(messageData.sessionId);
+    }
+
+    @SubscribeMessage(ClientPacketType.PlayerActions)
+    async handlePlayerActions(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "type": "byte", "metadata": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+            const metadata = (messageData.metadata) ? JSON.parse(messageData.metadata) : null;
+
+            if(entity && entity instanceof Player && metadata)
+                (entity as Player).playerActions(messageData.type, metadata);
+        }
+        catch(e){}        
+    }
+
+    @SubscribeMessage(ClientPacketType.Waipoint)
+    async handleWaipoint(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "map": "string", "waypoint": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).teleport(messageData.map, messageData.waypoint);
+        }
+        catch(e){}        
+    }
+
+    @SubscribeMessage(ClientPacketType.AppendCard)
+    async handleAppendCard(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "equipament": "string", "itemref": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).appendCard(messageData.equipament, messageData.itemref);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.CreateGuild)
+    async handleCreateGuild(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ 
+                "guildName": "string", "banner": "int32",
+                "pattern": "int32", "symbol" : "int32",
+                "bannerColor": "string", "patternColor": "string", 
+                "symbolColor": "string"
+            });
+
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).createGuild(messageData);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.GuildsList)
+    async handleGuildsList(@ConnectedSocket() socket: any){
+        try{
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).guildList();
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.CreateEventInstance)
+    async handleCreateEventInstance(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "eventType": "byte" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).createEvent(messageData.eventType);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.GetGuildData)
+    async handleGetGuildData(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "guildId": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).guildData(messageData.guildId);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.RequestGuildJoin)
+    async handleRequestGuildJoin(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "guildId": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).guildRequestJoin(messageData.guildId);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.AcceptGuildRequest)
+    async handleAcceptGuildRequest(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "requestid": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).guildAcceptRequest(messageData.requestid);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.DenyGuildRequest)
+    async handleDenyGuildRequest(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "requestid": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).guildDenyRequest(messageData.requestid);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.RemoveGuildMember)
+    async handleRemoveGuildMember(@ConnectedSocket() socket: any, @MessageBody() data: ByteBuffer){
+        try{
+            const messageData = data.readDataFromBuffer({ "characterId": "string" });
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).removeGuildMember(messageData.characterId);
+        }
+        catch{}        
+    }
+
+    @SubscribeMessage(ClientPacketType.LeaveGuild)
+    async handleLeaveGuild(@ConnectedSocket() socket: any){
+        try{
+            const entity = Maps.getEntity(socket, socket.entityId);
+
+            if(entity && entity instanceof Player)
+                (entity as Player).leaveGuild();
+        }
+        catch{}        
     }
 }

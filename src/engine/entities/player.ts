@@ -1090,7 +1090,7 @@ export class Player extends Humanoid {
 
                                 const hasStackableItem = this.inventory.hasStackableItem(baseItem);
 
-                                console.log(Math.abs(recipe.resultQuantity * amount));
+                                //console.log(Math.abs(recipe.resultQuantity * amount));
                                 
                                 const itemRef = await (this.socket.services.itemsService as ItemsService).createItem(
                                     this.inventory.containerId,

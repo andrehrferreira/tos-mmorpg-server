@@ -21,6 +21,12 @@ export class ByteBuffer {
         return view;
     }
 
+    public static utoArrayBuffer(buffer: ArrayBuffer, startIndex: number = 0): Uint8Array {
+        const length = buffer.byteLength - startIndex;
+        const view = new Uint8Array(buffer, startIndex, length);
+        return view;
+    }
+
     private ensureCapacity(requiredBytes: number) {
         const requiredCapacity = this.position + requiredBytes;
 
@@ -274,7 +280,8 @@ export class ByteBuffer {
 
             return outValues;
         }
-        catch{
+        catch(e){
+            console.log(e);
             return {};
         }        
     }

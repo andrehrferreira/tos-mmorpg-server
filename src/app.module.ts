@@ -9,10 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GameServerConsumer } from "@consumers";
 
 import { 
-	GameServerGateway, 
-	EntitiesGateway,
-	PlayerGateway,
-	ContainersGateway 
+	GameServerGateway
 } from '@gateways';
 
 import { 
@@ -47,10 +44,7 @@ export let OnLoadModules = new Subject();
 	providers: [
 		...Providers,
 		GameServerConsumer,
-		GameServerGateway,
-		EntitiesGateway,
-		PlayerGateway,
-		ContainersGateway
+		GameServerGateway
 	]
 })
 export class AppModule {
